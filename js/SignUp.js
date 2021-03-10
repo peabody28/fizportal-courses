@@ -1,0 +1,20 @@
+$("#form").submit(function ()
+{
+
+    $.ajax({
+            url: "/signup.php",
+            type: "POST",
+            data: $(this).serialize(),
+            success: function (res)
+            {
+                let response = JSON.parse(res)
+                if(response["status"]==="OK")
+                    $(location).attr("href", "/main.php")
+                else
+                    $("#error").html(response["error"])
+
+            }
+        }
+    );
+    return false;
+});

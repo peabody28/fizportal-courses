@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>{{ title }}</title>
+    <script src="/vendor/components/jquery/jquery.js"></script>
+    <link href="/media/fonts/roboto/Roboto-Regular.ttf" rel="stylesheet">
+    <link href="/media/fonts/Bangers/Bangers-Regular.ttf" rel="stylesheet">
+    <link rel="stylesheet" href="/vendor/twbs/bootstrap/dist/css/bootstrap.css">
+    <link rel="stylesheet" href="/css/main.css">
+    <link rel="stylesheet" href="{{ css }}">
+</head>
+<body>
+
+    <div id="header" class="container-fluid row">
+        <div id="logo" class="col-sm-2">Crello</div>
+        <div id="str" class=" col-sm-auto row">
+            <div id="main" class="header_a col-sm-auto"><a href="/main.php">Главная</a></div>
+            <div id="acc" class="header_a col-sm-auto"><a href="/acc.php">Аккаунт</a></div>
+            <div id="blog" class="header_a col-sm-auto"><a href="/blog.php">Блог</a></div>
+            <div id="friends" class="header_a col-sm-auto"><a href="/friends.php">Друзья</a></div>
+            <div id="messenger" class="header_a col-sm-auto"><a href="/messenger.php">Сообщения</a></div>
+            <div id="notif" class="header_a col-sm-auto"><a href="/notif.php">Уведомления</a></div>
+        </div>
+        <div id="exit" class="header_a col-sm-1 my-2 my-sm-0">
+            <form id="exit_form" method="POST" action="exit.php">
+                <input type="hidden" name="submit">
+                <button type="submit">Выйти</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="wr">
+        <div id="content" class="col-lg-7 col-12 container">
+            {{ content|raw }}
+        </div>
+    </div>
+    <script src="/js/Main.js"></script>
+    <script src="{{ js }}"></script>
+    <script src="/vendor/twbs/bootstrap/dist/js/bootstrap.js"></script>
+</body>
+</html>
