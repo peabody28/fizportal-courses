@@ -29,7 +29,7 @@ body #wrapper .container #down #reg {
   color: inherit;
 }
 body #wrapper .container #error {
-  color: red;
+  color: #000000;
   font-weight: bold;
   display: flex;
   align-items: center;

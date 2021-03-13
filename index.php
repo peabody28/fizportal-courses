@@ -3,4 +3,4 @@ session_start();
 if(isset($_SESSION["name"]))
     header("Location: /main.php");
 else
-    header("Location: /signup.php");
+    header("Location: /login.php");
