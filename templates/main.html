@@ -11,11 +11,30 @@
     <link rel="stylesheet" href="{{ css }}">
 </head>
 <body>
-    <div id="wrapper">
-        <div id="content">
-            {{ content|raw }}
-       </div>
+    <div id="wrapper" class="container-fluid h-100 p-0">
+        <div class="row m-0 h-100">
+            <div id="sidebar" class="col-sm-4 col-md-4 col-lg-4 col-xl-3 p-0 m-0">
+                <div class="row m-0 mt-3 mb-2 d-flex justify-content-center" id="logo">FIZPORTAL</div>
+                <div id="username" class="col-12 mb-3 d-flex justify-content-center">{{ name|raw }}</div>
+                <ul class="list-group pr-3 pl-3">
+                    <li class="list-group-item m-3 p-0 shadow"><a class="col-12 btn btn-md {{ disabled_main }}" href="/main.php">Главная</a></li>
+                    <li class="list-group-item m-3 p-0 shadow"><a class="col-12 btn btn-md {{ disabled_acc }}" href="/acc.php">Личный кабинет</a></li>
+                    <li class="list-group-item m-3 p-0 shadow"><a class="col-12 btn btn-md {{ disabled_courses }}" href="/courses.php">Курсы</a></li>
+                    <li class="list-group-item m-3 p-0 shadow"><a class="col-12 btn btn-md {{ disabled_plat_info }}" href="/plat_info.php">Как пользоваться платформой</a></li>
+                    <li class="list-group-item m-3 p-0 shadow" id="exit_btn">
+                        <form id='exit_form'>
+                            <input type='hidden' name='submit'>
+                            <button type="submit" class="col-12 btn-md btn-primary">Выйти</button>
+                        </form>
+                    </li>
+                </ul>
+            </div>
+            <div id="content" class="col w-100 p-0 m-0 container">
+                {{ content|raw }}
+            </div>
+        </div>
     </div>
+    <footer class="m-0 footer navbar navbar-fixed-bottom" id="footer">footer</footer>
     <script src="/js/main.js"></script>
     <script src="{{ js }}"></script>
     <script src="/vendor/twbs/bootstrap/dist/js/bootstrap.js"></script>

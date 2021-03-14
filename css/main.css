@@ -1,0 +1,37 @@
+body {
+  height: 950px;
+}
+#sidebar {
+  background-color: #2c4768;
+}
+#sidebar #logo {
+  color: #ffffff;
+  font-size: 30px;
+  font-weight: bold;
+}
+#sidebar #username {
+  color: #ffffff;
+}
+#sidebar .list-group {
+  border: none;
+  border-radius: 0;
+}
+#sidebar .list-group .list-group-item {
+  border: none;
+  background-color: #5a85c1;
+}
+#sidebar .list-group .list-group-item .btn {
+  color: #ffffff;
+}
+#sidebar .list-group .list-group-item #exit_form button {
+  font-weight: bold;
+  border: none;
+  background-color: #3e0000;
+}
+#footer {
+  bottom: 0;
+  height: 150px;
+  background-color: #2b2d38;
+  color: #ffffff;
+}
+/*# sourceMappingURL=main.css.map */

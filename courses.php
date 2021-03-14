@@ -8,9 +8,10 @@ $twig = new Twig\Environment($loader);
 
 $file = basename(__FILE__, ".php");
 echo $twig->render('main.html',
-    ['title'=>"main",
-        'css'=>"/css/main.css",
+    ['title'=>"courses",
+        'css'=>"/css/courses.css",
         "name"=>"<h2>$_SESSION[name]</h2>",
-        "content"=>"Главная страница",
+        "content"=>"курсы v.01",
         "disabled_$file"=>"disabled",
-        "js"=>"/js/main.js"] );
+        "js"=>"/js/courses.js"
+    ] );
