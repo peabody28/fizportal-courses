@@ -16,6 +16,8 @@ if (isset($data["submit"]))
         {
             if( $user->password == md5(md5( $data["password"] )) )
             {
+                if($user->rights == "admin")
+                    $_SESSION["rights"] = "admin";
                 $_SESSION["name"] = $data["name"];
                 echo json_encode(["status" => "OK"]);
             }

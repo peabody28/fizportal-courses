@@ -1,0 +1,15 @@
+.cours-row .col-8 {
+  border: 2px solid #13142a;
+  background-color: #b2c8e8;
+}
+.cours-row .col-8 .cours-name {
+  height: 50px;
+}
+.cours-row .col-8 .title {
+  background-color: #cadbf3;
+}
+.cours-row .col-8 .btn {
+  background-color: #fff;
+  color: black;
+}
+/*# sourceMappingURL=cours.css.map */

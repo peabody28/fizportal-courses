@@ -7,8 +7,7 @@ $data = $_POST;
 
 if (isset($data["submit"]))
 {
-
-    if(trim($data["name"])=="" or trim($data["password"])=="")
+    if(trim($data["name"])=="" or $data["password"]=="")
         echo json_encode(["status"=>"ERROR", "error"=>"Заполни поля"]);
     //проверка на пробелы и запрещенные символы в имени
     else
@@ -16,6 +15,7 @@ if (isset($data["submit"]))
         $user = R::dispense("users");
         $user->name =trim(htmlspecialchars($data["name"]));
         $user->password = md5(md5($data["password"]));
+        $user->rights = "";
         $id = R::store($user);
         if($id)
         {
