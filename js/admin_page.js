@@ -1,7 +1,7 @@
-$(".cours-doing").submit(function ()
+$(".course-actions").submit(function ()
 {
     $.ajax({
-            url: "/cours-actions.php",
+            url: "/course_actions.php",
             type: "POST",
             data: $(this).serialize(),
             success: function (res)
@@ -10,7 +10,7 @@ $(".cours-doing").submit(function ()
                 if(response["status"]==="OK")
                    $("#resp").html("good")
                 else
-                   $("#resp").html("not work")
+                   $("#resp").html(response["error"])
             }
         }
     );
