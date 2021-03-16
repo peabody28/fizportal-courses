@@ -13,7 +13,7 @@ R::selectDatabase("courses_list");
 $courses_list = R::findAll("courses");
 R::selectDatabase("default");
 
-$content = "<div id='catalog' class='row container-fluid justify-content-center m-0 mt-5 p-0 h1'>Каталог курсов</div>";
+$content = "<div id='catalog' class='row container-fluid justify-content-center m-0 mt-5 p-0 h1'><span>Каталог курсов</span></div>";
 foreach ($courses_list as $cours)
     $content .= $twig->render("cours-block.html", ["name"=>$cours->name, "title"=>"$cours->title", "id"=>$cours->id]);
 

@@ -11,6 +11,6 @@ echo $twig->render('main.html',
     ['title'=>"main",
         'css'=>"/css/main.css",
         "name"=>"<h2>$_SESSION[name]</h2>",
-        "content"=>"Главная страница",
+        "content"=>"Главная страница v0.3",
         "disabled_$file"=>"disabled",
         "js"=>"/js/main.js"] );

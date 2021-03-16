@@ -3,9 +3,10 @@
   background-color: #b2c8e8;
 }
 .cours-row .col-8 .cours-name {
-  height: 50px;
+  white-space: normal;
 }
 .cours-row .col-8 .title {
+  white-space: normal;
   background-color: #cadbf3;
 }
 .cours-row .col-8 .btn {

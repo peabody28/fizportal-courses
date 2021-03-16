@@ -1,12 +1,16 @@
-body {
-  height: 950px;
+body,
+html {
+  height: 100%;
+}
+body #wrapper #up,
+html #wrapper #up {
+  min-height: 950px;
 }
 #sidebar {
   background-color: #2c4768;
 }
 #sidebar #logo {
   color: #ffffff;
-  font-size: 30px;
   font-weight: bold;
 }
 #sidebar #username {
@@ -29,7 +33,6 @@ body {
   background-color: #3e0000;
 }
 #footer {
-  bottom: 0;
   height: 150px;
   background-color: #2b2d38;
   color: #ffffff;

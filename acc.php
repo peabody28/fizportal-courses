@@ -15,7 +15,7 @@ echo $twig->render('main.html',
     ['title'=>"acc",
         'css'=>"/css/acc.css",
         "name"=>"<h2>$_SESSION[name]</h2>",
-        "content"=>"кабинет v.01",
+        "content"=>"кабинет v.03",
         "disabled_$file"=>"disabled",
         "js"=>"/js/acc.js"
     ] );
