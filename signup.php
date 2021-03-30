@@ -1,39 +1,25 @@
 <?php
-session_start();
-require_once "vendor/autoload.php";
-require_once "db.php";
+require_once __DIR__."/classes/Render.php";
+require_once __DIR__."/classes/User.php";
 
 $data = $_POST;
 
 if (isset($data["submit"]))
 {
-    if(trim($data["name"])=="" or $data["password"]=="")
-        echo json_encode(["status"=>"ERROR", "error"=>"Заполни поля"]);
-    //проверка на пробелы и запрещенные символы в имени
-    else
-    {
-        $user = R::dispense("users");
-        $user->name =trim(htmlspecialchars($data["name"]));
-        $user->password = md5(md5($data["password"]));
-        $user->rights = "";
-        $id = R::store($user);
-        if($id)
-        {
-            $_SESSION["name"] = $data["name"];
-            echo json_encode(["status"=>"OK"]);
-        }
-        else
-            echo json_encode(["status"=>"ERROR", "error"=>"not work("]);
-    }
+    // создание объекта пользователя
+    $user = new User();
+    $user->name = $data["name"];
+    $user->password = $data["password"];
+    $user->create_cookie = ($data["check"]=="on")?1:0;
+    $response = $user->add();
+    echo json_encode($response);
 
 }
 else
 {
-    $loader = new Twig\Loader\FilesystemLoader(__DIR__.'/templates');
-    $twig = new Twig\Environment($loader);
-
-    echo $twig->render('login.html',
-        ['title'=>"signup", 'nm'=>"РЕГИСТРАЦИЯ",
-            'btn_text'=>"Создать", 'a_href'=>"/login.php", 'a_text'=>"Войти", "js"=>"/js/signup.js"] );
-
+    $page = new Render();
+    $page->temp = 'login.html';
+    $page->argv = ['title'=>"signup", 'nm'=>"РЕГИСТРАЦИЯ",
+        'btn_text'=>"Создать", 'a_href'=>"/login.php", 'a_text'=>"Войти", "js"=>"/js/signup.js"] ;
+    echo $page->render_page();
 }

@@ -1,41 +1,23 @@
 <?php
-session_start();
-require_once "vendor/autoload.php";
-require_once "db.php";
-
+require_once __DIR__."/classes/Render.php";
+require_once __DIR__."/classes/User.php";
 $data = $_POST;
 
 if (isset($data["submit"]))
 {
-    if(trim($data["name"])=="" or trim($data["password"])=="")
-        echo json_encode(["status"=>"ERROR", "error"=>"Заполни поля"]);
-    else
-    {
-        $user = R::findOne("users", "WHERE name = ?", [$data["name"]]);
-        if($user)
-        {
-            if( $user->password == md5(md5( $data["password"] )) )
-            {
-                if($user->rights == "admin")
-                    $_SESSION["rights"] = "admin";
-                $_SESSION["name"] = $data["name"];
-                echo json_encode(["status" => "OK"]);
-            }
-            else
-                echo json_encode(["status"=>"ERROR", "error"=>"Ты плохо помнишь пароль"]);
-        }
-        else
-            echo json_encode(["status"=>"ERROR", "error"=>"Нету тебя в списочке моем"]);
-    }
+    $user = new User();
+    $user->name = $data["name"];
+    $user->password = $data["password"];
+    $user->create_cookie = $data["check"];
+    $response = $user->login();
+    echo json_encode($response);
 }
 else
 {
-    $loader = new Twig\Loader\FilesystemLoader(__DIR__.'/templates');
-    $twig = new Twig\Environment($loader);
-
-    echo $twig->render('login.html',
-        ['title'=>"login", 'nm'=>"ВХОД",
-            'btn_text'=>"Войти", 'a_href'=>"/signup.php", 'a_text'=>"создать акк", "js"=>"/js/login.js"] );
-
+    $page = new Render();
+    $page->temp = 'login.html';
+    $page->argv = ['title'=>"login", 'nm'=>"ВХОД",
+        'btn_text'=>"Войти", 'a_href'=>"/signup.php", 'a_text'=>"создать акк", "js"=>"/js/login.js"]  ;
+    echo $page->render_page();
 }
 

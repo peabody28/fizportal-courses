@@ -1,10 +1,11 @@
 <?php
-session_start();
+require_once __DIR__."/classes/User_session.php";
 
 $data = $_POST;
 if(isset($data["submit"]))
 {
-    session_destroy();
+    $session = new User_session();
+    $session->delete();
     echo json_encode(["status"=>"OK"]);
 }
 else

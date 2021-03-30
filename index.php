@@ -1,6 +1,25 @@
 <?php
 session_start();
-if(isset($_SESSION["name"]))
-    header("Location: /main.php");
+require_once __DIR__."/classes/User.php";
+if(!isset($_SESSION["name"]))
+{
+    if(isset($_COOKIE["id"]))
+    {
+        $user = new User();
+        $user->id = $_COOKIE["id"];
+        $user->get_user();
+
+        if($user->hash == $_COOKIE["hash"])
+        {
+            $_SESSION["name"]=$user->name;
+            $_SESSION["rights"]=$user->rights;
+            header("Location: /main.php");
+        }
+        else
+            header("Location: /login.php");
+    }
+    else
+        header("Location: /login.php");
+}
 else
-    header("Location: /login.php");
+    header("Location: /main.php");

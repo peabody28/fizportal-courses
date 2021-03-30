@@ -1,34 +1,26 @@
 <?php
+require_once "db.php";
+require_once "classes/Courses_db.php";
+require_once "classes/Render.php";
 
 class Course
 {
-    public $id, $name, $title, $themes;
+    public $id, $name, $title, $themes, $existence;
 
-    function __construct($name=NULL, $title=NULL)
+    public function get()
     {
-        $this->name = $name;
-        $this->title = $title;
+        $courses_db = new Courses_db();
+        $courses_db->get_course($this);
+        return $this;
+    }
+    public function get_courses(): string
+    {
+        $courses_db = new Courses_db();
+        $courses_list = $courses_db->get_courses_list();
+
+        $render = new Render();
+        $render_courses_list = $render->render_cours($courses_list);
+        return $render_courses_list;
     }
 
-    function add()
-    {
-        $cours = R::dispense("courses");
-        $cours->name = $this->name;
-        $cours->title = $this->title;
-        $this->id = R::store($cours);
-        if ($this->id)
-            return json_encode(["status"=>"OK"]);
-    }
-    function search($id)
-    {
-        return R::findOne("courses", $id);
-    }
-    function remove()
-    {
-        //мОЖЕТ УДАЛЯТЬ ПО ИМЕНИ?
-        $cours = R::load("courses", $this->id);
-        $status = R::trash($cours);
-        if ($status)
-            return json_encode(["status"=>"OK"]);
-    }
 }
