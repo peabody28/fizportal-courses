@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="/vendor/twbs/bootstrap/dist/css/bootstrap.css">
     <link rel="stylesheet" href="/css/main.css">
     <link rel="stylesheet" href="{{ css }}">
+    {{ js2|raw }}
 </head>
 <body>
     <div id="wrapper" class="container-fluid w-100 h-100 p-0">
@@ -35,6 +36,7 @@
             <div class="m-0 row w-100" id="footer">footer</div>
         </div>
     </div>
+    {{ textov|raw }}
     <script src="/js/main.js"></script>
     <script src="{{ js }}"></script>
     <script src="/vendor/twbs/bootstrap/dist/js/bootstrap.js"></script>

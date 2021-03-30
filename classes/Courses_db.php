@@ -3,6 +3,16 @@ require_once __DIR__."/../db.php";
 
 class Courses_db
 {
+    public function add(Course $course)
+    {
+        R::selectDatabase("courses_list");
+        $row = R::dispense("courses");
+        $row->name = $course->name;
+        $row->title = $course->title;
+        $course->id = R::store($row);
+        R::selectDatabase("default");
+        return $course->id?["status"=>"OK"]:["status"=>"ERROR", "error"=>"not work("];
+    }
     public function get_course(Course $course)
     {
         R::selectDatabase("courses_list");

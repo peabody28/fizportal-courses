@@ -7,6 +7,11 @@ class Course
 {
     public $id, $name, $title, $themes, $existence;
 
+    public function add()
+    {
+        $courses_db = new Courses_db();
+        $courses_db->add($this);
+    }
     public function get()
     {
         $courses_db = new Courses_db();
