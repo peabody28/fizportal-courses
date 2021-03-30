@@ -11,8 +11,8 @@ class Users_db
         $row->password = md5(md5($user->password));
         $row->rights = $user->rights;
         $row->hash = $user->hash;
-        $id = R::store($row);
-        return $id?["status"=>"OK"]:["status"=>"ERROR", "error"=>"not work("];
+        $user->id = R::store($row);
+        return $user->id?["status"=>"OK"]:["status"=>"ERROR", "error"=>"not work("];
     }
     public function search_user(User $user): array
     {
