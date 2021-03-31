@@ -11,6 +11,10 @@
     <link rel="stylesheet" href="{{ css }}">
     <script src='/js/mathjax-config.js' defer></script>
     <script src='/vendor/mathjax/mathjax/es5/tex-chtml.js' async></script>
+<<<<<<< HEAD
+=======
+    <script src="https://cdn.ckeditor.com/ckeditor5/27.0.0/classic/ckeditor.js"></script>
+>>>>>>> tiny
 </head>
 <body>
     <div id="wrapper" class="container-fluid w-100 h-100 p-0">
@@ -37,6 +41,21 @@
             <div class="m-0 row w-100" id="footer">footer</div>
         </div>
     </div>
+<<<<<<< HEAD
+=======
+    <script>
+        ClassicEditor
+            .create( document.querySelector( '#editor1' ) )
+            .catch( err => {
+                console.error( err.stack );
+            } );
+        ClassicEditor
+            .create( document.querySelector( '#editor2' ) )
+            .catch( err => {
+                console.error( err.stack );
+            } );
+    </script>
+>>>>>>> tiny
     <script src="/js/main.js"></script>
     <script src="{{ js }}"></script>
     <script src="/vendor/twbs/bootstrap/dist/js/bootstrap.js"></script>
