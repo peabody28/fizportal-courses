@@ -11,6 +11,7 @@ if (isset($data["submit"]))
         $course = new Course();
         $course->name = $data["course_name"];
         $course->title = $data["title"];
+        $course->themes = array([]);
         $course->add();
     }
     else if($data["code"]=="del_course")
@@ -28,7 +29,7 @@ if (isset($data["submit"]))
         $course = new Course();
         $course->id = $data["course_id"];
         $course->get();
-        $themes = json_decode($course->themes);
+        $themes = $course->themes;
         array_push($themes, $theme->id);
         $course->themes = $themes;
         $course->add_theme_to_course();

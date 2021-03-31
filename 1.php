@@ -1,2 +1,2 @@
 <?php
-echo json_encode([], JSON_UNESCAPED_UNICODE);
+echo var_dump(json_decode("[1,4]"));

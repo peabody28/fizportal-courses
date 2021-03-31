@@ -10,7 +10,7 @@ class Courses_db
         $row = R::dispense("courses");
         $row->name = $course->name;
         $row->title = $course->title;
-        $row->themes = json_encode([]);
+        $row->themes = json_encode($course->themes);
         $course->id = R::store($row);
         R::selectDatabase("default");
         return $course->id?["status"=>"OK"]:["status"=>"ERROR", "error"=>"not work("];

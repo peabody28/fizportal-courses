@@ -5,7 +5,7 @@ require_once __DIR__."/Render.php";
 
 class Course
 {
-    public $id, $name, $title, $themes, $existence;
+    public $id, $name, $title, $themes, $existence=false;
 
     public function add()
     {
