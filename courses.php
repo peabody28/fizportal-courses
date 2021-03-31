@@ -7,7 +7,8 @@ session_start();
 $data = $_GET;
 
 $cours = new Course();
-$content = $cours->get_courses();
+$courses_list = $cours->get_courses();
+$content = $cours->get_html($courses_list);
 
 // чтоб сделать кнопку неактивной
 $file = basename(__FILE__, ".php");

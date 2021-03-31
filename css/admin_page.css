@@ -1,4 +1,13 @@
-#cr_bt {
-  background-color: #466c9c;
+.create {
+  background-color: #466b9b;
+}
+.course {
+  border: 1px solid #466C9C;
+}
+.course .izm {
+  background-color: #466b9b;
+}
+.course .del_btn {
+  background-color: #b64c4c;
 }
 /*# sourceMappingURL=admin_page.css.map */

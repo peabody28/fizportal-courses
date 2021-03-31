@@ -36,4 +36,11 @@ class Courses_db
         R::selectDatabase("default");
         return $courses_list;
     }
+    public function delete(Course $course)
+    {
+        R::selectDatabase("courses_list");
+        $row =  R::load("courses", $course->id);
+        R::trash($row);
+        R::selectDatabase("default");
+    }
 }

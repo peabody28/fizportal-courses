@@ -18,14 +18,23 @@ class Course
         $courses_db->get_course($this);
         return $this;
     }
-    public function get_courses(): string
+    public function get_courses(): array
     {
         $courses_db = new Courses_db();
         $courses_list = $courses_db->get_courses_list();
-
+        return $courses_list;
+    }
+    public function get_html(array $courses_list)
+    {
         $render = new Render();
         $render_courses_list = $render->render_cours($courses_list);
         return $render_courses_list;
     }
+    public function delete()
+    {
+        $courses_db = new Courses_db();
+        $courses_db->delete($this);
+    }
+
 
 }
