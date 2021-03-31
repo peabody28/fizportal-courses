@@ -15,6 +15,7 @@ if (isset($data["submit"]))
         $course->name = $data["course_name"];
         $course->title = $data["title"];
         $course->add();
+        header("Location: /admin_page.php");
     }
 }
 else
@@ -28,6 +29,7 @@ else
         "name" => "<h2>$_SESSION[name] - admin-tools</h2>",
         "content" => $content,
         "js" => "/js/admin_page.js",
+
         'js2'=>"<script src='https://cdn.tiny.cloud/1/3yb9s681223ydg8xq85axmko4fjf3485tan985upzgql2yqm/tinymce/5/tinymce.min.js' referrerpolicy='origin'></script>",
         "textov"=>"<script>
     tinymce.init({
@@ -38,7 +40,8 @@ else
         tinycomments_mode: 'embedded',
         tinycomments_author: 'Author name',
     });
-</script>"];
+</script>"
+        ];
 
     echo $page->render_page();
 

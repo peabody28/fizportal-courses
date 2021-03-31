@@ -2,6 +2,7 @@
     "require": {
         "twig/twig": "^3.0",
         "twbs/bootstrap": "^4.5",
-        "components/jquery": "^3.5"
+        "components/jquery": "^3.5",
+        "mathjax/mathjax": "3.*"
     }
 }
