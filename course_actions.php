@@ -11,7 +11,7 @@ if (isset($data["submit"]))
         $course = new Course();
         $course->name = $data["course_name"];
         $course->title = $data["title"];
-        $course->themes = array([]);
+        $course->themes = array();
         $course->add();
     }
     else if($data["code"]=="del_course")
