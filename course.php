@@ -2,6 +2,7 @@
 require_once __DIR__."/auth.php";
 require_once __DIR__."/classes/Course.php";
 require_once __DIR__."/classes/Render.php";
+require_once __DIR__."/classes/Theme.php";
 session_start();
 
 $data = $_GET;
@@ -11,10 +12,8 @@ $course->id = $data["id"];
 $course->get();
 if ($course->existence)
 {
-    $themes = json_decode($course->themes);
-    $content = "$course->id<br><br>";
-    foreach ($themes as $theme)
-        $content .= "<a>$theme</a><br>";
+    $themes = new Theme();
+    $content = $themes->get_html($course->themes);
 }
 else
     $content = "Такого курса нет";
@@ -30,7 +29,7 @@ $page->argv = ['title'=>"$course->name",
     "content"=>$content,
     "js"=>"/js/cours.js"] ;
 
-echo $page->render_page();
+echo $page->render_temp();
 
 
 

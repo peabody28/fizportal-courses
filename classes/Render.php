@@ -15,9 +15,17 @@ class Render
             $courses_blocks .= $twig->render("cours-block.html", ["name"=>$cours->name, "title"=>"$cours->title", "id"=>$cours->id]);
         return  $courses_blocks;
     }
-    public function render_page()
+    public function render_temp()
     {
         global $twig;
         return $twig->render($this->temp, $this->argv);
+    }
+    public function render_theme($themes): string
+    {
+        global $twig;
+        $themes_blocks = "";
+        foreach($themes as $theme)
+            $themes_blocks .= $twig->render("theme.html", ["name"=>$theme->name, "id"=>$theme->id]);
+        return  $themes_blocks;
     }
 }

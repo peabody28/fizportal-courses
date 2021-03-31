@@ -22,4 +22,4 @@ $page->argv = ['title'=>"courses_list",
     "disabled_$file"=>"disabled",
     "js"=>"/js/courses.js"] ;
 
-echo $page->render_page();
+echo $page->render_temp();

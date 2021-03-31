@@ -14,4 +14,4 @@ $page->argv =
     "content"=>"this is FAQ page",
     "disabled_$file"=>"disabled",
     "js"=>""];
-echo $page->render_page();
+echo $page->render_temp();

@@ -21,10 +21,10 @@ class User
             $this->existence = $users_db->check_existence_username($this);
             if($this->existence)
                 return ["status"=>"ERROR", "error"=>"Это имя занято"];
-
+            // добавление в базу
             $response = $users_db->add($this);
             if($response["status"]=="OK")
-                $this->remember();
+                $this->remember(); // создание куки
             return $response;
         }
 
@@ -35,26 +35,32 @@ class User
             return ["status"=>"ERROR", "error"=>"Заполни поля"];
         else
         {
+            // поиск в базе пользователей
             $users_db = new Users_db();
-            $response = $users_db->search_user($this);
-            if($response["status"]=="OK")
-                $this->remember();
-            return $response;
+            $serching_user = $users_db->search_user($this);
+            if($serching_user)
+            {
+                if($serching_user->password == md5(md5($this->password)))
+                {
+                    // дополняю обьект данными из БД
+                    $this->id = $serching_user->id;
+                    $this->rights = $serching_user->rights;
+                    $this->hash = $serching_user->hash;
+                    $this->existence = true;
+                    $this->remember();
+                    return ["status" => "OK"];
+                }
+                else
+                    return ["status"=>"ERROR", "error"=>"Неверный пароль"];
+            }
+            else
+                return ["status"=>"ERROR", "error"=>"Такое имя не зарегестрировано"];
         }
     }
-    public function get_user()
+    public function get()
     {
         $users_db = new Users_db();
         $users_db->read($this);
-    }
-    public function generate_code($length=6) {
-        $chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHI JKLMNOPRQSTUVWXYZ0123456789";
-        $code = "";
-        $clen = strlen($chars) - 1;
-        while (strlen($code) < $length) {
-            $code .= $chars[mt_rand(0,$clen)];
-        }
-        return $code;
     }
     public function remember()
     {
@@ -66,5 +72,14 @@ class User
         }
         $session = new User_session();
         $session->create($this);
+    }
+    public function generate_code($length=6) {
+        $chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHI JKLMNOPRQSTUVWXYZ0123456789";
+        $code = "";
+        $clen = strlen($chars) - 1;
+        while (strlen($code) < $length) {
+            $code .= $chars[mt_rand(0,$clen)];
+        }
+        return $code;
     }
 }

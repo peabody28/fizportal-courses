@@ -1,5 +1,5 @@
 <?php
-require_once "db.php";
+require_once __DIR__."/../db.php";
 
 // взаимодействие непосредственно с базой
 class Users_db
@@ -14,24 +14,10 @@ class Users_db
         $user->id = R::store($row);
         return $user->id?["status"=>"OK"]:["status"=>"ERROR", "error"=>"not work("];
     }
-    public function search_user(User $user): array
+    public function search_user(User $user)
     {
         $row = R::findOne("users", "WHERE name = ?", [$user->name]);
-        if($row)
-        {
-            if($row->password == md5(md5($user->password)))
-            {
-                // дополняю обьект данными из БД
-                $user->id = $row->id;
-                $user->rights = $row->rights;
-                $user->hash = $row->hash;
-                return ["status" => "OK"];
-            }
-            else
-                return ["status"=>"ERROR", "error"=>"Неверный пароль"];
-        }
-        else
-            return ["status"=>"ERROR", "error"=>"Неверное имя"];
+        return $row;
     }
     public function check_existence_username(User $user)
     {

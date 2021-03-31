@@ -28,4 +28,15 @@ $("#create_course").submit(function ()
     )
     return false;
 });
+$("#add_theme").submit(function ()
+{
+    $.ajax(
+        {
+            url: "/course_actions.php",
+            type: "POST",
+            data: $(this).serialize(),
+        }
+    )
+    return false;
+});
 

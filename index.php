@@ -7,7 +7,7 @@ if(!isset($_SESSION["name"]))
     {
         $user = new User();
         $user->id = $_COOKIE["id"];
-        $user->get_user();
+        $user->get();
 
         if($user->hash == $_COOKIE["hash"])
         {

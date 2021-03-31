@@ -1,7 +1,7 @@
 <?php
-require_once "db.php";
-require_once "classes/Courses_db.php";
-require_once "classes/Render.php";
+require_once __DIR__."/../db.php";
+require_once __DIR__."/Courses_db.php";
+require_once __DIR__."/Render.php";
 
 class Course
 {
@@ -35,6 +35,9 @@ class Course
         $courses_db = new Courses_db();
         $courses_db->delete($this);
     }
-
-
+    public function add_theme_to_course()
+    {
+        $courses_db = new Courses_db();
+        $courses_db->update_themes($this);
+    }
 }

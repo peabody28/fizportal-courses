@@ -1,0 +1,13 @@
+<div class="container-fluid">
+    <p>
+    <form id="add_theme" method="POST">
+        <label class="row col-12 justify-content-center h2">Добавление темы</label>
+        <textarea id="editor1"  name="theme_name" placeholder="Название"></textarea>
+        <br>
+        <input type="hidden" name="code" value="add_theme">
+        <input type="hidden" name="course_id" value="{{ course_id }}">
+        <input type="hidden" name="submit">
+        <input id="cr_bt" class="btn create" type="submit" value="Добавить тему">
+    </form>
+    <p>
+</div>

@@ -15,5 +15,5 @@ $page->argv =
     "disabled_$file"=>"disabled",
     "js"=>"/js/main.js"] ;
 
-echo $page->render_page();
+echo $page->render_temp();
 

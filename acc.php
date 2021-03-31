@@ -20,7 +20,7 @@ $page->argv = ['title'=>"acc",
     "js"=>"/js/acc.js"
 ] ;
 
-echo $page->render_page();
+echo $page->render_temp();
 
 
 
