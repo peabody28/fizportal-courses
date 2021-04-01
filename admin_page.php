@@ -18,16 +18,15 @@ else if($_GET["code"]=="change_course")
     $course = new Course();
     $course->id = $_GET["id"];
     $course->get();
-    //отображение существующих в курсе тем
+    $themes = $course->get_themes();
+
+    //отображение существующих в курсе тем специально для админа
     $content = "";
     $theme_block_adm = new Render();
     $theme_block_adm->temp = "theme_block_adm.html";
-    foreach ($course->themes as $item)
+    foreach ($themes as $theme)
     {
-        $theme = new Theme();
-        $theme->id = $item;
-        $theme->get();
-        $theme_block_adm->argv = ["id"=>$theme->id, "name"=>$theme->name];
+        $theme_block_adm->argv = ["id"=>$theme["id"], "name"=>$theme["name"]];
         $content .= $theme_block_adm->render_temp();
     }
     // форма добавление новой темы
@@ -47,9 +46,10 @@ else
 {
     // существующие курсы + добавление курса
     $content = "<br><br><div class='row col-12 p-0 m-0 ml-5'><a class='btn create' href='/admin_page.php?code=create_course'>Cоздать курс</a> </div><br><br>";
+
     //Отображение существующих курсов специально для админа
-    $courses = new Course();
-    $courses_list = $courses->get_courses();
+    $courses = new Courses_table();
+    $courses_list = $courses->get_courses_list();
     foreach ($courses_list as $course)
     {
         $block = new Render();

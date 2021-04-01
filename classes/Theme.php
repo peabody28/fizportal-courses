@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__."/Courses_db.php";
+require_once __DIR__ . "/Themes_table.php";
 require_once __DIR__."/Render.php";
 
 
@@ -8,25 +8,20 @@ class Theme
     public $id, $name, $level, $tasks, $existence=false;
     public function add()
     {
-        $courses_db = new Courses_db();
-        $courses_db->add_theme($this);
+        $themes_table = new Themes_table();
+        $response = $themes_table->create($this);
+        // проверка на успешность добавления
     }
     public function get()
     {
-        $courses_db = new Courses_db();
-        $courses_db->get_theme($this);
-    }
-    public function get_html(array $themes)
-    {
-        $themes_list = [];
-        foreach ($themes as $item)
+        $themes_table = new Themes_table();
+        $theme = $themes_table->read($this);
+        if($theme)
         {
-            $theme = new Theme();
-            $theme->id = $item;
-            $theme->get();
-            array_push($themes_list, $theme);
+            $this->name = $theme->name;
+            $this->tasks = json_decode($theme->tasks);
+            $this->level = $theme->level;
+            $this->existence=true;
         }
-        $render = new Render();
-        return $render->render_theme($themes_list);
     }
 }

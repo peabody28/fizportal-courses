@@ -6,9 +6,13 @@ session_start();
 
 $data = $_GET;
 
-$cours = new Course();
-$courses_list = $cours->get_courses();
-$content = $cours->get_html($courses_list);
+// беру счписок курсов из базы
+$table = new Courses_table();
+$courses_list = $table->get_courses_list();
+
+//рендеринг
+$render = new Render();
+$content = $render->render_course($courses_list);
 
 // чтоб сделать кнопку неактивной
 $file = basename(__FILE__, ".php");

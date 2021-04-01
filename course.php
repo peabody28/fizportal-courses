@@ -2,7 +2,6 @@
 require_once __DIR__."/auth.php";
 require_once __DIR__."/classes/Course.php";
 require_once __DIR__."/classes/Render.php";
-require_once __DIR__."/classes/Theme.php";
 session_start();
 
 $data = $_GET;
@@ -10,10 +9,14 @@ $data = $_GET;
 $course = new Course();
 $course->id = $data["id"];
 $course->get();
+
 if ($course->existence)
 {
-    $themes = new Theme();
-    $content = $themes->get_html($course->themes);
+    //беру темы курса
+    $themes = $course->get_themes();
+    // рендеринг
+    $render = new Render();
+    $content = $render->render_theme($themes);
 }
 else
     $content = "Такого курса нет";

@@ -29,9 +29,10 @@ if (isset($data["submit"]))
         $course = new Course();
         $course->id = $data["course_id"];
         $course->get();
+        // изменяю список тем курса и обновляю запись в БД
         $themes = $course->themes;
         array_push($themes, $theme->id);
         $course->themes = $themes;
-        $course->add_theme_to_course();
+        $course->add_theme();
     }
 }

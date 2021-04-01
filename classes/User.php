@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__."/../classes/Users_db.php";
+require_once __DIR__ . "/../classes/Users_table.php";
 require_once __DIR__."/../classes/User_session.php";
 require_once __DIR__."/../classes/Validator.php";
 
@@ -11,21 +11,25 @@ class User
     {
         $validator = new Validator();
         $validation_response = $validator->valid_user_data($this);
-
         if($validation_response["status"]=="ERROR")
             return $validation_response;
         else
         {
             // проверка на доступность имени
-            $users_db = new Users_db();
-            $this->existence = $users_db->check_existence_username($this);
-            if($this->existence)
+            $isset = $this->check_existence();
+            if($isset)
                 return ["status"=>"ERROR", "error"=>"Это имя занято"];
+
             // добавление в базу
-            $response = $users_db->add($this);
-            if($response["status"]=="OK")
+            $users_table = new Users_table();
+            $this->existence = $users_table->create($this);
+            if($this->existence) // проверка на успешность добавления в базу
+            {
                 $this->remember(); // создание куки
-            return $response;
+                return ["status"=>"OK"];
+            }
+            else
+               return ["status"=>"ERROR", "error"=>"Не удалось создать пользователя"];
         }
 
     }
@@ -36,16 +40,20 @@ class User
         else
         {
             // поиск в базе пользователей
-            $users_db = new Users_db();
-            $serching_user = $users_db->search_user($this);
-            if($serching_user)
+            $isset = $this->check_existence();
+
+            if($isset)
             {
-                if($serching_user->password == md5(md5($this->password)))
+                $searching_user = new User();
+                $searching_user->id = $isset;
+                $searching_user->get();
+
+                if($searching_user->password == md5(md5($this->password)))
                 {
                     // дополняю обьект данными из БД
-                    $this->id = $serching_user->id;
-                    $this->rights = $serching_user->rights;
-                    $this->hash = $serching_user->hash;
+                    $this->id = $searching_user->id;
+                    $this->rights = $searching_user->rights;
+                    $this->hash = $searching_user->hash;
                     $this->existence = true;
                     $this->remember();
                     return ["status" => "OK"];
@@ -59,16 +67,30 @@ class User
     }
     public function get()
     {
-        $users_db = new Users_db();
-        $users_db->read($this);
+        $users_table = new Users_table();
+        $user = $users_table->read($this);
+        if($user)
+        {
+            $this->name = $user->name;
+            $this->password = $user->password;
+            $this->rights = $user->rights;
+            $this->hash = $user->hash;
+            $this->existence = true;
+        }
+
+    }
+    public function check_existence()
+    {
+        $users_table = new Users_table();
+        return $users_table->check_existence_username($this);
     }
     public function remember()
     {
         if($this->create_cookie and strlen($this->hash)==0)
         {
-            $users_db = new Users_db();
+            $users_db = new Users_table();
             $this->hash = md5($this->generate_code());
-            $users_db->update_hash($this);
+            $users_db->update($this, "hash");
         }
         $session = new User_session();
         $session->create($this);

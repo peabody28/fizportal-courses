@@ -7,7 +7,7 @@ $twig = new Twig\Environment($loader);
 class Render
 {
     public $temp, $argv;
-    public function render_cours($courses_list): string
+    public function render_course($courses_list): string
     {
         global $twig;
         $courses_blocks = "";
@@ -25,7 +25,8 @@ class Render
         global $twig;
         $themes_blocks = "";
         foreach($themes as $theme)
-            $themes_blocks .= $twig->render("theme.html", ["name"=>$theme->name, "id"=>$theme->id]);
+            $themes_blocks .= $twig->render("theme.html", ["name"=>$theme["name"], "id"=>$theme["id"]]);
         return  $themes_blocks;
     }
+
 }
