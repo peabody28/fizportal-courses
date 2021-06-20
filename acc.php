@@ -4,7 +4,7 @@ require_once __DIR__."/classes/Render.php";
 session_start();
 
 $content = "";
-
+$l = $_SESSION["rights"];
 if($_SESSION["rights"]=="admin")
     $content.= "<div class='row w-100 p-2 m-0 justify-content-center'><a class='btn btn-primary' href='/admin_page.php'>Админка</a></div>";
 

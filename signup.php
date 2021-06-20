@@ -10,7 +10,7 @@ if (isset($data["submit"]))
     $user = new User();
     $user->name = $data["name"];
     $user->password = $data["password"];
-
+    // валидация данных
     $validator = new Validator();
     $validation_response = $validator->valid_user_data($user);
     if($validation_response["status"]=="ERROR")
@@ -23,17 +23,21 @@ if (isset($data["submit"]))
         if($isset)
            $response = ["status"=>"ERROR", "error"=>"Это имя занято"];
         // добавление в базу
-        $user->existence = $users_table->create($user);
-        if($user->existence) // проверка на успешность добавления в базу
+        $response = $users_table->create($user);
+        if($response) // проверка на успешность добавления в базу
         {
             // создаю сессию
-            if($data["check"] and strlen($user->hash)==0)
-            {
-                $user->hash = md5($user->generate_code());
-                $users_table->update($user, "hash");
-            }
             $session = new User_session();
-            $session->create($user);
+            $session->create_session($user);
+            if($data["check"])
+            {
+                if(strlen($user->hash)==0)
+                {
+                    $user->hash = md5($session->generate_code());
+                    $users_table->update($user, "hash");
+                }
+                $session->create_cookie($user);
+            }
             $response = ["status" => "OK"];
         }
         else

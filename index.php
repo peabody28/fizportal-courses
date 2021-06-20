@@ -12,6 +12,7 @@ if(!isset($_SESSION["name"]))
         $db_user = $users_table->read($user);
         $user->name = $db_user->name;
         $user->password = $db_user->password;
+        $user->rights= $db_user->rights;
         $user->hash = $db_user->hash;
 
         if($user->hash == $_COOKIE["hash"])

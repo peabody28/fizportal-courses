@@ -9,7 +9,6 @@ if (isset($data["submit"]))
 {
     $user = new User();
     $user->name = $data["name"];
-    //$user->password = $data["password"];
 
     if($user->name=="" or $data["password"]=="")
         $response = ["status"=>"ERROR", "error"=>"Заполни поля"];
@@ -27,21 +26,23 @@ if (isset($data["submit"]))
             if($searching_user->password == md5(md5($data["password"])))
             {
                 // дополняю обьект данными из БД
-
                 $user->password = $data["password"];
                 $user->rights = $searching_user->rights;
                 $user->hash = $searching_user->hash;
-                $user->existence = true;
+                //$user->existence = true;
 
                 // создаю сессию
-
-                if($data["check"] and strlen($user->hash)==0)
-                {
-                    $user->hash = md5($user->generate_code());
-                    $users_table->update($user, "hash");
-                }
                 $session = new User_session();
-                $session->create($user);
+                $session->create_session($user);
+                if($data["check"])
+                {
+                    if(strlen($user->hash)==0)
+                    {
+                        $user->hash = md5($session->generate_code());
+                        $users_table->update($user, "hash");
+                    }
+                    $session->create_cookie($user);
+                }
                 $response = ["status" => "OK"];
             }
             else
