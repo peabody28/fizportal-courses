@@ -1,15 +1,55 @@
 <?php
 require_once __DIR__."/classes/Render.php";
 require_once __DIR__."/classes/User.php";
+require_once __DIR__."/classes/Users_table.php";
+require_once __DIR__."/classes/User_session.php";
 $data = $_POST;
 
 if (isset($data["submit"]))
 {
     $user = new User();
     $user->name = $data["name"];
-    $user->password = $data["password"];
-    $user->create_cookie = $data["check"];
-    $response = $user->login();
+    //$user->password = $data["password"];
+
+    if($user->name=="" or $data["password"]=="")
+        $response = ["status"=>"ERROR", "error"=>"Заполни поля"];
+    else
+    {
+        // поиск в базе пользователей
+        $users_table = new Users_table();
+        $isset = $users_table->check_existence_user($user); //id найденного пользователя
+
+        if($isset)
+        {
+            $user->id = $isset;
+            $searching_user = $users_table->read($user);
+
+            if($searching_user->password == md5(md5($data["password"])))
+            {
+                // дополняю обьект данными из БД
+
+                $user->password = $data["password"];
+                $user->rights = $searching_user->rights;
+                $user->hash = $searching_user->hash;
+                $user->existence = true;
+
+                // создаю сессию
+
+                if($data["check"] and strlen($user->hash)==0)
+                {
+                    $user->hash = md5($user->generate_code());
+                    $users_table->update($user, "hash");
+                }
+                $session = new User_session();
+                $session->create($user);
+                $response = ["status" => "OK"];
+            }
+            else
+                $response = ["status"=>"ERROR", "error"=>"Неверный пароль"];
+        }
+        else
+            $response = ["status"=>"ERROR", "error"=>"Такое имя не зарегестрировано"];
+    }
     echo json_encode($response);
 }
 else
