@@ -9,9 +9,8 @@ if (isset($data["submit"]))
     if ($data["code"]=="create_course")
     {
         $course = new Course();
-        $course->name = $data["course_name"];
-        $course->title = $data["title"];
-        $course->themes = array();
+        $course->title = $data["course_title"];
+        $course->text = $data["course_text"];
         $course->add();
     }
     else if($data["code"]=="del_course")
@@ -23,16 +22,14 @@ if (isset($data["submit"]))
     else if($data["code"]=="add_theme")
     {
         $theme = new Theme();
-        $theme->name = $data["theme_name"];
+        $theme->title = $data["theme_title"];
+        $theme->text = $data["theme_text"];
+        $theme->course_id = $data["course_id"];
         $theme->add();
         // тема уже лежит в базе
         $course = new Course();
         $course->id = $data["course_id"];
         $course->get();
-        // изменяю список тем курса и обновляю запись в БД
-        $themes = $course->themes;
-        array_push($themes, $theme->id);
-        $course->themes = $themes;
-        $course->add_theme();
+
     }
 }

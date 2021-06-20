@@ -5,7 +5,7 @@ require_once __DIR__."/Render.php";
 
 class Theme
 {
-    public $id, $name, $level, $tasks, $existence=false;
+    public $id, $title, $complexity=0, $course_id, $existence=false;
     public function add()
     {
         $themes_table = new Themes_table();
@@ -18,9 +18,8 @@ class Theme
         $theme = $themes_table->read($this);
         if($theme)
         {
-            $this->name = $theme->name;
-            $this->tasks = json_decode($theme->tasks);
-            $this->level = $theme->level;
+            $this->title = $theme->title;
+            $this->complexity = $theme->complexity;
             $this->existence=true;
         }
     }

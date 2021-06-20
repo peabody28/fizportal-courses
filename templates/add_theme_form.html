@@ -2,7 +2,9 @@
     <p>
     <form id="add_theme" method="POST">
         <label class="row col-12 justify-content-center h2">Добавление темы</label>
-        <textarea id="editor1"  name="theme_name" placeholder="Название"></textarea>
+        <textarea id="editor1"  name="theme_title" placeholder="Название"></textarea>
+        <br>
+        <textarea id="editor2"  name="theme_text" placeholder="Описание"></textarea>
         <br>
         <input type="hidden" name="code" value="add_theme">
         <input type="hidden" name="course_id" value="{{ course_id }}">

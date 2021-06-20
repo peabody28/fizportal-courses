@@ -26,7 +26,7 @@ else if($_GET["code"]=="change_course")
     $theme_block_adm->temp = "theme_block_adm.html";
     foreach ($themes as $theme)
     {
-        $theme_block_adm->argv = ["id"=>$theme["id"], "name"=>$theme["name"]];
+        $theme_block_adm->argv = ["id"=>$theme["id"], "title"=>$theme["title"]];
         $content .= $theme_block_adm->render_temp();
     }
     // форма добавление новой темы
@@ -54,7 +54,7 @@ else
     {
         $block = new Render();
         $block->temp = "course_block_adm.html";
-        $block->argv = ["name"=>$course->name, "id"=>$course->id];
+        $block->argv = ["title"=>$course->title, "id"=>$course->id];
         $content .= $block->render_temp();
     }
 }

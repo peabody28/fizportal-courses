@@ -2,12 +2,13 @@
 require_once __DIR__."/../db.php";
 require_once __DIR__ . "/Courses_table.php";
 require_once __DIR__."/Theme.php";
+require_once __DIR__."/Themes_table.php";
 
 
 
 class Course
 {
-    public $id, $name, $title, $themes, $existence=false;
+    public $id, $title, $text, $complexity=0, $price=null, $existence=false;
 
     public function add()
     {
@@ -22,36 +23,28 @@ class Course
         if($course)
         {
             $this->id = $course->id;
-            $this->name = $course->name;
             $this->title = $course->title;
-            $this->themes = json_decode($course->themes);
+            $this->text = $course->text;
+            $this->price = $course->price;
             $this->existence = true;
         }
     }
     public function add_theme()
     {
-        $courses_db = new Courses_table();
-        $courses_db->update($this, "themes");
+        $themes_table = new Themes_table();
+        $themes_table->create();
     }
-    public function get_themes():array
-    {
-        if(!$this->themes)
-            $this->get();
-        $themes_list = [];
-        foreach ($this->themes as $item)
-        {
-            $theme = new Theme();
-            $theme->id = $item;
-            $theme->get();
-            array_push($themes_list,  ["name"=>$theme->name, "id"=>$theme->id]);
-        }
-        return $themes_list;
-    }
-
     public function delete()
     {
         $courses_db = new Courses_table();
         $courses_db->delete($this);
+    }
+
+    public function get_themes()
+    {
+        $themes_table = new Themes_table();
+        $themes_list =  $themes_table->get_themes_course($this->id);
+        return $themes_list;
     }
 
 }

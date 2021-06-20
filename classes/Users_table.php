@@ -10,7 +10,6 @@ class Users_table implements Table
         $row = R::dispense("users");
         $row->name = $user->name;
         $row->password = md5(md5($user->password));
-        $row->rights = $user->rights;
         $row->hash = $user->hash;
         $user->id = R::store($row);
         return $user->id?true:false;
@@ -31,9 +30,8 @@ class Users_table implements Table
         R::store($row);
     }
     public function delete($user){
-
+        // TODO: deliting user
     }
-
     public function check_existence_username(User $user)
     {
         $row = R::findOne("users", "WHERE name = ?", [$user->name]);

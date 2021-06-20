@@ -5,7 +5,7 @@ require_once __DIR__."/../classes/Validator.php";
 
 class User
 {
-    public $id, $name, $password, $rights=null, $existence=false, $create_cookie=false, $hash=null;
+    public $id, $name, $password, $rights, $existence=false, $create_cookie=false, $hash=null;
 
     public function add(): array
     {
