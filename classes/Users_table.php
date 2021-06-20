@@ -32,7 +32,7 @@ class Users_table implements Table
     public function delete($user){
         // TODO: deliting user
     }
-    public function check_existence_username(User $user)
+    public function check_existence_user(User $user)
     {
         $row = R::findOne("users", "WHERE name = ?", [$user->name]);
         return $row?($row->id):false;
