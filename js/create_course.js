@@ -1,17 +1,15 @@
-$(".del_course").submit(function ()
+$("#create_course").submit(function ()
 {
     $.ajax(
         {
-            url: "/course_actions.php",
+            url: "/create_course.php",
             type: "POST",
             data: $(this).serialize(),
             success: function ()
             {
-                console.log($(this).remove());
+                $(location).attr("href", "/admin_page.php");
             }
         }
     )
-   return false;
+    return false;
 });
-
-

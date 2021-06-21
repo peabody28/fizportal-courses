@@ -10,12 +10,6 @@ class Course
 {
     public $id, $title, $text, $complexity=0, $price=null, $existence=false;
 
-    public function add()
-    {
-        $courses_db = new Courses_table();
-        $response = $courses_db->create($this);
-        //поверка на успешность добавления
-    }
     public function get()
     {
         $courses_db = new Courses_table();

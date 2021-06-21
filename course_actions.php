@@ -6,14 +6,7 @@ $data = $_POST;
 if (isset($data["submit"]))
 {
 
-    if ($data["code"]=="create_course")
-    {
-        $course = new Course();
-        $course->title = $data["course_title"];
-        $course->text = $data["course_text"];
-        $course->add();
-    }
-    else if($data["code"]=="del_course")
+    if($data["code"]=="del_course")
     {
         $course = new Course();
         $course->id = $data["id"];

@@ -1,4 +1,5 @@
 <?php
+require_once __DIR__."/../db.php";
 require_once __DIR__."/Table.php";
 
 class Themes_table implements Table
@@ -28,10 +29,10 @@ class Themes_table implements Table
         // TODO: Implement delete() method.
     }
 
-    public function get_themes_course($id)
+    public function get_themes_course($course)
     {
         $themes_list = array();
-        $row = R::findAll("themes", "WHERE course_id=?",[$id]);
+        $row = R::findAll("themes", "WHERE course_id=?",[$course->id]);
         foreach ($row as $theme)
             array_push($themes_list, ["id"=>$theme->id, "title"=>$theme->title, "text"=>$theme->text, "complexity"=>$theme->complexity, "course_id"=>$theme->course_id]);
         return $themes_list;
