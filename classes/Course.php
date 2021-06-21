@@ -8,9 +8,8 @@ require_once __DIR__."/Themes_table.php";
 
 class Course
 {
-    public $id, $title, $text, $complexity=0, $price=null, $existence=false;
-
-    public function get()
+    public $id, $title, $text, $complexity=0, $price=null;
+    function get()
     {
         $courses_db = new Courses_table();
         $course = $courses_db->read($this);
@@ -23,22 +22,4 @@ class Course
             $this->existence = true;
         }
     }
-    public function add_theme()
-    {
-        $themes_table = new Themes_table();
-        $themes_table->create();
-    }
-    public function delete()
-    {
-        $courses_db = new Courses_table();
-        $courses_db->delete($this);
-    }
-
-    public function get_themes()
-    {
-        $themes_table = new Themes_table();
-        $themes_list =  $themes_table->get_themes_course($this->id);
-        return $themes_list;
-    }
-
 }

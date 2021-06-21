@@ -12,7 +12,7 @@ class Render
         global $twig;
         $courses_blocks = "";
         foreach($courses_list as $cours)
-            $courses_blocks .= $twig->render("course-block.html", ["name"=>$cours->name, "title"=>"$cours->title", "id"=>$cours->id]);
+            $courses_blocks .= $twig->render("course-block.html", ["title"=>$cours->title, "text"=>$cours->text, "price"=>$cours->price, "id"=>$cours->id]);
         return  $courses_blocks;
     }
     public function render_temp()
@@ -25,7 +25,7 @@ class Render
         global $twig;
         $themes_blocks = "";
         foreach($themes as $theme)
-            $themes_blocks .= $twig->render("theme.html", ["name"=>$theme["name"], "id"=>$theme["id"]]);
+            $themes_blocks .= $twig->render("theme.html", ["title"=>$theme["title"], "text"=>$theme["text"], "id"=>$theme["id"]]);
         return  $themes_blocks;
     }
 

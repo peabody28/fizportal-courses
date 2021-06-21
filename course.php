@@ -1,6 +1,8 @@
 <?php
 require_once __DIR__."/auth.php";
 require_once __DIR__."/classes/Course.php";
+require_once __DIR__."/classes/Courses_table.php";
+require_once __DIR__."/classes/Themes_table.php";
 require_once __DIR__."/classes/Render.php";
 session_start();
 
@@ -8,15 +10,15 @@ $data = $_GET;
 
 $course = new Course();
 $course->id = $data["id"];
-$course->get();
-
-if ($course->existence)
+$courses_table = new Courses_table();
+$tmp_course = $courses_table->read($course);
+if ($tmp_course)
 {
     //беру темы курса
-    $themes = $course->get_themes();
-    // рендеринг
+    $themes_table = new Themes_table();
+    $themes_list = $themes_table->get_themes_course($course);
     $render = new Render();
-    $content = $render->render_theme($themes);
+    $content = $render->render_theme($themes_list);
 }
 else
     $content = "Такого курса нет";

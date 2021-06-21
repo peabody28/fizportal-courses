@@ -8,7 +8,6 @@ $("#add_theme").submit(function ()
             success: function (response)
             {
                 var resp = JSON.parse(response)
-                console.log("/change_course.php?course_id="+resp["course_id"])
                 $(location).attr("href", "/change_course.php?id="+resp["course_id"])
             }
         }

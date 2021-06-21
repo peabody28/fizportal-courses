@@ -13,7 +13,7 @@ if(isset($data["submit"]))
     $theme->course_id = $data["course_id"];
     $themes_table = new Themes_table();
     $response = $themes_table->create($theme);
-    return json_encode(["course_id"=>$data["course_id"]]);
+    echo json_encode(["course_id"=>$data["course_id"]]);
 }
 else
 {
@@ -26,7 +26,7 @@ else
     $page = new Render();
     $page->temp = 'main.html';
     $page->argv = ['title' => "add_theme",
-        'css' => "/css/admin_page.css",
+        'css' => "/css/add_theme.css",
         "name" => "<h2>$_SESSION[name] - admin-tools</h2>",
         "content" => $content,
         "js" => "/js/add_theme.js"];

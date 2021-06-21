@@ -23,7 +23,7 @@ foreach ($courses_list as $course)
 
 $page = new Render();
 $page->temp = 'main.html';
-$page->argv = ['title' => "main",
+$page->argv = ['title' => "adminpage",
     'css' => "/css/admin_page.css",
     "name" => "<h2>$_SESSION[name] - admin-tools</h2>",
     "content" => $content,

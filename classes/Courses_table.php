@@ -20,9 +20,12 @@ class Courses_table implements Table
         $row =  R::findOne("courses", "id = ?", [$course->id]);
         return $row;
     }
-    public function update($obj, $column)
+    public function update($course, $column)
     {
-        // TODO: Implement update() method.
+        $row =  R::findOne("courses", "id = ?", [$course->id]);
+        $row->$column = $course->$column;
+        $status = R::store($row);
+        return $status?true:false;
     }
     public function delete($course)
     {
