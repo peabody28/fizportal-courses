@@ -28,11 +28,6 @@ html #wrapper #up {
 #sidebar .list-group .list-group-item .btn {
   color: #ffffff;
 }
-#sidebar .list-group .list-group-item #exit_form button {
-  font-weight: bold;
-  border: none;
-  background-color: #3e0000;
-}
 #footer {
   height: 150px;
   background-color: #2b2d38;

@@ -23,12 +23,6 @@
                         <li class="list-group-item m-3 p-0 shadow"><a class="col-12 btn btn-md {{ disabled_acc }}" href="/acc.php">Личный кабинет</a></li>
                         <li class="list-group-item m-3 p-0 shadow"><a class="col-12 btn btn-md {{ disabled_courses }}" href="/courses.php">Курсы</a></li>
                         <li class="list-group-item m-3 p-0 shadow"><a class="col-12 btn btn-md {{ disabled_faq }}" href="/faq.php">Как пользоваться платформой</a></li>
-                        <li class="list-group-item m-3 p-0 shadow" id="exit_btn">
-                            <form id='exit_form'>
-                                <input type='hidden' name='submit'>
-                                <button type="submit" class="col-12 btn-md btn-primary">Выйти</button>
-                            </form>
-                        </li>
                     </ul>
                 </div>
                 <div id="content" class=" col p-0 m-0 pb-5 w-100">{{ content|raw }}</div>
