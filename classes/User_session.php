@@ -5,6 +5,7 @@ class User_session
 {
     public function create_session(User $user)
     {
+        $_SESSION["id"]   = $user->id;
         $_SESSION["name"]   = $user->name;
         $_SESSION["rights"] = $user->rights;
     }

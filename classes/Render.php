@@ -7,14 +7,7 @@ $twig = new Twig\Environment($loader);
 class Render
 {
     public $temp, $argv;
-    public function render_course($courses_list): string
-    {
-        global $twig;
-        $courses_blocks = "";
-        foreach($courses_list as $cours)
-            $courses_blocks .= $twig->render("course-block.html", ["title"=>$cours->title, "text"=>$cours->text, "price"=>$cours->price, "id"=>$cours->id]);
-        return  $courses_blocks;
-    }
+
     public function render_temp()
     {
         global $twig;

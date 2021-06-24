@@ -17,6 +17,7 @@ if(!isset($_SESSION["name"]))
         // сравниваю хэш из куки и хеш в таблице
         if($user->hash == $_COOKIE["hash"])
         {
+            $_SESSION["id"]=$user->id;
             $_SESSION["name"]=$user->name;
             $_SESSION["rights"]=$user->rights;
         }
