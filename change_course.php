@@ -66,10 +66,10 @@ else
 
     $content = "";
     $forms = new Render();
-    $forms->temp = "course_forms.html";
+    $forms->temp = "change_course_forms.html";
     $forms->argv = ["course_id"=>$_GET["id"]];
     $content.=$forms->render_temp();
-    $content.="<br><br><h2>Темы курса</h2><br><br>";
+    $content.="<br><br><h2>Темы курса</h2>";
 
     //получаю темы
     $themes_table = new Themes_table();

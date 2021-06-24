@@ -17,18 +17,21 @@ class Themes_table implements Table
     }
     public function read($theme)
     {
-        $row = R::load("themes", $theme->id);
+        $row =  R::findOne("themes", "id = ?", [$theme->id]);
         return $row;
     }
-    public function update($obj, $code)
+    public function update($theme, $column)
     {
-        // TODO: Implement update() method.
+        $row =  R::findOne("themes", "id = ?", [$theme->id]);
+        $row->$column = $theme->$column;
+        $status = R::store($row);
+        return $status?true:false;
     }
-    public function delete($obj)
+    public function delete($theme)
     {
-        // TODO: Implement delete() method.
+        $row =  R::load("themes", $theme->id);
+        R::trash($row);
     }
-
     public function get_themes_course($course)
     {
         $themes_list = array();

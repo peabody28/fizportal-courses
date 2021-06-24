@@ -5,7 +5,7 @@ require_once __DIR__."/Render.php";
 
 class Theme
 {
-    public $id, $title, $complexity=0, $course_id, $existence=false;
+    public $id, $title, $complexity=0, $course_id;
     public function get()
     {
         $themes_table = new Themes_table();
@@ -14,7 +14,7 @@ class Theme
         {
             $this->title = $theme->title;
             $this->complexity = $theme->complexity;
-            $this->existence=true;
+            $this->course_id = $theme->course_id;
         }
     }
 }
