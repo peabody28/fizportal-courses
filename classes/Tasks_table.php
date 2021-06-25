@@ -9,7 +9,7 @@ class Tasks_table implements Table
     {
         $row = R::dispense("tasks");
         $row->text = $task->text;
-        $row->answer = $task->answer;
+        $row->answer = strip_tags($task->answer);
         $row->complexity = $task->complexity;
         $row->image_url = $task->image_url;
         $row->theme_id = $task->theme_id;
@@ -17,9 +17,9 @@ class Tasks_table implements Table
         return $task->id;
     }
 
-    public function read($task)
+    public function read($task_id)
     {
-        $row =  R::findOne("tasks", "id = ?", [$task->id]);
+        $row =  R::findOne("tasks", "id = ?", [$task_id]);
         return $row;
     }
 

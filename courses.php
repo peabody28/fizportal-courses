@@ -3,7 +3,8 @@ require_once __DIR__."/auth.php";
 require_once __DIR__."/classes/Course.php";
 require_once __DIR__."/classes/Close_course_block.php";
 require_once __DIR__."/classes/Course_block.php";
-require_once __DIR__ . "/classes/Users_courses_table.php";
+require_once __DIR__."/classes/Users_courses_table.php";
+require_once __DIR__."/classes/Users_courses.php";
 require_once __DIR__."/classes/Render.php";
 session_start();
 
@@ -11,11 +12,15 @@ $data = $_POST;
 
 if(isset($data["submit"]))
 {
-    $user_id = $_SESSION["id"];
-    $course_id = $data["course_id"];
+
+    $users_courses = new Users_courses();
+    $users_courses->user_id = $_SESSION["id"];
+    $users_courses->course_id = $data["course_id"];
+
     $users_courses_table = new Users_courses_table();
-    $users_courses_table->create($user_id, $course_id);
-    echo json_encode(["status"=>"OK", "course_id"=>$course_id]);
+    $users_courses_table->create($users_courses);
+
+    echo json_encode(["status"=>"OK", "course_id"=>$data["course_id"]]);
 }
 else
 {

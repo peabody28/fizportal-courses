@@ -2,17 +2,15 @@
 require_once __DIR__."/../db.php";
 require_once __DIR__."/Table.php";
 
-
+$link = mysqli_connect("127.0.0.1", "root", "1234", "fizportal_courses");
 class Courses_table implements Table
 {
     public function create($course)
     {
-        $row = R::dispense("courses");
-        $row->title = $course->title;
-        $row->text = $course->text;
-        $row->complexity = $course->complexity;
-        $row->price = $course->price;
-        $course->id = R::store($row);
+        global $link;
+        $sql = sprintf("INSERT INTO courses(title, text, complexity, price) VALUES ('%s', '%s', '%s', '%s')", $course->title, $course->text, $course->complexity, $course->price);
+        $result = mysqli_query($link, $sql);
+        $course->id = mysqli_insert_id($link);
         return $course->id ? true: false;
     }
     public function read($course)

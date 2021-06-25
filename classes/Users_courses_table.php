@@ -1,14 +1,15 @@
 <?php
 require_once __DIR__."/../db.php";
+require_once __DIR__."/Table.php";
 $link = mysqli_connect("127.0.0.1", "root", "1234", "fizportal_courses");
 
-class Users_courses_table
+class Users_courses_table implements Table
 {
 
-    public function create($user_id, $course_id)
+    public function create($users_courses)
     {
         global $link;
-        $sql = "INSERT users_courses(user_id, course_id) VALUES ($user_id, $course_id)";
+        $sql = "INSERT users_courses(user_id, course_id) VALUES ($users_courses->user_id, $users_courses->course_id)";
         $result = mysqli_query($link, $sql);
         return $result;
     }

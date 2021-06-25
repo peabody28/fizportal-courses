@@ -12,16 +12,18 @@ $course = new Course();
 $course->id = $data["id"];
 $courses_table = new Courses_table();
 $tmp_course = $courses_table->read($course);
+
 if ($tmp_course)
 {
+    $content = "<div class='row container-fluid justify-content-center m-0 p-0'><h2>Темы</h2></div>";
     //беру темы курса
     $themes_table = new Themes_table();
     $themes_list = $themes_table->get_themes_course($course);
     $render = new Render();
-    $content = $render->render_theme($themes_list);
+    $content .= $render->render_theme($themes_list);
 }
 else
-    $content = "Такого курса нет";
+    header("Location: /courses.php");
 
 
 $file = basename(__FILE__, ".php");
