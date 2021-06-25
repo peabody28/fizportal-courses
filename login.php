@@ -16,16 +16,16 @@ if (isset($data["submit"]))
     {
         // поиск в базе пользователей
         $users_table = new Users_table();
-        $user->id = $users_table->check_existence_user($user); //id найденного пользователя
+        $user->id = $users_table->check_existence_user($user->name); //id найденного пользователя
         if($user->id)
         {
-            $searching_user = $users_table->read($user); // беру данные пользователя для сверки
-            if($searching_user->password == md5(md5($data["password"])))
+            $searching_user = $users_table->read($user->id); // беру данные пользователя для сверки
+            if($searching_user["password"] == md5(md5($data["password"])))
             {
                 // дополняю обьект данными из БД
                 $user->password = $data["password"];
-                $user->rights = $searching_user->rights;
-                $user->hash = $searching_user->hash;
+                $user->rights = $searching_user["rights"];
+                $user->hash = $searching_user["hash"];
 
                 // создаю сессию
                 $session = new User_session();

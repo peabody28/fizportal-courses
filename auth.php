@@ -12,8 +12,8 @@ if(!isset($_SESSION["name"]))
         // получаю инфу пользователя
         $users_table = new Users_table();
         $tmp_user = $users_table->read($user);
-        $user->hash = $tmp_user->hash;
-        $user->rights = $tmp_user->rights;
+        $user->hash = $tmp_user["hash"];
+        $user->rights = $tmp_user["rights"];
         // сравниваю хэш из куки и хеш в таблице
         if($user->hash == $_COOKIE["hash"])
         {
@@ -27,6 +27,3 @@ if(!isset($_SESSION["name"]))
     else
         header("Location: /index.php");
 }
-
-
-

@@ -21,29 +21,29 @@ if (isset($data["submit"]))
     {
         // проверка на доступность имени
         $users_table = new Users_table();
-        $isset = $users_table->check_existence_user($user); //id найденного пользователя
+        $isset = $users_table->check_existence_user($user->name); //id найденного пользователя
         if($isset)
            $response = ["status"=>"ERROR", "error"=>"Это имя занято"];
-        // добавление в базу
-        $response = $users_table->create($user);
-        if($response) // проверка на успешность добавления в базу
+        else
         {
-            // создаю сессию
-            $session = new User_session();
-            $session->create_session($user);
-            if($data["check"])
+            // добавление в базу
+            $response = $users_table->create($user);
+            if($response) // проверка на успешность добавления в базу
             {
-                if(strlen($user->hash)==0)
+                // создаю сессию
+                $session = new User_session();
+                $session->create_session($user);
+                if($data["check"])
                 {
                     $user->hash = md5($session->generate_code());
                     $users_table->update($user, "hash");
+                    $session->create_cookie($user);
                 }
-                $session->create_cookie($user);
+                $response = ["status" => "OK"];
             }
-            $response = ["status" => "OK"];
+            else
+                $response = ["status"=>"ERROR", "error"=>"Не удалось создать пользователя"];
         }
-        else
-            $response = ["status"=>"ERROR", "error"=>"Не удалось создать пользователя"];
     }
     echo json_encode($response);
 
