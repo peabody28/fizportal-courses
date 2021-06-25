@@ -1,5 +1,6 @@
 <?php
 session_start();
+
 // работа с сессией
 class User_session
 {

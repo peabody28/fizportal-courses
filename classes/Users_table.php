@@ -28,7 +28,7 @@ class Users_table implements Table
         $result = mysqli_query($link, $sql);
         return $result;
     }
-    public function delete($user){
+    public function delete($id){
         // TODO: deliting user
     }
     public function check_existence_user($name)

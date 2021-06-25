@@ -1,8 +1,7 @@
 <?php
 session_start();
-require_once __DIR__."/auth_root.php";
 require_once __DIR__."/auth.php";
-require_once __DIR__."/db.php";
+require_once __DIR__."/auth_root.php";
 require_once __DIR__."/classes/Course.php";
 require_once __DIR__."/classes/Courses_table.php";
 require_once __DIR__."/classes/Theme.php";
@@ -19,7 +18,7 @@ if(isset($data["submit"]))
     if($data["code"]=="delete")
     {
         $themes_table = new Themes_table();
-        $themes_table->delete($theme);
+        $themes_table->delete($theme->id);
         echo json_encode(["status"=>"OK"]);
     }
     else if ($data["code"]=="change_title")
@@ -47,27 +46,29 @@ if(isset($data["submit"]))
 }
 else
 {
-    $theme = new Theme();
-    $theme->id = $_GET["id"];
+
+
     $themes_table = new Themes_table();
-    $tmp_theme = $themes_table->read($theme);
+    $tmp_theme = $themes_table->read($_GET["id"]);
     if(!$tmp_theme)
         header("Location: /admin_page.php");
-    $theme->title = $tmp_theme->title;
-    $theme->text = $tmp_theme->text;
-    $theme->complexity = $tmp_theme->complexity;
-    $theme->course_id = $tmp_theme->course_id;
+    $theme = new Theme();
+    $theme->id = $tmp_theme["id"];
+    $theme->title = $tmp_theme["title"];
+    $theme->text = $tmp_theme["text"];
+    $theme->complexity = $tmp_theme["complexity"];
+    $theme->course_id = $tmp_theme["course_id"];
 
     $content = "";
     $forms = new Render();
     $forms->temp = "change_theme_forms.html";
-    $forms->argv = ["theme_id"=>$_GET["id"]];
+    $forms->argv = ["theme_id"=>$theme->id];
     $content.=$forms->render_temp();
     $content.="<br><br><h2>Задачи темы</h2>";
 
     //получаю задачи
     $tasks_table = new Tasks_table();
-    $tasks_list = $tasks_table->get_tasks_theme($theme);
+    $tasks_list = $tasks_table->get_tasks_theme($theme->id);
     foreach ($tasks_list as $task) {
         $content .= "<div>$task[text]</div>";
     }

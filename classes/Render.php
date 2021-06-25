@@ -32,7 +32,7 @@ class Render
     public function render_full_task($task)
     {
         global $twig;
-        $task_block = $twig->render("full_task.html", ["text"=>$task->text, "task_id"=>$task->id]);
+        $task_block = $twig->render("full_task.html", ["text"=>$task["text"], "task_id"=>$task["id"]]);
         return $task_block;
     }
 }

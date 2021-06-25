@@ -12,13 +12,13 @@ $data = $_GET;
 $theme = new Theme();
 $theme->id = $data["id"];
 $themes_table = new Themes_table();
-$tmp_theme = $themes_table->read($theme);
+$tmp_theme = $themes_table->read($theme->id);
 if ($tmp_theme)
 {
     //беру темы курса
     $content = "<div class='row container-fluid justify-content-center m-0 p-0'><h2>Задачи</h2></div>";
     $tasks_table = new Tasks_table();
-    $tasks_list = $tasks_table->get_tasks_theme($theme);
+    $tasks_list = $tasks_table->get_tasks_theme($theme->id);
     $render = new Render();
     $content .= $render->render_task($tasks_list);
 }

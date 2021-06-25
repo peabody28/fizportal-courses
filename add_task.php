@@ -14,6 +14,7 @@ if(isset($data["submit"]))
     $task->theme_id = $data["theme_id"];
     $task->image_url = ($data["image_url"]=="")?null:$data["image_url"];
     $task->complexity = $data["task_complexity"];
+
     $tasks_table = new Tasks_table();
     $response = $tasks_table->create($task);
     echo json_encode(["theme_id"=>$data["theme_id"]]); // для перехода к дальнейшему редактированию темы

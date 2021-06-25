@@ -1,6 +1,5 @@
 <?php
 require_once __DIR__ . "/Tasks_table.php";
-require_once __DIR__."/Render.php";
 
 
 class Task
@@ -9,13 +8,13 @@ class Task
     public function get()
     {
         $tasks_table = new Tasks_table();
-        $task = $tasks_table->read($this);
+        $task = $tasks_table->read($this->id);
         if($task)
         {
-            $this->text = $task->text;
-            $this->answer = $task->answer;
-            $this->complexity = $task->complexity;
-            $this->theme_id = $task->theme_id;
+            $this->text = $task["text"];
+            $this->answer = $task["answer"];
+            $this->complexity = $task["complexity"];
+            $this->theme_id = $task["theme_id"];
         }
     }
 }

@@ -1,6 +1,6 @@
 <?php
 require_once __DIR__ . "/../classes/Users_table.php";
-require_once __DIR__."/../classes/User_session.php";
+
 
 class User
 {

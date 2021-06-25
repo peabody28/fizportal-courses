@@ -1,26 +1,27 @@
 <?php
-require_once __DIR__."/../db.php";
 require_once __DIR__."/Table.php";
+$link = mysqli_connect("127.0.0.1", "root", "1234", "fizportal_courses");
+
 
 class Tasks_table implements Table
 {
 
     public function create($task)
     {
-        $row = R::dispense("tasks");
-        $row->text = $task->text;
-        $row->answer = strip_tags($task->answer);
-        $row->complexity = $task->complexity;
-        $row->image_url = $task->image_url;
-        $row->theme_id = $task->theme_id;
-        $task->id = R::store($row);
-        return $task->id;
+        global $link;
+        $sql = sprintf("INSERT INTO tasks(text, answer, image_url, complexity, theme_id) VALUES ('%s', '%s', '%s', '%s', '%s')", $task->text, strip_tags($task->answer), $task->image_url, $task->complexity, $task->theme_id);
+        $result = mysqli_query($link, $sql);
+        $task->id = mysqli_insert_id($link);
+        return $task->id ? true: false;
     }
 
-    public function read($task_id)
+    public function read($id)
     {
-        $row =  R::findOne("tasks", "id = ?", [$task_id]);
-        return $row;
+        global $link;
+        $sql = sprintf("SELECT * FROM tasks WHERE id = '%s'", $id);
+        $result = mysqli_query($link, $sql);
+        $task_data = mysqli_fetch_array($result, MYSQLI_ASSOC);
+        return $task_data;
     }
 
     public function update($obj, $column)
@@ -28,17 +29,17 @@ class Tasks_table implements Table
         // TODO: Implement update() method.
     }
 
-    public function delete($obj)
+    public function delete($id)
     {
         // TODO: Implement delete() method.
     }
 
-    public function get_tasks_theme($theme)
+    public function get_tasks_theme($id)
     {
-        $tasks_list = array();
-        $row = R::findAll("tasks", "WHERE theme_id=?",[$theme->id]);
-        foreach ($row as $task)
-            array_push($tasks_list, ["id"=>$task->id, "answer"=>$task->answer, "text"=>$task->text, "image_url"=>$task->image_url, "complexity"=>$task->complexity, "theme_id"=>$task->theme_id]);
+        global $link;
+        $sql = sprintf("SELECT * FROM tasks WHERE theme_id='%s'", $id);
+        $result = mysqli_query($link, $sql);
+        $tasks_list = mysqli_fetch_all($result, MYSQLI_ASSOC);
         return $tasks_list;
     }
 }

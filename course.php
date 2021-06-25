@@ -8,17 +8,15 @@ session_start();
 
 $data = $_GET;
 
-$course = new Course();
-$course->id = $data["id"];
 $courses_table = new Courses_table();
-$tmp_course = $courses_table->read($course);
+$course = $courses_table->read($data["id"]);
 
-if ($tmp_course)
+if ($course["id"])
 {
     $content = "<div class='row container-fluid justify-content-center m-0 p-0'><h2>Темы</h2></div>";
     //беру темы курса
     $themes_table = new Themes_table();
-    $themes_list = $themes_table->get_themes_course($course);
+    $themes_list = $themes_table->get_themes_course($course["id"]);
     $render = new Render();
     $content .= $render->render_theme($themes_list);
 }
@@ -30,7 +28,7 @@ $file = basename(__FILE__, ".php");
 
 $page = new Render();
 $page->temp = 'main.html';
-$page->argv = ['title'=>"$course->name",
+$page->argv = ['title'=>"$course[name]",
     'css'=>"/css/cours.css",
     "name"=>"<h2>$_SESSION[name]</h2>",
     "content"=>$content,

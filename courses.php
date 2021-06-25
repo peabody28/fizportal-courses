@@ -1,6 +1,6 @@
 <?php
 require_once __DIR__."/auth.php";
-require_once __DIR__."/classes/Course.php";
+require_once __DIR__."/classes/Courses_table.php";
 require_once __DIR__."/classes/Close_course_block.php";
 require_once __DIR__."/classes/Course_block.php";
 require_once __DIR__."/classes/Users_courses_table.php";
@@ -12,7 +12,6 @@ $data = $_POST;
 
 if(isset($data["submit"]))
 {
-
     $users_courses = new Users_courses();
     $users_courses->user_id = $_SESSION["id"];
     $users_courses->course_id = $data["course_id"];
@@ -37,12 +36,12 @@ else
     $course_block = new Course_block();
 
     foreach ($courses_list as $course) {
-        if(in_array($course->id, $users_courses_list)){
-            $course_block->argv = ["title" => $course->title, "text" => $course->text, "id" => $course->id];
+        if(in_array($course["id"], $users_courses_list)){
+            $course_block->argv = ["title" => $course["title"], "text" => $course["text"], "id" => $course["id"]];
             $content .= $course_block->render();
         }
         else {
-            $close_course_block->argv = ["title"=>$course->title, "text"=>$course->text, "price"=>$course->price, "id"=>$course->id];
+            $close_course_block->argv = ["title" => $course["title"], "text" => $course["text"], "id" => $course["id"], "price"=>$course["price"]];
             $content .= $close_course_block->render();
         }
     }

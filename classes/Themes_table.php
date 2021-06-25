@@ -1,43 +1,47 @@
 <?php
-require_once __DIR__."/../db.php";
 require_once __DIR__."/Table.php";
+$link = mysqli_connect("127.0.0.1", "root", "1234", "fizportal_courses");
+
 
 class Themes_table implements Table
 {
 
     public function create($theme)
     {
-        $row = R::dispense("themes");
-        $row->title = $theme->title;
-        $row->text = $theme->text;
-        $row->course_id = $theme->course_id;
-        $row->complexity = $theme->complexity;
-        $theme->id = R::store($row);
-        return $theme->id ? true:false;
+        global $link;
+        $sql = sprintf("INSERT INTO themes(title, text, complexity, course_id) VALUES ('%s', '%s', '%s', '%s')", $theme->title, $theme->text, $theme->complexity, $theme->course_id);
+        $result = mysqli_query($link, $sql);
+        $theme->id = mysqli_insert_id($link);
+        return $theme->id ? true: false;
     }
-    public function read($theme)
+    public function read($id)
     {
-        $row =  R::findOne("themes", "id = ?", [$theme->id]);
-        return $row;
+        global $link;
+        $sql = sprintf("SELECT * FROM themes WHERE id = '%s'", $id);
+        $result = mysqli_query($link, $sql);
+        $theme_data = mysqli_fetch_array($result, MYSQLI_ASSOC);
+        return $theme_data;
     }
     public function update($theme, $column)
     {
-        $row =  R::findOne("themes", "id = ?", [$theme->id]);
-        $row->$column = $theme->$column;
-        $status = R::store($row);
-        return $status?true:false;
+        global $link;
+        $sql = sprintf("UPDATE themes SET %s='%s' WHERE id = '%s'", $column, $theme->$column, $theme->id);
+        $result = mysqli_query($link, $sql);
+        return $result;
     }
-    public function delete($theme)
+    public function delete($id)
     {
-        $row =  R::load("themes", $theme->id);
-        R::trash($row);
+        global $link;
+        $sql = sprintf("DELETE FROM themes WHERE id = '%s'", $id);
+        $result = mysqli_query($link, $sql);
+        return $result;
     }
-    public function get_themes_course($course)
+    public function get_themes_course($id)
     {
-        $themes_list = array();
-        $row = R::findAll("themes", "WHERE course_id=?",[$course->id]);
-        foreach ($row as $theme)
-            array_push($themes_list, ["id"=>$theme->id, "title"=>$theme->title, "text"=>$theme->text, "complexity"=>$theme->complexity, "course_id"=>$theme->course_id]);
+        global $link;
+        $sql = sprintf("SELECT * FROM themes WHERE course_id='%s'", $id);
+        $result = mysqli_query($link, $sql);
+        $themes_list = mysqli_fetch_all($result, MYSQLI_ASSOC);
         return $themes_list;
     }
 }

@@ -14,8 +14,9 @@ if (isset($data["submit"]))
     $course->text = $data["course_text"];
     $course->price = $data["course_price"];
     $course->complexity = $data["course_comlexity"];
-    $courses_db = new Courses_table();
-    $response = $courses_db->create($course);
+
+    $courses_table = new Courses_table();
+    $response = $courses_table->create($course);
 }
 else
 {

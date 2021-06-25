@@ -1,7 +1,6 @@
 <?php
-require_once __DIR__."/db.php";
-require_once __DIR__."/auth_root.php";
 require_once __DIR__."/auth.php";
+require_once __DIR__."/auth_root.php";
 require_once __DIR__."/classes/Courses_table.php";
 require_once __DIR__."/classes/Render.php";
 require_once __DIR__."/classes/Course_block_adm.php";
@@ -17,7 +16,7 @@ $courses_list = $courses_table->get_courses_list();
 $block = new Course_block_adm();
 foreach ($courses_list as $course)
 {
-    $block->argv = ["title"=>$course->title, "id"=>$course->id];
+    $block->argv = ["title"=>$course["title"], "id"=>$course["id"]];
     $content .= $block->render();
 }
 

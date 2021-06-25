@@ -1,7 +1,7 @@
 <?php
-require_once __DIR__."/../db.php";
 require_once __DIR__."/Table.php";
 $link = mysqli_connect("127.0.0.1", "root", "1234", "fizportal_courses");
+
 
 class Users_courses_table implements Table
 {
@@ -9,7 +9,7 @@ class Users_courses_table implements Table
     public function create($users_courses)
     {
         global $link;
-        $sql = "INSERT users_courses(user_id, course_id) VALUES ($users_courses->user_id, $users_courses->course_id)";
+        $sql = sprintf("INSERT INTO users_courses(user_id, course_id) VALUES ('%s', '%s')", $users_courses->user_id, $users_courses->course_id);
         $result = mysqli_query($link, $sql);
         return $result;
     }
@@ -17,7 +17,7 @@ class Users_courses_table implements Table
     public function read($user_id)
     {
         global $link;
-        $sql = "SELECT * FROM users_courses WHERE user_id=$user_id";
+        $sql = sprintf("SELECT * FROM users_courses WHERE user_id='%s'", $user_id);
         $res = mysqli_query($link, $sql);
         $rows = mysqli_fetch_all($res, MYSQLI_ASSOC);
         $courses_list = array();
@@ -31,7 +31,7 @@ class Users_courses_table implements Table
         // TODO: Implement update() method.
     }
 
-    public function delete($obj)
+    public function delete($user_courses_row_id)
     {
         // TODO: Implement delete() method.
     }

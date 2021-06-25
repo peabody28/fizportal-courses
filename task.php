@@ -10,7 +10,7 @@ if(isset($data["submit"]))
 {
     $tasks_table = new Tasks_table();
     $task = $tasks_table->read($data["task_id"]);
-    if($task->answer == $data["answer"])
+    if($task["answer"] == $data["answer"])
     {
         $users_tasks = new Users_tasks();
         $users_tasks->user_id = $_SESSION["id"];
@@ -28,18 +28,16 @@ if(isset($data["submit"]))
 }
 else
 {
-    $task_id = $_GET["id"];
     $tasks_table = new Tasks_table();
-    $task = $tasks_table->read($task_id);
-    if($task->id)
+    $task = $tasks_table->read($_GET["id"]);
+    if($task["id"])
     {
         $task_block = new Render();
         $content = $task_block->render_full_task($task);
 
-
         $page = new Render();
         $page->temp = 'main.html';
-        $page->argv = ['title'=>"task $_GET[id]",
+        $page->argv = ['title'=>"task $task[id]",
             'css'=>"/css/task.css",
             "name"=>"<h2>$_SESSION[name]</h2>",
             "content"=>$content,
@@ -49,6 +47,4 @@ else
     }
     else
         header("Location: /courses.php");
-
-
 }

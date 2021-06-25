@@ -1,6 +1,5 @@
 <?php
 require_once __DIR__ . "/auth.php";
-require_once __DIR__ . "/classes/Course.php";
 require_once __DIR__ . "/classes/Course_block.php";
 require_once __DIR__ . "/classes/Courses_table.php";
 require_once __DIR__ . "/classes/Users_courses_table.php";
@@ -13,22 +12,15 @@ $user_id = $_SESSION["id"];
 $users_courses_table = new Users_courses_table();
 $users_courses_list_ids = $users_courses_table->read($user_id);
 
-$users_courses_list = array();
-
+// рендеринг
+$content = "";
+$course_block = new Course_block();
+$courses_table = new Courses_table();
 foreach ($users_courses_list_ids as $course_id)
 {
-    $course = new Course();
-    $course->id = $course_id;
-    array_push($users_courses_list, $course->get());
-}
-
-//рендеринг
-$content = "";
-$block = new Course_block();
-foreach ($users_courses_list as $course)
-{
-    $block->argv = ["title"=>$course->title, "text"=>$course->text, "id"=>$course->id];
-    $content .= $block->render();
+    $tmp_course = $courses_table->read($course_id);
+    $course_block->argv = ["title"=>$tmp_course["title"], "text"=>$tmp_course["text"], "id"=>$tmp_course["id"]];
+    $content .= $course_block->render();
 }
 
 // чтоб сделать кнопку неактивной
