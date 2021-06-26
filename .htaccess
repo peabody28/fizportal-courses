@@ -1,0 +1,16 @@
+
+<Files exit.php>
+    Order Deny,Allow
+    Deny from all
+    Allow from 127.0.0.1
+</Files>
+
+Redirect 301 /rb.php /templates/404.html
+Redirect 301 /db.php /templates/404.html
+Redirect 301 /info.php /templates/404.html
+Redirect 301 /.gitignore /templates/404.html
+Redirect 301 /auth.php /templates/404.html
+Redirect 301 /auth_root.php /templates/404.html
+Redirect 301 /composer.json /templates/404.html
+Redirect 301 /composer.lock /templates/404.html
+Redirect 301 /README.md /templates/404.html
