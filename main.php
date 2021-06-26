@@ -3,6 +3,7 @@ require_once __DIR__."/auth.php";
 require_once __DIR__."/classes/Render.php";
 session_start();
 
+
 $file = basename(__FILE__, ".php");
 
 $page = new Render();

@@ -1,5 +1,4 @@
 <?php
-session_start();
 require_once __DIR__."/auth.php";
 require_once __DIR__."/auth_root.php";
 require_once __DIR__."/classes/Course.php";
@@ -8,8 +7,11 @@ require_once __DIR__."/classes/Theme.php";
 require_once __DIR__."/classes/Themes_table.php";
 require_once __DIR__."/classes/Tasks_table.php";
 require_once __DIR__."/classes/Render.php";
+session_start();
+
 
 $data = $_POST;
+
 if(isset($data["submit"]))
 {
     $theme = new Theme();
@@ -46,8 +48,6 @@ if(isset($data["submit"]))
 }
 else
 {
-
-
     $themes_table = new Themes_table();
     $tmp_theme = $themes_table->read($_GET["id"]);
     if(!$tmp_theme)
@@ -72,8 +72,9 @@ else
     foreach ($tasks_list as $task) {
         $content .= "<div>$task[text]</div>";
     }
-    // поле создания задачи
+    // ссылка на создание задачи
     $content.= "<br><br><div class='row col-12 p-0 m-0 ml-5'><a class='btn create' href='/add_task.php?theme_id=$theme->id'>Добавить задачу</a> </div><br><br>";
+
     $page = new Render();
     $page->temp = 'main.html';
     $page->argv = ['title' => "change_theme",

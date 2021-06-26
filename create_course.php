@@ -1,8 +1,8 @@
 <?php
-session_start();
 require_once __DIR__."/classes/Course.php";
 require_once __DIR__."/classes/Courses_table.php";
 require_once __DIR__."/classes/Render.php";
+session_start();
 
 
 $data = $_POST;
@@ -15,6 +15,7 @@ if (isset($data["submit"]))
     $course->price = $data["course_price"];
     $course->complexity = $data["course_comlexity"];
 
+    // TODO: ВОЗМОЖНО ЗДЕСЬ НУЖНА ПРОВЕРКА ВВЕДЕННЫХ ДАННЫХ
     $courses_table = new Courses_table();
     $response = $courses_table->create($course);
 }

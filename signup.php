@@ -1,9 +1,11 @@
 <?php
 require_once __DIR__."/classes/Render.php";
 require_once __DIR__."/classes/User.php";
+require_once __DIR__."/classes/Validator.php";
 require_once __DIR__."/classes/Users_table.php";
 require_once __DIR__."/classes/User_session.php";
-require_once __DIR__."/classes/Validator.php";
+
+
 $data = $_POST;
 
 if (isset($data["submit"]))
@@ -21,8 +23,8 @@ if (isset($data["submit"]))
     {
         // проверка на доступность имени
         $users_table = new Users_table();
-        $isset = $users_table->check_existence_user($user->name); //id найденного пользователя
-        if($isset)
+        $user_data = $users_table->check_existence_username($user->name); //id найденного пользователя
+        if($user_data)
            $response = ["status"=>"ERROR", "error"=>"Это имя занято"];
         else
         {
@@ -35,7 +37,7 @@ if (isset($data["submit"]))
                 $session->create_session($user);
                 if($data["check"])
                 {
-                    $user->hash = md5($session->generate_code());
+                    $user->hash = $session->generate_code();
                     $users_table->update($user, "hash");
                     $session->create_cookie($user);
                 }

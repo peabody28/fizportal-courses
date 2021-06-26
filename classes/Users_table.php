@@ -1,6 +1,9 @@
 <?php
 require_once __DIR__."/Table.php";
+
+
 $link = mysqli_connect("127.0.0.1", "root", "1234", "fizportal_courses");
+
 
 // взаимодействие непосредственно с базой
 class Users_table implements Table
@@ -31,13 +34,13 @@ class Users_table implements Table
     public function delete($id){
         // TODO: deliting user
     }
-    public function check_existence_user($name)
+    public function check_existence_username($name)
     {
         global $link;
-        $sql = sprintf("SELECT id FROM users WHERE name = '%s'", $name);
+        $sql = sprintf("SELECT * FROM users WHERE name = '%s'", $name);
         $result = mysqli_query($link, $sql);
-        $id = mysqli_fetch_array($result, MYSQLI_ASSOC)["id"];
-        return ($result->num_rows==0)?false:$id;
+        $user_data = mysqli_fetch_array($result, MYSQLI_ASSOC);
+        return $user_data;
     }
 
 }

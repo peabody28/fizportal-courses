@@ -1,5 +1,4 @@
 <?php
-session_start();
 require_once __DIR__."/auth.php";
 require_once __DIR__."/auth_root.php";
 require_once __DIR__."/classes/Course.php";
@@ -7,8 +6,11 @@ require_once __DIR__."/classes/Courses_table.php";
 require_once __DIR__."/classes/Theme.php";
 require_once __DIR__."/classes/Themes_table.php";
 require_once __DIR__."/classes/Render.php";
+session_start();
+
 
 $data = $_POST;
+
 if(isset($data["submit"]))
 {
     $course = new Course();
@@ -56,7 +58,7 @@ else
     $tmp_course = $courses_table->read($_GET["id"]);
     if(!$tmp_course)
         header("Location: /admin_page.php");
-
+    // беру данные курса из базы
     $course = new Course();
     $course->id = $tmp_course["id"];
     $course->title = $tmp_course["title"];
@@ -73,8 +75,8 @@ else
 
     //получаю темы
     $themes_table = new Themes_table();
-    $themes_list = $themes_table->get_themes_course($course->id);
-
+    $themes_list = $themes_table->get_courses_themes($course->id);
+    // рендеринг тем
     $theme_block = new Render();
     $theme_block->temp = "theme_block_adm.html";
     foreach ($themes_list as $theme) {

@@ -1,5 +1,7 @@
 <?php
 require_once __DIR__."/Table.php";
+
+
 $link = mysqli_connect("127.0.0.1", "root", "1234", "fizportal_courses");
 
 
@@ -36,7 +38,7 @@ class Themes_table implements Table
         $result = mysqli_query($link, $sql);
         return $result;
     }
-    public function get_themes_course($id)
+    public function get_courses_themes($id)
     {
         global $link;
         $sql = sprintf("SELECT * FROM themes WHERE course_id='%s'", $id);

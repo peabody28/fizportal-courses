@@ -1,5 +1,7 @@
 <?php
 require_once __DIR__."/Table.php";
+
+
 $link = mysqli_connect("127.0.0.1", "root", "1234", "fizportal_courses");
 
 
@@ -20,10 +22,7 @@ class Users_courses_table implements Table
         $sql = sprintf("SELECT * FROM users_courses WHERE user_id='%s'", $user_id);
         $res = mysqli_query($link, $sql);
         $rows = mysqli_fetch_all($res, MYSQLI_ASSOC);
-        $courses_list = array();
-        foreach ($rows as $row)
-            array_push($courses_list, $row["course_id"]);
-        return $courses_list;
+        return $rows;
     }
 
     public function update($obj, $column)

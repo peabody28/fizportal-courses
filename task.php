@@ -5,7 +5,9 @@ require_once __DIR__."/classes/Users_tasks.php";
 require_once __DIR__."/classes/Users_tasks_table.php";
 session_start();
 
+
 $data=$_POST;
+
 if(isset($data["submit"]))
 {
     $tasks_table = new Tasks_table();
@@ -22,6 +24,7 @@ if(isset($data["submit"]))
     }
     else
     {
+        // TODO: Добавление задачи в работу над ошибками
         echo json_encode(["status"=>"ERROR"]);
     }
 

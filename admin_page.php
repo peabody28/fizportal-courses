@@ -6,6 +6,7 @@ require_once __DIR__."/classes/Render.php";
 require_once __DIR__."/classes/Course_block_adm.php";
 session_start();
 
+
 // существующие курсы + добавление курса
 $content = "<br><br><div class='row col-12 p-0 m-0 ml-5'><a class='btn create' href='/create_course.php'>Cоздать курс</a> </div><br><br>";
 
@@ -13,11 +14,11 @@ $content = "<br><br><div class='row col-12 p-0 m-0 ml-5'><a class='btn create' h
 $courses_table = new Courses_table();
 $courses_list = $courses_table->get_courses_list();
 
-$block = new Course_block_adm();
+$course_block_adm = new Course_block_adm();
 foreach ($courses_list as $course)
 {
-    $block->argv = ["title"=>$course["title"], "id"=>$course["id"]];
-    $content .= $block->render();
+    $course_block_adm->argv = ["title"=>$course["title"], "id"=>$course["id"]];
+    $content .= $course_block_adm->render();
 }
 
 $page = new Render();
