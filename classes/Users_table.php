@@ -1,41 +1,46 @@
 <?php
-require_once __DIR__."/../db.php";
 require_once __DIR__."/Table.php";
+
+
+$link = mysqli_connect("127.0.0.1", "root", "1234", "fizportal_courses");
+
 
 // взаимодействие непосредственно с базой
 class Users_table implements Table
 {
     public function create($user): bool
     {
-        $row = R::dispense("users");
-        $row->name = $user->name;
-        $row->password = md5(md5($user->password));
-        $row->hash = $user->hash;
-        $user->id = R::store($row);
-        return $user->id?true:false;
+        global $link;
+        $sql = sprintf("INSERT INTO users(name, password, hash) VALUES ('%s', '%s', '%s')", $user->name, md5(md5($user->password)), $user->hash );
+        $result = mysqli_query($link, $sql);
+        $user->id = mysqli_insert_id($link);
+        return $result;
     }
-    public function read($user)
+    public function read($id)
     {
-        return R::load("users", $user->id);
+        global $link;
+        $sql = sprintf("SELECT * FROM users WHERE id = '%s'", $id );
+        $result = mysqli_query($link, $sql);
+        $user_data = mysqli_fetch_array($result, MYSQLI_ASSOC);
+        return $user_data;
     }
     public function update($user, $code)
     {
-        $row = R::load("users", $user->id);
-        if($code == "name")
-            $row->name = $user->name;
-        if($code == "password")
-            $row->password = md5(md5($user->password));
-        if($code == "hash")
-            $row->hash = $user->hash;
-        R::store($row);
+        global $link;
+        $sql = sprintf("UPDATE users SET %s='%s' WHERE id='%s'", $code, $user->$code, $user->id);
+        $result = mysqli_query($link, $sql);
+        return $result;
     }
-    public function delete($user){
+    public function delete($id){
         // TODO: deliting user
     }
-    public function check_existence_user(User $user)
+    public function check_existence_username($name)
     {
-        $row = R::findOne("users", "WHERE name = ?", [$user->name]);
-        return $row?($row->id):false;
+        global $link;
+        $sql = sprintf("SELECT * FROM users WHERE name = '%s'", $name);
+        $result = mysqli_query($link, $sql);
+        $user_data = mysqli_fetch_array($result, MYSQLI_ASSOC);
+        return $user_data;
     }
 
 }

@@ -4,14 +4,6 @@
         <div class='col-6 d-flex align-items-center justify-content-end' style='opacity: 0.7;'>#{{ id }}</div>
     </div>
     <div class='row p-0 m-0'>
-        <div class='row justify-content-start col-6'><a class='btn izm' href='/admin_page.php?code=change_course&id={{ id }}'>Изменить</a></div>
-        <div class='row justify-content-end col-6'>
-            <form class='del_course' method='POST'>
-                <input type='hidden' name='code' value='del_course'>
-                <input type='hidden' name='id' value='{{ id }}'>
-                <input type='hidden' name='submit'>
-                <input class='btn del_btn' type='submit' value='Удалить'>
-            </form>
-        </div>
+        <div class='row justify-content-start col-6'><a class='btn izm' href='/change_course.php?id={{ id }}'>Изменить</a></div>
     </div>
 </div><br>

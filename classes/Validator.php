@@ -1,5 +1,6 @@
 <?php
 
+
 class Validator
 {
     public function valid_user_data(User $user): array

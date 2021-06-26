@@ -1,0 +1,21 @@
+<div class="container-fluid">
+  <p>
+  <form id="add_task" method="POST">
+    <label class="row col-12 justify-content-center h2">Добавление задачи</label>
+    <textarea id="editor1"  name="task_text" placeholder="Условие задачи"></textarea>
+    <br>
+    <textarea id="editor2"  name="task_answer" placeholder="Ответ на задачу"></textarea>
+    <br>
+
+    <input type="text" name="image_url" placeholder="Путь к рисунку">
+    <br>
+  <br>
+    <input type="text" name="task_complexity" placeholder="Сложность">
+    <br>
+  <br>
+    <input type="hidden" name="theme_id" value="{{ theme_id }}">
+    <input type="hidden" name="submit">
+    <input id="cr_bt" class="btn create" type="submit" value="Добавить задачу">
+  </form>
+  <p>
+</div>

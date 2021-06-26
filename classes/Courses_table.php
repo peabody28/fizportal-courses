@@ -1,37 +1,48 @@
 <?php
-require_once __DIR__."/../db.php";
 require_once __DIR__."/Table.php";
+
+
+$link = mysqli_connect("127.0.0.1", "root", "1234", "fizportal_courses");
 
 
 class Courses_table implements Table
 {
     public function create($course)
     {
-        $row = R::dispense("courses");
-        $row->title = $course->title;
-        $row->text = $course->text;
-        $row->complexity = $course->complexity;
-        $row->price = $course->price;
-        $course->id = R::store($row);
+        global $link;
+        $sql = sprintf("INSERT INTO courses(title, text, complexity, price) VALUES ('%s', '%s', '%s', '%s')", $course->title, $course->text, $course->complexity, $course->price);
+        $result = mysqli_query($link, $sql);
+        $course->id = mysqli_insert_id($link);
         return $course->id ? true: false;
     }
-    public function read($course)
+    public function read($id)
     {
-        $row =  R::findOne("courses", "id = ?", [$course->id]);
-        return $row;
+        global $link;
+        $sql = sprintf("SELECT * FROM courses WHERE id = '%s'", $id);
+        $result = mysqli_query($link, $sql);
+        $course_data = mysqli_fetch_array($result, MYSQLI_ASSOC);
+        return $course_data;
     }
-    public function update($obj, $column)
+    public function update($course, $column)
     {
-        // TODO: Implement update() method.
+        global $link;
+        $sql = sprintf("UPDATE courses SET %s='%s' WHERE id = '%s'", $column, $course->$column, $course->id);
+        $result = mysqli_query($link, $sql);
+        return $result;
     }
-    public function delete($course)
+    public function delete($id)
     {
-        $row =  R::load("courses", $course->id);
-        R::trash($row);
+        global $link;
+        $sql = sprintf("DELETE FROM courses WHERE id = '%s'", $id);
+        $result = mysqli_query($link, $sql);
+        return $result;
     }
     public function get_courses_list():array
     {
-        $courses_list = R::findAll("courses");
+        global $link;
+        $sql = sprintf("SELECT * FROM courses");
+        $result = mysqli_query($link, $sql);
+        $courses_list = mysqli_fetch_all($result, MYSQLI_ASSOC);
         return $courses_list;
     }
 }

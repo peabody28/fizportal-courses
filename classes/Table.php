@@ -1,5 +1,6 @@
 <?php
 
+
 interface Table
 {
     public function create($obj);
