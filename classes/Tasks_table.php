@@ -1,8 +1,6 @@
 <?php
 require_once __DIR__."/Table.php";
-
-
-$link = mysqli_connect("127.0.0.1", "root", "1234", "fizportal_courses");
+require_once __DIR__."/../db_connect.php";
 
 
 class Tasks_table implements Table
