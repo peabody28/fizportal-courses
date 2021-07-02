@@ -19,7 +19,7 @@ $courses_table = new Courses_table();
 foreach ($users_courses_rows as $row)
 {
     $tmp_course = $courses_table->read($row["course_id"]);
-    $course_block->argv = ["title"=>$tmp_course["title"], "text"=>$tmp_course["text"], "id"=>$tmp_course["id"]];
+    $course_block->argv = ["title"=>$tmp_course["title"], "text"=>$tmp_course["text"], "id"=>$tmp_course["id"], "img_url"=>$tmp_course["img_url"]];
     $content .= $course_block->render();
 }
 

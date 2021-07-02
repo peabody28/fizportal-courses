@@ -8,7 +8,7 @@ class Courses_table implements Table
     public function create($course)
     {
         global $link;
-        $sql = sprintf("INSERT INTO courses(title, text, complexity, price) VALUES ('%s', '%s', '%s', '%s')", $course->title, $course->text, $course->complexity, $course->price);
+        $sql = sprintf("INSERT INTO courses(title, text, complexity, price, img_url) VALUES ('%s', '%s', '%s', '%s', '%s')", $course->title, $course->text, $course->complexity, $course->price, $course->img_url);
         $result = mysqli_query($link, $sql);
         $course->id = mysqli_insert_id($link);
         return $course->id ? true: false;

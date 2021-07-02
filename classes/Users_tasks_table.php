@@ -31,5 +31,13 @@ class Users_tasks_table implements Table
     {
         // TODO: Implement delete() method.
     }
+    public function get_users_tasks($id)
+    {
+        global $link;
+        $sql = sprintf("SELECT * FROM users_tasks WHERE user_id = '%s'", $id);
+        $result = mysqli_query($link, $sql);
+        $users_tasks = mysqli_fetch_all($result, MYSQLI_ASSOC);
+        return $users_tasks;
+    }
 
 }

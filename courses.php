@@ -35,13 +35,16 @@ else
     $close_course_block = new Close_course_block(); // некупленные курсы
     $course_block = new Course_block(); // купленные курсы
 
-    foreach ($courses_list as $course) {
+    $count_rows =count($courses_list)/2+1;
+    for($i = 0; $i<count($courses_list); $i++) {
+        $course = $courses_list[$i];
+
         if(in_array(["user_id"=>$_SESSION["id"], "course_id"=>$course["id"]], $users_courses_list)){
-            $course_block->argv = ["title" => $course["title"], "text" => $course["text"], "id" => $course["id"]];
+            $course_block->argv = ["title" => $course["title"], "text" => $course["text"], "id" => $course["id"], "img_url"=>$course["img_url"]];
             $content .= $course_block->render();
         }
         else {
-            $close_course_block->argv = ["title" => $course["title"], "text" => $course["text"], "id" => $course["id"], "price"=>$course["price"]];
+            $close_course_block->argv = ["title" => $course["title"], "text" => $course["text"], "id" => $course["id"], "price"=>$course["price"], "img_url"=>$course["img_url"]];
             $content .= $close_course_block->render();
         }
     }

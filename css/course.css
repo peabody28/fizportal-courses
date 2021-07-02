@@ -1,22 +1,43 @@
-.cours-row .col-8 {
-  border: 2px solid #13142a;
-  background-color: #b2c8e8;
+.cours-row {
+  min-height: 150px;
 }
-.cours-row .col-8 .cours-name {
+.cours-row .col-10 .cours-name {
   white-space: normal;
+  height: 40px;
 }
-.cours-row .col-8 .title {
-  white-space: normal;
-  background-color: #cadbf3;
+.cours-row .col-10 .tandb {
+  min-height: 200px;
+  border: 2px solid rgba(19, 20, 42, 0.42);
 }
-.cours-row .col-8 .btn {
-  background-color: #fff;
+.cours-row .col-10 .tandb img {
+  height: auto;
+  width: auto;
+}
+.cours-row .col-10 .title {
+  min-height: 170px;
+  white-space: break-spaces;
+  font-size: 20px;
+  background-color: #ffffff;
+}
+.cours-row .col-10 .btn-bl {
+  background-color: #cecece;
+}
+.cours-row .col-10 .get_course_btn {
+  background-color: #FDE37F;
   color: black;
+}
+.cours-row .col-10 .open-btn {
+  background-color: #3d807a;
+  color: black;
+}
+.theme {
+  border: 1px solid grey;
+  background-color: #efe7e2;
 }
 .theme p {
   margin: 0;
 }
 .izm {
-  background-color: #466b9b;
+  background-color: #c99898;
 }
 /*# sourceMappingURL=course.css.map */

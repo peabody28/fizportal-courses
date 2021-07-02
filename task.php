@@ -10,44 +10,35 @@ $data=$_POST;
 
 if(isset($data["submit"]))
 {
-    $tasks_table = new Tasks_table();
-    $task = $tasks_table->read($data["task_id"]);
-    if($task["answer"] == $data["answer"])
+    if($data["code"]=="get_task_data")
     {
-        $users_tasks = new Users_tasks();
-        $users_tasks->user_id = $_SESSION["id"];
-        $users_tasks->task_id = $data["task_id"];
+        $tasks_table = new Tasks_table();
+        $task = $tasks_table->read($data["task_id"]);
+        echo json_encode($task);
+    }
+    else if ($data["code"]=="send_answer")
+    {
+        $tasks_table = new Tasks_table();
+        $task = $tasks_table->read($data["task_id"]);
+        if ($task["answer"] == $data["answer"]) {
+            $users_tasks = new Users_tasks();
+            $users_tasks->user_id = $_SESSION["id"];
+            $users_tasks->task_id = $data["task_id"];
 
-        $users_tasks_table = new Users_tasks_table();
-        $users_tasks_table->create($users_tasks);
-        echo json_encode(["status"=>"OK"]);
+            $users_tasks_table = new Users_tasks_table();
+            $users_tasks_table->create($users_tasks);
+            echo json_encode(["status" => "OK", "task_id"=>$data["task_id"]]);
+        } else {
+            // TODO: Добавление задачи в работу над ошибками
+            echo json_encode(["status" => "ERROR"]);
+        }
     }
     else
-    {
-        // TODO: Добавление задачи в работу над ошибками
-        echo json_encode(["status"=>"ERROR"]);
-    }
+        echo json_encode(["status"=>"wrong code"]);
 
 }
 else
 {
-    $tasks_table = new Tasks_table();
-    $task = $tasks_table->read($_GET["id"]);
-    if($task["id"])
-    {
-        $task_block = new Render();
-        $content = $task_block->render_full_task($task);
-
-        $page = new Render();
-        $page->temp = 'main.html';
-        $page->argv = ['title'=>"task $task[id]",
-            'css'=>"/css/task.css",
-            "name"=>"<h2>$_SESSION[name]</h2>",
-            "content"=>$content,
-            "js"=>"/js/task.js"] ;
-
-        echo $page->render_temp();
-    }
-    else
-        header("Location: /courses.php");
+    echo json_encode(["status"=>"error1 not subm"]);
 }
+
