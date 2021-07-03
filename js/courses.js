@@ -10,7 +10,7 @@ $('#get_course').submit(
                 var resp = JSON.parse(res)
                 if (resp["status"]=="OK")
                 {
-                    $(location).attr("href", "/course.php?id="+resp["course_id"])
+                    $(location).attr("href", "/course?id="+resp["course_id"])
                 }
             }
         })

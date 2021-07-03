@@ -8,7 +8,7 @@ $("#add_task").submit(function ()
             success: function (response)
             {
                 var resp = JSON.parse(response)
-                $(location).attr("href", "/change_theme.php?id="+resp["theme_id"])
+                $(location).attr("href", "/change_theme?id="+resp["theme_id"])
             }
         }
     )

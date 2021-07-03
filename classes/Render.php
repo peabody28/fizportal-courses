@@ -23,18 +23,4 @@ class Render
             $themes_blocks .= $twig->render("theme.html", ["title"=>$theme["title"], "text"=>$theme["text"], "id"=>$theme["id"]]);
         return $themes_blocks;
     }
-    public function render_task($tasks)
-    {
-        global $twig;
-        $tasks_blocks = "";
-        foreach($tasks as $task)
-            $tasks_blocks .= $twig->render("task.html", ["text"=>$task["text"], "id"=>$task["id"]]);
-        return $tasks_blocks;
-    }
-    public function render_full_task($task)
-    {
-        global $twig;
-        $task_block = $twig->render("full_task.html", ["text"=>$task["text"], "task_id"=>$task["id"]]);
-        return $task_block;
-    }
 }

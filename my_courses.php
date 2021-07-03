@@ -13,7 +13,7 @@ $users_courses_table = new Users_courses_table();
 $users_courses_rows = $users_courses_table->read($_SESSION["id"]);
 
 // рендеринг
-$content = "<div class='row container-fluid justify-content-center m-0 mt-5 p-0'><h1>Мои курсы</h1></div>";
+$content = "<div class='row container-fluid justify-content-center m-0 mb-3 p-0'><h1>Мои курсы</h1></div>";
 $course_block = new Course_block();
 $courses_table = new Courses_table();
 foreach ($users_courses_rows as $row)

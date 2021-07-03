@@ -25,21 +25,21 @@ if(!isset($_SESSION["name"]))
                 $_SESSION["id"]=$user->id;
                 $_SESSION["name"]=$user->name;
                 $_SESSION["rights"]=$user->rights;
-                header("Location: /main.php");
+                header("Location: /main");
             }
             else
-                header("Location: /login.php");
+                header("Location: /login");
         }
         else
         {
             $sess = new User_session();
             $sess->delete();
-            header("Location: /login.php");
+            header("Location: /login");
         }
 
     }
     else
-        header("Location: /login.php");
+        header("Location: /login");
 }
 else
-    header("Location: /main.php");
+    header("Location: /main");

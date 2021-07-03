@@ -1,20 +1,30 @@
 body, html
 {
-    height: 100%;
+    font-family: 'Comfortaa', cursive;
     #wrapper
     {
         #up
         {
-          min-height: 950px;
+          //min-height: 950px;
         }
     }
 }
 #sidebar
 {
+    @media (min-width: 576px) {
+        min-height: 950px;
+    }
     background-color: #3d807a;
     #logo
     {
-        font-size: 25px;
+        font-family: 'Righteous', cursive;
+        font-size: 30px;
+        @media(max-width: 768px) {
+            font-size: 30px;
+        }
+        @media(min-width: 768px) {
+            font-size: 40px;
+        }
         color: #ffffff;
         font-weight: bold;
     }

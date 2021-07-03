@@ -9,9 +9,9 @@ $('.get_task').submit(function ()
             {
                 var task = JSON.parse(res)
                 var block = "" +
-                    "<div class='row justify-content-center h2'>Условие</div><br>"+
-                    "<div class='opis d-flex justify-content-center'>"+task["text"]+"</div><br><br>" +
-                    "<div class='container-fluid d-flex justify-content-center'>" +
+                    "<div class='row m-0 p-0 justify-content-center h2'>Условие</div><br>"+
+                    "<div class='opis m-0 p-0 d-flex justify-content-center'>"+task["text"]+"</div><br><br>" +
+                    "<div class='container-fluid d-flex justify-content-center m-0 p-0'>" +
                         "<form class='send_answer' method='POST' onsubmit='send_answer();return false;'>" +
                             "<input type='hidden' name='submit' >"+
                             "<input type='hidden' name='task_id' value=" + task["id"] + ">"+

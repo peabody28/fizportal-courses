@@ -56,7 +56,7 @@ else
     $page = new Render();
     $page->temp = 'login.html';
     $page->argv = ['title'=>"login", 'nm'=>"ВХОД",
-        'btn_text'=>"Войти", 'a_href'=>"/signup.php", 'a_text'=>"создать акк", "js"=>"/js/login.js"]  ;
+        'btn_text'=>"Войти", 'a_href'=>"/signup", 'a_text'=>"создать акк", "js"=>"/js/login.js"]  ;
     echo $page->render_temp();
 }
 

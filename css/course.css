@@ -1,23 +1,16 @@
-.cours-row {
-  min-height: 150px;
-}
 .cours-row .col-10 .cours-name {
   white-space: normal;
   height: 40px;
 }
 .cours-row .col-10 .tandb {
-  min-height: 200px;
   border: 2px solid rgba(19, 20, 42, 0.42);
 }
-.cours-row .col-10 .tandb img {
-  height: auto;
-  width: auto;
-}
 .cours-row .col-10 .title {
-  min-height: 170px;
-  white-space: break-spaces;
-  font-size: 20px;
+  font-size: 18px;
   background-color: #ffffff;
+}
+.cours-row .col-10 .title p {
+  margin: 0;
 }
 .cours-row .col-10 .btn-bl {
   background-color: #cecece;
@@ -31,13 +24,18 @@
   color: black;
 }
 .theme {
-  border: 1px solid grey;
-  background-color: #efe7e2;
+  background-color: #cecece;
+  border: 1px solid #343135;
+  border-right: 20px solid #3d7f79;
+}
+.theme a {
+  text-decoration: none;
+  color: #343135;
 }
 .theme p {
   margin: 0;
 }
-.izm {
-  background-color: #c99898;
+.theme:hover {
+  background-color: #959494;
 }
 /*# sourceMappingURL=course.css.map */

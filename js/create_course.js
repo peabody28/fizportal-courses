@@ -7,7 +7,7 @@ $("#create_course").submit(function ()
             data: $(this).serialize(),
             success: function ()
             {
-                $(location).attr("href", "/admin_page.php");
+                $(location).attr("href", "/admin_page");
             }
         }
     )

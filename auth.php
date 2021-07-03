@@ -12,7 +12,7 @@ if(!isset($_SESSION["name"]))
         $users_table = new Users_table();
         $tmp_user = $users_table->read($_COOKIE["id"]);
         if(!$tmp_user)
-            header("Location: /signup.php");
+            header("Location: /signup");
         $user = new User();
         $user->id = $tmp_user["id"];
         $user->hash = $tmp_user["hash"];
@@ -25,8 +25,8 @@ if(!isset($_SESSION["name"]))
             $_SESSION["rights"]=$user->rights;
         }
         else
-            header("Location: /login.php");
+            header("Location: /login");
     }
     else
-        header("Location: /login.php");
+        header("Location: /login");
 }

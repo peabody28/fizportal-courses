@@ -8,7 +8,7 @@ session_start();
 
 
 // существующие курсы + добавление курса
-$content = "<br><br><div class='row col-12 p-0 m-0 ml-5'><a class='btn create' href='/create_course.php'>Cоздать курс</a> </div><br><br>";
+$content = "<br><br><div class='row col-12 p-0 m-0 ml-5'><a class='btn create' href='/create_course'>Cоздать курс</a> </div><br><br>";
 
 //Отображение существующих курсов специально для админа
 $courses_table = new Courses_table();

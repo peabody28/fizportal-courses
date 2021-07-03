@@ -6,27 +6,33 @@
     <title>{{ title }}</title>
     <script src="/vendor/components/jquery/jquery.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Righteous&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@300;400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/vendor/twbs/bootstrap/dist/css/bootstrap.css">
     <link rel="stylesheet" href="/css/main.css">
     <link rel="stylesheet" href="{{ css }}">
     <script src="https://cdn.ckeditor.com/ckeditor5/27.0.0/classic/ckeditor.js"></script>
 </head>
 <body>
-    <div id="wrapper" class="container-fluid w-100 h-100 p-0">
-        <div class="row m-0 w-100 h-100 ">
-            <div id="up" class="row p-0 m-0 w-100 container-fluid">
-                <div id="sidebar" class="col-12 col-sm-4 col-xl-3 w-100 p-0 m-0 container">
+    <div id="wrapper" class="container-fluid p-0">
+        <div class="row m-0 ">
+            <div id="up" class="row p-0 m-0 container-fluid">
+                <div id="sidebar" class="col-12 col-sm-4 col-xl-3 p-0 m-0 container">
                     <div class="row m-0 mt-3 mb-2 d-flex justify-content-center" id="logo">FIZPORTAL</div>
                     <div id="username" class="col-12 mb-3 d-flex justify-content-center">{{ name|raw }}</div>
                     <ul class="list-group pr-3 pl-3">
-                        <li class="list-group-item m-3 p-0 shadow"><a class="col-12 btn btn-md {{ disabled_main }}" href="/main.php">Главная</a></li>
-                        <li class="list-group-item m-3 p-0 shadow"><a class="col-12 btn btn-md {{ disabled_acc }}" href="/acc.php">Личный кабинет</a></li>
-                        <li class="list-group-item m-3 p-0 shadow"><a class="col-12 btn btn-md {{ disabled_courses }}" href="/courses.php">Курсы</a></li>
-                        <li class="list-group-item m-3 p-0 shadow"><a class="col-12 btn btn-md {{ disabled_my_courses }}" href="/my_courses.php">Мои Курсы</a></li>
-                        <li class="list-group-item m-3 p-0 shadow"><a class="col-12 btn btn-md {{ disabled_faq }}" href="/faq.php">Как пользоваться платформой</a></li>
+                        <li class="list-group-item m-3 p-0 shadow"><a class="col-12 btn btn-md {{ disabled_main }}" href="/main">Главная</a></li>
+                        <li class="list-group-item m-3 p-0 shadow"><a class="col-12 btn btn-md {{ disabled_acc }}" href="/acc">Личный кабинет</a></li>
+                        <li class="list-group-item m-3 p-0 shadow"><a class="col-12 btn btn-md {{ disabled_courses }}" href="/courses">Курсы</a></li>
+                        <li class="list-group-item m-3 p-0 shadow"><a class="col-12 btn btn-md {{ disabled_my_courses }}" href="/my_courses">Мои Курсы</a></li>
+                        <li class="list-group-item m-3 p-0 shadow"><a class="col-12 btn btn-md {{ disabled_faq }}" href="/faq">Как пользоваться платформой</a></li>
                     </ul>
                 </div>
-                <div id="content" class="col-12 col-sm-8 col-xl-9 p-0 m-0 pb-5 pl-2 pt-3 w-100 h-100 container-fluid">{{ content|raw }}</div>
+                <div id="content" class="col-12 col-sm-8 col-xl-9 p-0 m-0 pb-5 pl-2 pt-3 container-fluid">{{ content|raw }}</div>
             </div>
             <div class="m-0 row w-100" id="footer">Developed by Горбачевский Максим </div>
         </div>

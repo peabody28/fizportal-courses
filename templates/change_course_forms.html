@@ -1,19 +1,20 @@
-<div class="container-fluid">
-    <p>
-    <form id="change_title_course" method="POST">
-        <label class="row col-12 justify-content-center h2">Изменить имя курса</label>
-        <textarea id="editor1"  name="new_course_title" placeholder="Название"></textarea>
-        <input type="hidden" name="code" value="change_title">
-        <input type="hidden" name="course_id" value="{{ course_id }}">
-        <input type="hidden" name="submit">
-        <br>
-        <input class="btn izm" type="submit" value="Изменить">
-    </form>
-    <p>
-</div>
+
+<p>
+    <div>
+        <form id="change_title_course" method="POST">
+            <label class="row col-12 justify-content-center h2">Изменить имя курса</label>
+            <textarea id="editor1"  name="new_course_title" placeholder="Название"></textarea>
+            <input type="hidden" name="code" value="change_title">
+            <input type="hidden" name="course_id" value="{{ course_id }}">
+            <input type="hidden" name="submit">
+            <br>
+            <input class="btn izm" type="submit" value="Изменить">
+        </form>
+    </div>
+<p>
+
 
 <div class="container-fluid">
-    <p>
     <form id="change_text_course" method="POST">
         <label class="row col-12 justify-content-center h2">Изменить описание курса</label>
         <textarea id="editor2"  name="new_course_text" placeholder="Описание"></textarea>
@@ -23,45 +24,73 @@
         <br>
         <input class="btn izm" type="submit" value="Изменить">
     </form>
-    <p>
 </div>
 
 <div class="container-fluid">
-    <p>
     <form id="change_price_course" method="POST">
         <label class="row col-12 justify-content-center h2">Изменить цену курса</label>
         <input type="text" name="new_course_price">
         <input type="hidden" name="code" value="change_price">
         <input type="hidden" name="course_id" value="{{ course_id }}">
         <input type="hidden" name="submit">
+        <br>
+        <br>
         <input class="btn izm" type="submit" value="Изменить">
     </form>
-    <p>
 </div>
+<p>
 
+<p>
 <div class="container-fluid">
-    <p>
+
     <form id="change_complexity_course" method="POST">
         <label class="row col-12 justify-content-center h2">Изменить сложность курса (1-10)</label>
         <input type="text" name="new_course_comlexity">
         <input type="hidden" name="code" value="change_complexity">
         <input type="hidden" name="course_id" value="{{ course_id }}">
         <input type="hidden" name="submit">
+        <br>
+        <br>
         <input class="btn izm" type="submit" value="Изменить">
     </form>
-    <p>
-</div>
 
+</div>
+<p>
+
+
+
+<p>
 <div class="container-fluid">
-    <p>
+
+    <form id="change_img_url_course" method="POST">
+        <label class="row col-12 justify-content-center h2">Изменить путь к изабражению</label>
+        <input type="text" name="new_img_url">
+        <input type="hidden" name="code" value="change_img_url">
+        <input type="hidden" name="course_id" value="{{ course_id }}">
+        <input type="hidden" name="submit">
+        <br>
+        <br>
+        <input class="btn izm" type="submit" value="Изменить">
+    </form>
+
+</div>
+<p>
+
+<br>
+<br>
+<p>
+<div class="container-fluid">
+
     <form id="delete_course" method="POST">
         <input type="hidden" name="submit">
         <input type="hidden" name="code" value="delete">
         <input type="hidden" name="course_id" value="{{ course_id }}">
         <input id="del_course_btn" class="btn" type="submit" value="Удалить курс">
     </form>
-    <p>
+
 </div>
+<p>
+
 
 <div id="message"></div>
 

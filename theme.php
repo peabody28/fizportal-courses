@@ -34,6 +34,7 @@ if ($tmp_theme)
         $button
         </form>  ";
     }
+
     $content .= "</div><br><br>"."<div id='task'>$tmp_theme[text]</div><br><br>"."<div class='h2 d-flex justify-content-center' id='message'></div>";
 }
 else

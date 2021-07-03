@@ -1,3 +1,8 @@
+RewriteEngine On
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME}\.php -f
+RewriteRule ^(.*)$ $1.php
+
 Redirect 301 /rb.php /templates/404.html
 Redirect 301 /db.php /templates/404.html
 Redirect 301 /info.php /templates/404.html

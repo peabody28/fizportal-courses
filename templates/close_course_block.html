@@ -2,11 +2,11 @@
     <div class='col-10 h-100 container-fluid'>
         <div class='row h1 m-0 justify-content-center cours-name'>{{ title|raw }}</div>
         <div class="tandb mt-2" >
-            <div class='row p-0 m-0 mr-2 ml-2 mt-2 ' >
+            <div class='row p-0 m-0 mr-2 ml-2 mt-2'>
                 <div class="image d-flex justify-content-center align-items-center col-12 col-sm-4">
                     <img src="{{ img_url }}" class="img-fluid" alt="no image">
                 </div>
-                <div class="col-12 col-sm-8 title">{{ text|raw }}</div>
+                <div class="title text-center col-12 text-break col-sm-8">{{ text|raw }}</div>
             </div>
             <div class='btn-bl row p-0 m-0 mt-2 pt-2 pb-2 pr-3 shadow justify-content-end'>
                 <form id="get_course" method="POST">

@@ -1,18 +1,30 @@
 body,
 html {
-  height: 100%;
-}
-body #wrapper #up,
-html #wrapper #up {
-  min-height: 950px;
+  font-family: 'Comfortaa', cursive;
 }
 #sidebar {
   background-color: #3d807a;
 }
+@media (min-width: 576px) {
+  #sidebar {
+    min-height: 950px;
+  }
+}
 #sidebar #logo {
-  font-size: 25px;
+  font-family: 'Righteous', cursive;
+  font-size: 30px;
   color: #ffffff;
   font-weight: bold;
+}
+@media (max-width: 768px) {
+  #sidebar #logo {
+    font-size: 30px;
+  }
+}
+@media (min-width: 768px) {
+  #sidebar #logo {
+    font-size: 40px;
+  }
 }
 #sidebar #username {
   color: #ffffff;

@@ -50,6 +50,13 @@ if(isset($data["submit"]))
         $courses_table->update($course, "complexity");
         echo json_encode(["status"=>"OK"]);
     }
+    else if($data["code"]=="change_img_url")
+    {
+        $course->img_url = $data["new_img_url"];
+        $courses_table = new Courses_table();
+        $courses_table->update($course, "img_url");
+        echo json_encode(["status"=>"OK"]);
+    }
 
 }
 else
@@ -84,7 +91,7 @@ else
         $content .= $theme_block->render_temp();
     }
     // поле создания темы
-    $content.= "<br><br><div class='row col-12 p-0 m-0 ml-5'><a class='btn create' href='/add_theme.php?course_id=$course->id'>Добавить тему</a> </div><br><br>";
+    $content.= "<br><br><div class='row col-12 p-0 m-0 ml-5'><a class='btn create' href='/add_theme?course_id=$course->id'>Добавить тему</a> </div><br><br>";
     $page = new Render();
     $page->temp = 'main.html';
     $page->argv = ['title' => "change_course",

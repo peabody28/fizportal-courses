@@ -73,7 +73,7 @@ else
         $content .= "<div>$task[text]</div>";
     }
     // ссылка на создание задачи
-    $content.= "<br><br><div class='row col-12 p-0 m-0 ml-5'><a class='btn create' href='/add_task.php?theme_id=$theme->id'>Добавить задачу</a> </div><br><br>";
+    $content.= "<br><br><div class='row col-12 p-0 m-0 ml-5'><a class='btn create' href='/add_task?theme_id=$theme->id'>Добавить задачу</a> </div><br><br>";
 
     $page = new Render();
     $page->temp = 'main.html';
