@@ -31,7 +31,7 @@ if ($course["id"])
         $content = "Вы не купили этот курс";
 }
 else
-    header("Location: /courses.php");
+    header("Location: /courses");
 
 $file = basename(__FILE__, ".php");
 
