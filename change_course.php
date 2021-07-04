@@ -64,7 +64,7 @@ else
     $courses_table = new Courses_table();
     $tmp_course = $courses_table->read($_GET["id"]);
     if(!$tmp_course)
-        header("Location: /admin_page.php");
+        header("Location: /courses");
     // беру данные курса из базы
     $course = new Course();
     $course->id = $tmp_course["id"];
@@ -72,26 +72,14 @@ else
     $course->text = $tmp_course["text"];
     $course->complexity = $tmp_course["complexity"];
     $course->price = $tmp_course["price"];
+    $course->img_url = $tmp_course["img_url"];
 
     $content = "";
     $forms = new Render();
     $forms->temp = "change_course_forms.html";
-    $forms->argv = ["course_id"=>$course->id];
+    $forms->argv = ["course_id"=>$course->id, "course_title"=>strip_tags($course->title),"course_text"=>strip_tags($course->text), "course_complexity"=>$course->complexity, "course_price"=>$course->price, "course_img_url"=>$course->img_url ];
     $content.=$forms->render_temp();
-    $content.="<br><br><h2>Темы курса</h2>";
-
-    //получаю темы
-    $themes_table = new Themes_table();
-    $themes_list = $themes_table->get_courses_themes($course->id);
-    // рендеринг тем
-    $theme_block = new Render();
-    $theme_block->temp = "theme_block_adm.html";
-    foreach ($themes_list as $theme) {
-        $theme_block->argv = ["title"=>$theme["title"], "id"=>$theme["id"]];
-        $content .= $theme_block->render_temp();
-    }
-    // поле создания темы
-    $content.= "<br><br><div class='row col-12 p-0 m-0 ml-5'><a class='btn create' href='/add_theme?course_id=$course->id'>Добавить тему</a> </div><br><br>";
+    $content .= "<br><br><div class='row col-12 p-0 m-0 ml-5 d-flex justify-content-start'><a class='btn back' href='/courses'>Вернуться к списку курсов</a></div><br><br>";
     $page = new Render();
     $page->temp = 'main.html';
     $page->argv = ['title' => "change_course",

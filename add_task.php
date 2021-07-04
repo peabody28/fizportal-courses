@@ -1,6 +1,8 @@
 <?php
 require_once __DIR__."/classes/Task.php";
 require_once __DIR__."/classes/Tasks_table.php";
+require_once __DIR__ . "/classes/Tasks_answer.php";
+require_once __DIR__."/classes/Tasks_answers_table.php";
 require_once __DIR__."/classes/Render.php";
 session_start();
 
@@ -11,7 +13,9 @@ if(isset($data["submit"]))
 {
     $task = new Task();
     $task->text = $data["task_text"];
-    $task->answer = $data["task_answer"];
+    $task->type = $data["type"];
+    if($data["type"]=="B")
+        $task->answer = $data["task_answer"];
     $task->theme_id = $data["theme_id"];
     $task->image_url = ($data["image_url"]=="")?null:$data["image_url"];
     $task->complexity = $data["task_complexity"];
@@ -19,6 +23,21 @@ if(isset($data["submit"]))
     // TODO: ВОЗМОЖНО ЗДЕСЬ НУЖНА ПРОВЕРКА ВВЕДЕННЫХ ДАННЫХ
     $tasks_table = new Tasks_table();
     $response = $tasks_table->create($task);
+
+    if($data["type"]=="A" && $response)
+    {
+        $tasks_answer = new Tasks_answer();
+        $tasks_answers_table = new Tasks_answers_table();
+        $tasks_answer->task_id = $task->id;
+        for($i=1; $i<=5;$i++)
+        {
+            if(isset($data["answ".$i]))
+            {
+                $tasks_answer->answer=$data["answ".$i];
+                $tasks_answers_table->create($tasks_answer);
+            }
+        }
+    }
     echo json_encode(["theme_id"=>$data["theme_id"]]);
 }
 else

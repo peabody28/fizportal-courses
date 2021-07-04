@@ -68,7 +68,7 @@ $("#delete_theme").submit(function ()
             data: $(this).serialize(),
             success: function (res){
                 let response = JSON.parse(res)
-                $(location).attr("href", "/admin_page.php")
+                $(location).attr("href", "/courses")
             }
         }
     )

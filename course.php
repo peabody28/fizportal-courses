@@ -18,14 +18,21 @@ if ($course["id"])
     // проверяю, есть ли курс у пользователя
     $users_courses_table = new Users_courses_table();
     $users_courses_list = $users_courses_table->read($_SESSION["id"]);
-    if(in_array(["user_id"=>$_SESSION["id"], "course_id"=>$course["id"]], $users_courses_list))
+    if(in_array(["user_id"=>$_SESSION["id"], "course_id"=>$course["id"]], $users_courses_list) || $_SESSION["rights"]=="admin")
     {
         $content = "<div class='row container-fluid justify-content-center m-0 p-0'><h2>Темы</h2></div>";
         //беру темы курса
         $themes_table = new Themes_table();
         $themes_list = $themes_table->get_courses_themes($course["id"]);
         $render = new Render();
-        $content .= $render->render_theme($themes_list);
+        if($_SESSION["rights"]=="admin")
+        {
+            $content.=$render->render_themes_adm($themes_list);
+            $content.= "<br><br><div class='row col-12 p-0 m-0 ml-5 d-flex justify-content-start'><a class='btn create' href='/add_theme?course_id=$course[id]'>Добавить тему</a></div><br><br>";
+        }
+        else
+            $content .= $render->render_theme($themes_list);
+
     }
     else
         $content = "Вы не купили этот курс";

@@ -8,19 +8,7 @@ $('.get_task').submit(function ()
             success: function (res)
             {
                 var task = JSON.parse(res)
-                var block = "" +
-                    "<div class='row m-0 p-0 justify-content-center h2'>Условие</div><br>"+
-                    "<div class='opis m-0 p-0 d-flex justify-content-center'>"+task["text"]+"</div><br><br>" +
-                    "<div class='container-fluid d-flex justify-content-center m-0 p-0'>" +
-                        "<form class='send_answer' method='POST' onsubmit='send_answer();return false;'>" +
-                            "<input type='hidden' name='submit' >"+
-                            "<input type='hidden' name='task_id' value=" + task["id"] + ">"+
-                            "<input type='hidden' name='code' value='send_answer'>"+
-                            "<input type='text' class='row' name='answer'><br>"+
-                            "<div class='row d-flex justify-content-center'><button class='btn' type='submit'>Отправить</button></div>"+
-                        "</form>"+
-                    "</div>";
-                $("#task").html(block)
+                $("#task").html(task["block"])
                 $("#message").html("")
             }
         }
@@ -30,6 +18,7 @@ $('.get_task').submit(function ()
 
 function send_answer()
 {
+    console.log($('.send_answer').serialize())
     $.ajax(
         {
             url: "/task.php",
@@ -37,12 +26,12 @@ function send_answer()
             data: $('.send_answer').serialize(),
             success: function (res)
             {
+                console.log(res)
                 var response = JSON.parse(res)
-                console.log(response)
                 if (response["status"]=="OK")
                 {
                     $("#message").html("Верно!")
-                    $("#"+response["task_id"]).css('background-color', '#25a778');
+                    $("#"+response["task_id"]).css('background-color', '#50C878');
                 }
                 else
                     $("#message").html("Неверный ответ!")
@@ -51,3 +40,38 @@ function send_answer()
     )
     return false;
 }
+
+function del_task()
+{
+    $.ajax(
+        {
+            url: "/task.php",
+            type: "POST",
+            data: $('.del_task').serialize(),
+            success: function ()
+            {
+                location.reload();
+            }
+        }
+    )
+    return false;
+}
+
+$('.get_theme_text').submit(function ()
+{
+    $.ajax(
+        {
+            url: "/theme.php",
+            type: "POST",
+            data: $(this).serialize(),
+            success: function (res)
+            {
+                var theme = JSON.parse(res)
+                var block = "<div class='row m-0 p-0 justify-content-center h2'>Описание темы</div><br><div class='row m-0 p-0 justify-content-center h2'>"+ theme["text"]+ "</div>"
+                $("#task").html(block)
+                $("#message").html("")
+            }
+        }
+    )
+    return false;
+})

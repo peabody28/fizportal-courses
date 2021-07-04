@@ -1,6 +1,8 @@
-<div class=' row m-0 p-0 ml-2 mr-2 mb-2 p-2 theme' id="{{ id }}">
-    <div class="p-0 m-0 row container-fluid">
-        <div class="col-12 col-lg-9 d-flex justify-content-start">{{ title|raw }}</div>
-        <div class="col-12 col-lg-3"><a class="btn izm" href="/change_theme?id={{ id }}">Изменить</a></div>
-    </div>
+<div class="row theme m-0 p-0 mb-3 ml-2 mr-2 pl-2">
+    <a class="text-start text-break col-12 h2 m-0 p-0" href="/theme?id={{ id }}">{{ title|raw }}</a>
 </div>
+<div class="row m-0 p-0 mb-3 ml-2 mr-2">
+    <a class="btn izm" href="/change_theme?id={{ id }}">Изменить</a>
+</div>
+<br>
+<br>

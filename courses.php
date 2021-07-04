@@ -1,6 +1,7 @@
 <?php
 require_once __DIR__."/auth.php";
 require_once __DIR__."/classes/Courses_table.php";
+require_once __DIR__."/classes/Course_block_adm.php";
 require_once __DIR__."/classes/Close_course_block.php";
 require_once __DIR__."/classes/Course_block.php";
 require_once __DIR__."/classes/Users_courses_table.php";
@@ -32,14 +33,21 @@ else
     $users_courses_list = $users_courses_table->read($_SESSION["id"]);
     //рендеринг
     $content = "";
+    if($_SESSION["rights"]=="admin")
+        $content = "<br><br><div class='row col-12 p-0 m-0 ml-5 d-flex justify-content-start'><a class='btn create' href='/create_course'>Cоздать курс</a> </div><br><br>";
     $close_course_block = new Close_course_block(); // некупленные курсы
     $course_block = new Course_block(); // купленные курсы
+    $course_block_adm = new Course_block_adm();
 
-    $count_rows =count($courses_list)/2+1;
     for($i = 0; $i<count($courses_list); $i++) {
         $course = $courses_list[$i];
 
-        if(in_array(["user_id"=>$_SESSION["id"], "course_id"=>$course["id"]], $users_courses_list)){
+        if($_SESSION["rights"]=="admin")
+        {
+            $course_block_adm->argv = ["title" => $course["title"], "text" => $course["text"], "id" => $course["id"], "img_url"=>$course["img_url"]];
+            $content .= $course_block_adm->render();
+        }
+        else if(in_array(["user_id"=>$_SESSION["id"], "course_id"=>$course["id"]], $users_courses_list)){
             $course_block->argv = ["title" => $course["title"], "text" => $course["text"], "id" => $course["id"], "img_url"=>$course["img_url"]];
             $content .= $course_block->render();
         }

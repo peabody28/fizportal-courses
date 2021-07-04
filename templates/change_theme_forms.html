@@ -2,7 +2,7 @@
   <p>
   <form id="change_title_theme" method="POST">
     <label class="row col-12 justify-content-center h2">Изменить имя темы</label>
-    <textarea id="editor1"  name="new_theme_title" placeholder="Название"></textarea>
+    <textarea id="editor1"  name="new_theme_title" placeholder="Сейчас: {{ theme_title }}"></textarea>
     <input type="hidden" name="code" value="change_title">
     <input type="hidden" name="theme_id" value="{{ theme_id }}">
     <input type="hidden" name="submit">
@@ -16,7 +16,7 @@
   <p>
   <form id="change_text_theme" method="POST">
     <label class="row col-12 justify-content-center h2">Изменить описание темы</label>
-    <textarea id="editor2"  name="new_theme_text" placeholder="Описание"></textarea>
+    <textarea id="editor2"  name="new_theme_text" placeholder="Сейчас: {{ theme_text }}"></textarea>
     <input type="hidden" name="code" value="change_text">
     <input type="hidden" name="submit">
     <input type="hidden" name="theme_id" value="{{ theme_id }}">
@@ -30,7 +30,7 @@
   <p>
   <form id="change_complexity_theme" method="POST">
     <label class="row col-12 justify-content-center h2">Изменить сложность темы (1-10)</label>
-    <input type="text" name="new_theme_comlexity">
+    <input type="text" name="new_theme_comlexity" placeholder="Сейчас: {{ theme_complexity }}">
     <input type="hidden" name="code" value="change_complexity">
     <input type="hidden" name="theme_id" value="{{ theme_id }}">
     <input type="hidden" name="submit">

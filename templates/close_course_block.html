@@ -9,7 +9,7 @@
                 <div class="title text-center col-12 text-break col-sm-8">{{ text|raw }}</div>
             </div>
             <div class='btn-bl row p-0 m-0 mt-2 pt-2 pb-2 pr-3 shadow justify-content-end'>
-                <form id="get_course" method="POST">
+                <form class="get_course" method="POST">
                     <input type="hidden" name="submit">
                     <input type="hidden" name="course_id" value="{{ id }}">
                     <input type="submit" class="get_course_btn btn" value="Получить: &nbsp;{{ price|raw }}">
