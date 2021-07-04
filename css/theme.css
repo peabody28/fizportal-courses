@@ -12,4 +12,15 @@
 .send_answer .btn {
   background-color: #b3b3b3;
 }
+.create {
+  background-color: #3d7f79;
+}
+#get_theme_btn {
+  height: 26px;
+  width: 26px;
+  background-color: #cd7857;
+}
+.delete {
+  background-color: #fc8f8f;
+}
 /*# sourceMappingURL=theme.css.map */

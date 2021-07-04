@@ -72,11 +72,12 @@ else
     $course->text = $tmp_course["text"];
     $course->complexity = $tmp_course["complexity"];
     $course->price = $tmp_course["price"];
+    $course->img_url = $tmp_course["img_url"];
 
     $content = "";
     $forms = new Render();
     $forms->temp = "change_course_forms.html";
-    $forms->argv = ["course_id"=>$course->id];
+    $forms->argv = ["course_id"=>$course->id, "course_title"=>strip_tags($course->title),"course_text"=>strip_tags($course->text), "course_complexity"=>$course->complexity, "course_price"=>$course->price, "course_img_url"=>$course->img_url ];
     $content.=$forms->render_temp();
     $content.="<br><br><h2>Темы курса</h2>";
 

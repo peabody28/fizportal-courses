@@ -23,4 +23,12 @@ class Render
             $themes_blocks .= $twig->render("theme.html", ["title"=>$theme["title"], "text"=>$theme["text"], "id"=>$theme["id"]]);
         return $themes_blocks;
     }
+    public function render_themes_adm($themes): string
+    {
+        global $twig;
+        $themes_blocks = "";
+        foreach($themes as $theme)
+            $themes_blocks .= $twig->render("theme_block_adm.html", ["title"=>$theme["title"], "text"=>$theme["text"], "id"=>$theme["id"]]);
+        return $themes_blocks;
+    }
 }

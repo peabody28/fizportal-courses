@@ -1,9 +1,9 @@
 
 <p>
-    <div>
+    <div class="container-fluid">
         <form id="change_title_course" method="POST">
             <label class="row col-12 justify-content-center h2">Изменить имя курса</label>
-            <textarea id="editor1"  name="new_course_title" placeholder="Название"></textarea>
+            <textarea id="editor1"  name="new_course_title" placeholder="Сейчас: {{ course_title }}"></textarea>
             <input type="hidden" name="code" value="change_title">
             <input type="hidden" name="course_id" value="{{ course_id }}">
             <input type="hidden" name="submit">
@@ -17,7 +17,7 @@
 <div class="container-fluid">
     <form id="change_text_course" method="POST">
         <label class="row col-12 justify-content-center h2">Изменить описание курса</label>
-        <textarea id="editor2"  name="new_course_text" placeholder="Описание"></textarea>
+        <textarea id="editor2"  name="new_course_text" placeholder="Сейчас: {{ course_text }}"></textarea>
         <input type="hidden" name="code" value="change_text">
         <input type="hidden" name="submit">
         <input type="hidden" name="course_id" value="{{ course_id }}">
@@ -29,7 +29,7 @@
 <div class="container-fluid">
     <form id="change_price_course" method="POST">
         <label class="row col-12 justify-content-center h2">Изменить цену курса</label>
-        <input type="text" name="new_course_price">
+        <input type="text" name="new_course_price" placeholder="Сейчас: {{ course_price }}">
         <input type="hidden" name="code" value="change_price">
         <input type="hidden" name="course_id" value="{{ course_id }}">
         <input type="hidden" name="submit">
@@ -38,14 +38,13 @@
         <input class="btn izm" type="submit" value="Изменить">
     </form>
 </div>
-<p>
 
 <p>
 <div class="container-fluid">
 
     <form id="change_complexity_course" method="POST">
         <label class="row col-12 justify-content-center h2">Изменить сложность курса (1-10)</label>
-        <input type="text" name="new_course_comlexity">
+        <input type="text" name="new_course_comlexity" placeholder="Сейчас: {{ course_complexity }}">
         <input type="hidden" name="code" value="change_complexity">
         <input type="hidden" name="course_id" value="{{ course_id }}">
         <input type="hidden" name="submit">
@@ -64,7 +63,7 @@
 
     <form id="change_img_url_course" method="POST">
         <label class="row col-12 justify-content-center h2">Изменить путь к изабражению</label>
-        <input type="text" name="new_img_url">
+        <input id="img_input" type="text" name="new_img_url" placeholder="Сейчас: {{ course_img_url }}">
         <input type="hidden" name="code" value="change_img_url">
         <input type="hidden" name="course_id" value="{{ course_id }}">
         <input type="hidden" name="submit">

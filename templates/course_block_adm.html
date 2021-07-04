@@ -1,9 +1,17 @@
-<div class='m-0 ml-2 mr-2 p-2 course' id="{{ id }}">
-    <div id='info' class='row p-0 m-0 justify-content-start'>
-        <div class='col-6'>{{ title|raw }}</div>
-        <div class='col-6 d-flex align-items-center justify-content-end' style='opacity: 0.7;'>#{{ id }}</div>
+<div class='row col-12 mb-5 cours-row container-fluid m-0 p-0 d-flex justify-content-start'>
+    <div class='col-10 h-100 container-fluid'>
+        <div class='row h1 m-0 justify-content-center cours-name'>{{ title|raw }}</div>
+        <div class="tandb mt-2" >
+            <div class='row p-0 m-0 mr-2 ml-2 mt-2'>
+                <div class="image d-flex justify-content-center align-items-center col-12 col-sm-4">
+                    <img src="{{ img_url }}" class="img-fluid" alt="no image">
+                </div>
+                <div class="title text-center col-12 text-break col-sm-8">{{ text|raw }}</div>
+            </div>
+            <div class='btn-bl row p-0 m-0 pt-2 pb-2 mt-2 pr-3 shadow justify-content-around'>
+                <a class='btn izm' href='/change_course?id={{ id }}'>Изменить</a>
+                <a class="btn open-btn" href="/course?id={{ id }}">Изучать</a>
+            </div>
+        </div>
     </div>
-    <div class='row p-0 m-0'>
-        <div class='row justify-content-start col-6'><a class='btn izm' href='/change_course?id={{ id }}'>Изменить</a></div>
-    </div>
-</div><br>
+</div>

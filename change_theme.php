@@ -62,7 +62,7 @@ else
     $content = "";
     $forms = new Render();
     $forms->temp = "change_theme_forms.html";
-    $forms->argv = ["theme_id"=>$theme->id];
+    $forms->argv = ["theme_id"=>$theme->id, "theme_title"=>strip_tags($theme->title), "theme_text"=>strip_tags($theme->text), "theme_complexity"=>$theme->complexity];
     $content.=$forms->render_temp();
     $content.="<br><br><h2>Задачи темы</h2>";
 

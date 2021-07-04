@@ -14,7 +14,7 @@ if(isset($data["submit"]))
     {
         $tasks_table = new Tasks_table();
         $task = $tasks_table->read($data["task_id"]);
-        echo json_encode($task);
+        echo json_encode(["task"=>$task, "create_del_btn"=>($_SESSION["rights"]=="admin")]);
     }
     else if ($data["code"]=="send_answer")
     {
@@ -32,6 +32,12 @@ if(isset($data["submit"]))
             // TODO: Добавление задачи в работу над ошибками
             echo json_encode(["status" => "ERROR"]);
         }
+    }
+    else if($data["code"]=="del_task")
+    {
+        $tasks_table = new Tasks_table();
+        $task = $tasks_table->delete($data["task_id"]);
+        echo json_encode(["status"=>"OK"]);
     }
     else
         echo json_encode(["status"=>"wrong code"]);
