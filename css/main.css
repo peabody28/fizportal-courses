@@ -1,46 +1,61 @@
 body,
 html {
+  height: 100%;
   font-family: 'Comfortaa', cursive;
 }
-#sidebar {
+body #wrapper #content,
+html #wrapper #content {
+  min-height: 400px;
+}
+body #wrapper #sidebar,
+html #wrapper #sidebar {
   background-color: #3d807a;
 }
 @media (min-width: 576px) {
-  #sidebar {
+  body #wrapper #sidebar,
+  html #wrapper #sidebar {
     min-height: 950px;
   }
 }
-#sidebar #logo {
+body #wrapper #sidebar #logo,
+html #wrapper #sidebar #logo {
   font-family: 'Righteous', cursive;
   font-size: 30px;
   color: #ffffff;
   font-weight: bold;
 }
 @media (max-width: 768px) {
-  #sidebar #logo {
+  body #wrapper #sidebar #logo,
+  html #wrapper #sidebar #logo {
     font-size: 30px;
   }
 }
 @media (min-width: 768px) {
-  #sidebar #logo {
+  body #wrapper #sidebar #logo,
+  html #wrapper #sidebar #logo {
     font-size: 40px;
   }
 }
-#sidebar #username {
+body #wrapper #sidebar #username,
+html #wrapper #sidebar #username {
   color: #ffffff;
 }
-#sidebar .list-group {
+body #wrapper #sidebar .list-group,
+html #wrapper #sidebar .list-group {
   border: none;
   border-radius: 0;
 }
-#sidebar .list-group .list-group-item {
+body #wrapper #sidebar .list-group .list-group-item,
+html #wrapper #sidebar .list-group .list-group-item {
   border: none;
   background-color: #E8F4F0;
 }
-#sidebar .list-group .list-group-item .btn {
+body #wrapper #sidebar .list-group .list-group-item .btn,
+html #wrapper #sidebar .list-group .list-group-item .btn {
   color: #343135;
 }
-#footer {
+body #wrapper #footer,
+html #wrapper #footer {
   height: 150px;
   background-color: #343135;
   color: #ffffff;

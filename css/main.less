@@ -1,57 +1,60 @@
 body, html
 {
+    height: 100%;
     font-family: 'Comfortaa', cursive;
     #wrapper
     {
-        #up
+
+        #content
         {
-          //min-height: 950px;
+            min-height: 400px;
         }
-    }
-}
-#sidebar
-{
-    @media (min-width: 576px) {
-        min-height: 950px;
-    }
-    background-color: #3d807a;
-    #logo
-    {
-        font-family: 'Righteous', cursive;
-        font-size: 30px;
-        @media(max-width: 768px) {
-            font-size: 30px;
-        }
-        @media(min-width: 768px) {
-            font-size: 40px;
-        }
-        color: #ffffff;
-        font-weight: bold;
-    }
-    #username
-    {
-        color:#ffffff;
-    }
-    .list-group
-    {
-        border: none;
-        border-radius: 0;
-        .list-group-item
+        #sidebar
         {
-            border: none;
-            background-color: #E8F4F0;
-            .btn
+            @media (min-width: 576px) {
+                min-height: 950px;
+            }
+            background-color: #3d807a;
+            #logo
             {
-                color: #343135;
+                font-family: 'Righteous', cursive;
+                font-size: 30px;
+                @media(max-width: 768px) {
+                    font-size: 30px;
+                }
+                @media(min-width: 768px) {
+                    font-size: 40px;
+                }
+                color: #ffffff;
+                font-weight: bold;
+            }
+            #username
+            {
+                color:#ffffff;
+            }
+            .list-group
+            {
+                border: none;
+                border-radius: 0;
+                .list-group-item
+                {
+                    border: none;
+                    background-color: #E8F4F0;
+                    .btn
+                    {
+                        color: #343135;
+                    }
+                }
             }
         }
+        #footer
+        {
+            height: 150px;
+            background-color: #343135;
+            color: #ffffff;
+        }
     }
 }
-#footer
-{
-    height: 150px;
-    background-color: #343135;
-    color: #ffffff;
-}
+
 
 
