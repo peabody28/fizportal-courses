@@ -63,7 +63,9 @@ class Render
 
         $content .=
             "<div class='row m-0 p-0 justify-content-center h2'>Условие</div><br>
-            <div class='opis m-0 p-0 d-flex justify-content-center'>$task[text]</div><br><br>
+            <div class='opis m-0 p-0 d-flex justify-content-center'>
+                <div class='col-8'>$task[text]</div>
+            </div><br><br>
             <div class='container-fluid row m-0 p-0 d-flex justify-content-center'>";
 
         $content .= ($task["type"]=="A")?$a_type_task:$b_type_task;
