@@ -4,7 +4,7 @@ require_once __DIR__ . "/Tasks_table.php";
 
 class Task
 {
-    public $id, $text, $answer, $complexity=0, $theme_id;
+    public $id, $text, $answer=null, $complexity=0, $theme_id, $type=null;
     public function get()
     {
         $tasks_table = new Tasks_table();

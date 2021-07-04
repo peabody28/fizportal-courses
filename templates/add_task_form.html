@@ -4,18 +4,56 @@
     <label class="row col-12 justify-content-center h2">Добавление задачи</label>
     <textarea id="editor1"  name="task_text" placeholder="Условие задачи"></textarea>
     <br>
-    <textarea id="editor2"  name="task_answer" placeholder="Ответ на задачу"></textarea>
-    <br>
 
-    <input type="text" name="image_url" placeholder="Путь к рисунку">
+    <label class="row col-12 justify-content-center h2">Тип задачи</label>
+      <div class="form-check form-check-inline">
+        <input class="form-check-input" type="radio" name="type" id="A_radio" value="A">
+        <label class="form-check-label" for="A_radio">A</label>
+      </div>
+      <div class="form-check form-check-inline">
+        <input class="form-check-input" type="radio" name="type" id="B_radio" value="B" checked>
+        <label class="form-check-label" for="B_radio">B</label>
+      </div>
+      <br>
+      <br>
+      <div id="B_answers">
+      <textarea id="editor2"  name="task_answer" placeholder="Ответ на задачу"></textarea>
+      </div>
+      <br>
+
+      <div id="A_answers" style="display: none;">
+        <label class="row col-12 justify-content-center h2">Ответы</label>
+        <div class="form-check form-check-inline">
+          <input class="form-check-input" type="checkbox" name="answ1" id="inlineCheckbox1" value="1">
+          <label class="form-check-label" for="inlineCheckbox1">1</label>
+        </div>
+        <div class="form-check form-check-inline">
+          <input class="form-check-input" type="checkbox" name="answ2" id="inlineCheckbox2" value="2">
+          <label class="form-check-label" for="inlineCheckbox2">2</label>
+        </div>
+        <div class="form-check form-check-inline">
+          <input class="form-check-input" type="checkbox" name="answ3" id="inlineCheckbox3" value="3">
+          <label class="form-check-label" for="inlineCheckbox3">3</label>
+        </div>
+        <div class="form-check form-check-inline">
+          <input class="form-check-input" type="checkbox" name="answ4" id="inlineCheckbox4" value="4">
+          <label class="form-check-label" for="inlineCheckbox4">4</label>
+        </div>
+        <div class="form-check form-check-inline">
+          <input class="form-check-input" type="checkbox" name="answ5" id="inlineCheckbox5" value="5">
+          <label class="form-check-label" for="inlineCheckbox5">5</label>
+        </div>
+      </div>
+    <br><br>
+      <input type="text" name="image_url" placeholder="Путь к рисунку">
+      <br>
     <br>
-  <br>
-    <input type="text" name="task_complexity" placeholder="Сложность">
+      <input type="text" name="task_complexity" placeholder="Сложность">
+      <br>
     <br>
-  <br>
-    <input type="hidden" name="theme_id" value="{{ theme_id }}">
-    <input type="hidden" name="submit">
-    <input id="cr_bt" class="btn create" type="submit" value="Добавить задачу">
-  </form>
-  <p>
+      <input type="hidden" name="theme_id" value="{{ theme_id }}">
+      <input type="hidden" name="submit">
+      <input id="cr_bt" class="btn create" type="submit" value="Добавить задачу">
+    </form>
+    <p>
 </div>

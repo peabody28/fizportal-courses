@@ -23,7 +23,7 @@ if (isset($data["submit"]))
 else
 {
     $content=file_get_contents(__DIR__."/templates/create_course_form.html");
-
+    $content .= "<br><br><div class='row col-12 p-0 m-0 ml-5 d-flex justify-content-start'><a class='btn back' href='/courses'>Вернуться к списку курсов</a></div><br><br>";
     $page = new Render();
     $page->temp = 'main.html';
     $page->argv = ['title' => "create_course",

@@ -53,39 +53,27 @@ if ($tmp_theme)
             $content .= "<form class='get_task mr-1' method='POST'>
                             <input type='hidden' name='task_id' value='$task[id]'>
                             <input type='hidden' name='submit' value='true'>
-                            <input type='hidden' name='code' value='get_task_data'>
+                            <input type='hidden' name='code' value='get_task'>
                             $button
                          </form>  ";
         }
-        $first_task = $tasks_list[0];
-        $content .= "</div><br><br>" ;
-        $content .="<div id='task'>";
-        $content .=
-            "<div class='row m-0 p-0 justify-content-center h2'>Условие</div>
-            <br>
-            <div class='opis m-0 p-0 d-flex justify-content-center'>$first_task[text]</div>
-            <br>
-            <br> 
-            <div class='container-fluid d-flex justify-content-center m-0 p-0'>
-                <form class='send_answer' method='POST' onsubmit='send_answer();return false;'>
-                    <input type='hidden' name='submit' >
-                    <input type='hidden' name='task_id' value='$first_task[id]'>
-                    <input type='hidden' name='code' value='send_answer'>
-                    <input type='text' class='row' name='answer'><br>
-                    <div class='row d-flex justify-content-center'><button class='btn' type='submit'>Отправить</button></div>
-                </form>
-            </div>
-            <br><br>";
+        // добавить задачу
         if ($_SESSION["rights"]=="admin")
+            $content .="<a class='btn ml-3 create add_task' href='/add_task?theme_id=$tmp_theme[id]'>Добавить задачу</a>";
+
+        // задача
+        $content .= "</div><br><br>" ;
+        $first_task = $tasks_list[0];
+        if ($first_task)
         {
-            $content .= "<form class='del_task' method='POST' onsubmit='del_task();return false;'>
-            <input type='hidden' name='submit'>
-            <input type='hidden' name='task_id' value='$first_task[id]'>
-            <input type='hidden' name='code' value='del_task'>
-            <div class='row d-flex justify-content-center'><button class='btn delete' type='submit'>Удалить эту задачу</button></div>
-            </form>";
+            $task_block = new Render();
+            $content .="<div id='task'>";
+            $content .= $task_block->render_task($first_task);
+            $content .= "</div><br>";// закрыл блок #task
         }
-        $content .= "</div><br>"; // закрыл блок #task
+        else
+            $content .="<div id='task'><div class='row m-0 p-0 justify-content-center h2'>Описание темы</div><br><div class='row m-0 p-0 justify-content-center h2'>$tmp_theme[text]</div></div>";
+
         $content .= "<div class='h2 d-flex justify-content-center' id='message'></div>";
     } else
         $content = "Вы не купили этот курс";
