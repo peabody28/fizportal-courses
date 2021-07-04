@@ -10,8 +10,8 @@ $data = $_POST;
 if (isset($data["submit"]))
 {
     $course = new Course();
-    $course->title = $data["course_title"];
-    $course->text = $data["course_text"];
+    $course->title = addcslashes($data["course_title"]);
+    $course->text = addcslashes($data["course_text"]);
     $course->price = $data["course_price"];
     $course->complexity = $data["course_comlexity"];
     $course->img_url = $data["course_img_url"];

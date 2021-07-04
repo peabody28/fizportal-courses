@@ -16,7 +16,7 @@ $('.get_task').submit(function ()
     return false;
 })
 
-function send_answer()
+$('.send_answer').submit(function send_answer()
 {
     console.log($('.send_answer').serialize())
     $.ajax(
@@ -39,7 +39,7 @@ function send_answer()
         }
     )
     return false;
-}
+})
 
 function del_task()
 {

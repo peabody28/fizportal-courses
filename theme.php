@@ -45,10 +45,13 @@ if ($tmp_theme)
                             <button class='btn' id='get_theme_btn'></button>
                      </form>";
         foreach ($tasks_list as $task) {
+            if(isset($_GET["task_id"]))
+                if ($_GET["task_id"]==$task["id"])
+                    $this_task = $task;
             if (in_array(["user_id" => $_SESSION["id"], "task_id" => $task["id"]], $users_tasks))
-                $button = "<button class='btn' id='$task[id]'></button>";
+                $button = "<a class='btn' id='$task[id]' href='/theme?id=$tmp_theme[id]&task_id=$task[id]'></a>";
             else
-                $button = "<button class='btn close_btn' id='$task[id]'></button>";
+                $button = "<a class='btn close_btn' id='$task[id]' href='/theme?id=$tmp_theme[id]&task_id=$task[id]'></a>";
 
             $content .= "<form class='get_task mr-1' method='POST'>
                             <input type='hidden' name='task_id' value='$task[id]'>
@@ -63,12 +66,13 @@ if ($tmp_theme)
 
         // задача
         $content .= "</div><br><br>" ;
-        $first_task = $tasks_list[0];
-        if ($first_task)
+        if(!isset($_GET["task_id"]))
+            $this_task = $tasks_list[0];
+        if ($this_task)
         {
             $task_block = new Render();
             $content .="<div id='task'>";
-            $content .= $task_block->render_task($first_task);
+            $content .= $task_block->render_task($this_task);
             $content .= "</div><br>";// закрыл блок #task
         }
         else

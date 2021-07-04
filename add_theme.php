@@ -9,8 +9,8 @@ $data = $_POST;
 if(isset($data["submit"]))
 {
     $theme = new Theme();
-    $theme->title = $data["theme_title"];
-    $theme->text = $data["theme_text"];
+    $theme->title = addcslashes($data["theme_title"]);
+    $theme->text = addcslashes($data["theme_text"]);
     $theme->course_id = $data["course_id"];
     $theme->complexity = $data["theme_complexity"];
 
