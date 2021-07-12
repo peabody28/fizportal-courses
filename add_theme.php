@@ -1,6 +1,7 @@
 <?php
 require_once __DIR__."/classes/Theme.php";
 require_once __DIR__."/classes/Themes_table.php";
+require_once __DIR__."/classes/Supertests_table.php";
 require_once __DIR__."/classes/Render.php";
 session_start();
 
@@ -9,14 +10,19 @@ $data = $_POST;
 if(isset($data["submit"]))
 {
     $theme = new Theme();
-    $theme->title = addcslashes($data["theme_title"]);
-    $theme->text = addcslashes($data["theme_text"]);
+    $theme->title = $data["theme_title"];
+    $theme->text = $data["theme_text"];
     $theme->course_id = $data["course_id"];
     $theme->complexity = $data["theme_complexity"];
 
     // TODO: ВОЗМОЖНО ЗДЕСЬ НУЖНА ПРОВЕРКА ВВЕДЕННЫХ ДАННЫХ
     $themes_table = new Themes_table();
     $response = $themes_table->create($theme);
+    if ($response)
+    {
+        $supertest_table = new Supertests_table();
+        $supertest_table->create($theme->id);
+    }
     echo json_encode(["course_id"=>$data["course_id"]]);
 }
 else

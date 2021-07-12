@@ -5,11 +5,15 @@ require_once __DIR__."/classes/Themes_table.php";
 require_once __DIR__."/classes/Tasks_table.php";
 require_once __DIR__."/classes/Users_tasks_table.php";
 require_once __DIR__."/classes/Users_courses_table.php";
+require_once __DIR__."/classes/Supertests_table.php";
 require_once __DIR__."/classes/Render.php";
 session_start();
 
 
 $data = $_GET;
+
+if (isset($_GET["supertest_id"]))
+    header("Location: /supertest?id=$_GET[supertest_id]");
 
 $themes_table = new Themes_table();
 if(isset($_POST["submit"]))
@@ -60,12 +64,17 @@ if ($tmp_theme)
                             $button
                          </form>  ";
         }
+        // супертест
+        $supertests_table = new Supertests_table();
+        $tmp_sptest = $supertests_table->read($tmp_theme["id"]);
+        $content .= "<a class='btn close_btn supertest' href='/theme?id=$tmp_theme[id]&supertest_id=$tmp_sptest[id]'></a>";
         // добавить задачу
         if ($_SESSION["rights"]=="admin")
             $content .="<a class='btn ml-3 create add_task' href='/add_task?theme_id=$tmp_theme[id]'>Добавить задачу</a>";
 
         // задача
         $content .= "</div><br><br>" ;
+
         if(!isset($_GET["task_id"]))
             $this_task = $tasks_list[0];
         if ($this_task)
