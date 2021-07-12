@@ -14,10 +14,10 @@ class Supertests_table implements Table
         return $result ? true: false;
     }
 
-    public function read($theme_id)
+    public function read($sp_id)
     {
         global $link;
-        $sql = sprintf("SELECT * FROM supertests WHERE theme_id = '%s'", $theme_id);
+        $sql = sprintf("SELECT * FROM supertests WHERE id = '%s'", $sp_id);
         $result = mysqli_query($link, $sql);
         $supertest_data = mysqli_fetch_array($result, MYSQLI_ASSOC);
         return $supertest_data;
@@ -31,5 +31,13 @@ class Supertests_table implements Table
     public function delete($obj)
     {
         // TODO: Implement delete() method.
+    }
+    public function read_by_theme($id)
+    {
+        global $link;
+        $sql = sprintf("SELECT * FROM supertests WHERE theme_id = '%s'", $id);
+        $result = mysqli_query($link, $sql);
+        $supertest_data = mysqli_fetch_array($result, MYSQLI_ASSOC);
+        return $supertest_data;
     }
 }

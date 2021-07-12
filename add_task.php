@@ -3,6 +3,8 @@ require_once __DIR__."/classes/Task.php";
 require_once __DIR__."/classes/Tasks_table.php";
 require_once __DIR__ . "/classes/Tasks_answer.php";
 require_once __DIR__."/classes/Tasks_answers_table.php";
+require_once __DIR__."/classes/Supertests_table.php";
+require_once __DIR__."/classes/Supertests_tasks_table.php";
 require_once __DIR__."/classes/Render.php";
 session_start();
 
@@ -16,7 +18,8 @@ if(isset($data["submit"]))
     $task->type = $data["type"];
     if($data["type"]=="B")
         $task->answer = $data["task_answer"];
-    $task->theme_id = $data["theme_id"];
+    if ($data["theme_id"])
+        $task->theme_id = $data["theme_id"];
     $task->complexity = $data["task_complexity"];
 
     // TODO: ВОЗМОЖНО ЗДЕСЬ НУЖНА ПРОВЕРКА ВВЕДЕННЫХ ДАННЫХ
@@ -37,13 +40,28 @@ if(isset($data["submit"]))
             }
         }
     }
-    echo json_encode(["theme_id"=>$data["theme_id"]]);
+    if ($data["theme_id"])
+        echo json_encode(["theme_id"=>$data["theme_id"]]);
+    else
+    {
+        $supertests_table = new Supertests_table();
+        $tmp_sp_test = $supertests_table->read($data["supertest_id"]);
+
+        $supertests_tasks_table = new Supertests_tasks_table();
+        $supertests_tasks_table->create(["id"=>$data["supertest_id"], "task_id"=>$task->id]);
+
+        echo json_encode(["theme_id"=>$tmp_sp_test["theme_id"], "supertest_id"=>$data["supertest_id"]]);
+    }
+
 }
 else
 {
     $add_task_block = new Render();
     $add_task_block->temp = "add_task_form.html";
-    $add_task_block->argv = ["theme_id"=>$_GET["theme_id"]];
+    if (!isset($_GET["supertest_id"]))
+        $add_task_block->argv = ["theme_id"=>$_GET["theme_id"], "supertest_id"=>0];
+    else
+        $add_task_block->argv = ["theme_id"=>0, "supertest_id"=>$_GET["supertest_id"]];
     $content = $add_task_block->render_temp();
 
     $page = new Render();

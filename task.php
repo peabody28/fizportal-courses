@@ -3,6 +3,7 @@ require_once __DIR__."/classes/Render.php";
 require_once __DIR__."/classes/Tasks_table.php";
 require_once __DIR__."/classes/Users_tasks.php";
 require_once __DIR__."/classes/Users_tasks_table.php";
+require_once __DIR__."/classes/Supertests_table.php";
 require_once __DIR__."/classes/Tasks_answers_table.php";
 session_start();
 
@@ -11,14 +12,7 @@ $data=$_POST;
 
 if(isset($data["submit"]))
 {
-    if($data["code"]=="get_task")
-    {
-        $tasks_table = new Tasks_table();
-        $task = $tasks_table->read($data["task_id"]);
-        $task_block = new Render();
-        echo json_encode(["block"=>$task_block->render_task($task)]);
-    }
-    else if ($data["code"]=="send_answer")
+    if ($data["code"]=="send_answer")
     {
         $tasks_table = new Tasks_table();
         $task = $tasks_table->read($data["task_id"]);
@@ -65,16 +59,9 @@ if(isset($data["submit"]))
             // TODO: Добавление задачи в работу над ошибками
             echo json_encode(["status" => "ERROR"]);
         }
-
-    }
-    else if($data["code"]=="get_task_block")
-    {
-        $task_block = new Render();
-        echo json_encode($task_block->render_task(json_decode($data["task"])));
     }
     else
         echo json_encode(["status"=>"wrong code"]);
-
 }
 else
 {

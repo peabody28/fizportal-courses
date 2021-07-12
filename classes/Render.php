@@ -84,4 +84,15 @@ class Render
         }
         return $content;
     }
+
+
+    public function render_supertest($id, $tasks)
+    {
+        $content = "";
+
+        foreach ($tasks as $task) {
+            $content .= "<div class='row justify-content-center'>$task[text]</div><br><br>";
+        }
+        return $content;
+    }
 }

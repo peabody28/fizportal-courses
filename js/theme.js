@@ -57,22 +57,3 @@ function del_task()
     )
     return false;
 }
-
-$('.get_theme_text').submit(function ()
-{
-    $.ajax(
-        {
-            url: "/theme.php",
-            type: "POST",
-            data: $(this).serialize(),
-            success: function (res)
-            {
-                var theme = JSON.parse(res)
-                var block = "<div class='row m-0 p-0 justify-content-center h2'>Описание темы</div><br><div class='row m-0 p-0 justify-content-center h2'>"+ theme["text"]+ "</div>"
-                $("#task").html(block)
-                $("#message").html("")
-            }
-        }
-    )
-    return false;
-})
