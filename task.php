@@ -53,6 +53,7 @@ if(isset($data["submit"]))
             $users_tasks_table = new Users_tasks_table();
             $users_tasks_table->create($users_tasks);
             echo json_encode(["status" => "OK", "task_id"=>$data["task_id"]]);
+            exit();
         }
         else
         {

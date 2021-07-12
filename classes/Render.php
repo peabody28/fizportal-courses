@@ -16,22 +16,11 @@ class Render
         return $twig->render($this->temp, $this->argv);
     }
 
-    public function render_theme($themes): string
+    public function render_theme($theme): string
     {
         global $twig;
-        $themes_blocks = "";
-        foreach ($themes as $theme)
-            $themes_blocks .= $twig->render("theme.html", ["title" => $theme["title"], "text" => $theme["text"], "id" => $theme["id"]]);
-        return $themes_blocks;
-    }
-
-    public function render_themes_adm($themes): string
-    {
-        global $twig;
-        $themes_blocks = "";
-        foreach ($themes as $theme)
-            $themes_blocks .= $twig->render("theme_block_adm.html", ["title" => $theme["title"], "text" => $theme["text"], "id" => $theme["id"]]);
-        return $themes_blocks;
+        $theme_blocks = $twig->render("theme.html", ["title" => $theme["title"], "text" => $theme["text"], "id" => $theme["id"]]);
+        return $theme_blocks;
     }
 
     public function render_task($task)
@@ -72,21 +61,10 @@ class Render
 
         $content.="</div><br><br>";
 
-        if ($_SESSION["rights"]=="admin")
-        {
-            $content .= "<div class='row justify-content-center'><a class='btn chg_task_btn' href='/change_task?id=$task[id]'>Изменить задачу</a></div><br><br>";
-            $content .= "<form class='del_task' method='POST' onsubmit='del_task();return false;'>
-            <input type='hidden' name='submit'>
-            <input type='hidden' name='task_id' value='$task[id]'>
-            <input type='hidden' name='code' value='del_task'>
-            <div class='row d-flex justify-content-center'><button class='btn delete' type='submit'>Удалить эту задачу</button></div>
-            </form>";
-        }
         return $content;
     }
 
-
-    public function render_supertest($id, $tasks)
+    public function render_supertest($tasks)
     {
         $content = "";
 

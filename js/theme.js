@@ -17,9 +17,8 @@ $('.get_task').submit(function ()
     return false;
 })
 
-$('.send_answer').submit(function send_answer()
+$('.send_answer').submit(function ()
 {
-    console.log($('.send_answer').serialize())
     $.ajax(
         {
             url: "/task.php",
@@ -27,7 +26,6 @@ $('.send_answer').submit(function send_answer()
             data: $('.send_answer').serialize(),
             success: function (res)
             {
-                console.log(res)
                 var response = JSON.parse(res)
                 if (response["status"]=="OK")
                 {

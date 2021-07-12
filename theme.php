@@ -15,23 +15,11 @@ $data = $_GET;
 
 
 $themes_table = new Themes_table();
-if(isset($_POST["submit"]))
-{
-    if($_POST["code"]=="get_theme_text")
-    {
-        $tmp_theme = $themes_table->read($_POST["theme_id"]);
-        echo json_encode(["text"=>$tmp_theme["text"]]);
-        exit();
-    }
-}
-
 $tmp_theme = $themes_table->read($data["id"]);
+
 if ($tmp_theme)
 {
-    $content = $tmp_theme["text"];
-    if($_SESSION["rights"]=="admin")
-       $content.= "<br><br><div class='row col-12 p-0 m-0 ml-5'><a class='btn create' href='/add_task?theme_id=$tmp_theme[id]'>Добавить задачу</a> </div><br><br>";
-
+    // проверка доступа к теме
     $users_courses_table = new Users_courses_table();
     $users_courses = $users_courses_table->read($_SESSION["id"]);
     if (in_array(["user_id" => $_SESSION["id"], "course_id" => $tmp_theme["course_id"]], $users_courses) || $_SESSION["rights"] == "admin") {
@@ -42,7 +30,8 @@ if ($tmp_theme)
 
         $users_tasks_table = new Users_tasks_table();
         $users_tasks = $users_tasks_table->get_users_tasks($_SESSION["id"]);
-        $content .= "<a class='btn get_text_theme mr-1' href='/theme?id=$tmp_theme[id]'></a>";
+        $content .= "<a class='btn get_text_theme mr-1' href='/theme?id=$tmp_theme[id]&text'></a>";
+        // отображение квадратов задачи
         foreach ($tasks_list as $task) {
             if(isset($_GET["task_id"]))
                 if ($_GET["task_id"]==$task["id"])
@@ -59,12 +48,12 @@ if ($tmp_theme)
                             $button
                          </form>  ";
         }
-        // супертест
+        // отображение супертеста
         $supertests_table = new Supertests_table();
         $tmp_sptest = $supertests_table->read_by_theme($tmp_theme["id"]);
         $content .= "<a class='btn close_btn supertest' href='/theme?id=$tmp_theme[id]&supertest'></a>";
 
-        // добавить задачу
+        // кнопка "добавить задачу"
         if ($_SESSION["rights"]=="admin")
             $content .="<a class='btn ml-3 create add_task' href='/add_task?theme_id=$tmp_theme[id]'>Добавить задачу</a>";
 
@@ -83,6 +72,16 @@ if ($tmp_theme)
                 $task_block = new Render();
                 $content .="<div id='task'>";
                 $content .= $task_block->render_task($this_task);
+                if ($_SESSION["rights"]=="admin")
+                {
+                    $content .= "<div class='row justify-content-center'><a class='btn chg_task_btn' href='/change_task?id=$this_task[id]'>Изменить задачу</a></div><br><br>";
+                    $content .= "<form class='del_task' method='POST' onsubmit='del_task();return false;'>
+                                    <input type='hidden' name='submit'>
+                                    <input type='hidden' name='task_id' value='$this_task[id]'>
+                                    <input type='hidden' name='code' value='del_task'>
+                                    <div class='row d-flex justify-content-center'><button class='btn delete' type='submit'>Удалить эту задачу</button></div>
+                                 </form>";
+                }
                 $content .= "</div><br>";// закрыл блок #task
             }
             else if(isset($_GET["supertest"]))
@@ -104,9 +103,11 @@ if ($tmp_theme)
                 if ($_SESSION["rights"]=="admin")
                     $content .= "<div class='row justify-content-center'><a class='btn add_task_to_supertest_btn' href='/add_task?supertest_id=$tmp_sp_test[id]'>Добавить задачу в супертест</a></div><br><br>";
                 $content .="<div id='task'>";
-                $content .= $supertest->render_supertest($tmp_sp_test["id"], $supertests_tasks);
+                $content .= $supertest->render_supertest($supertests_tasks);
                 $content .= "</div><br>";
             }
+            else if(isset($_GET["text"]))
+                $content .="<div id='task'><div class='row m-0 p-0 justify-content-center h2'>Описание темы</div><br><div class='row m-0 p-0 justify-content-center h2'>$tmp_theme[text]</div></div>";
             else
             {
                 $this_task = $tasks_list[0];

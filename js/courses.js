@@ -7,7 +7,6 @@ $('.get_course').submit(
             data: $(this).serialize(),
             success: function (res)
             {
-                console.log(res)
                 var resp = JSON.parse(res)
                 if (resp["status"]==="OK")
                     $(location).attr("href", "/course?id="+resp["course_id"])

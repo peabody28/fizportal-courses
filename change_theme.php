@@ -51,7 +51,7 @@ else
     $themes_table = new Themes_table();
     $tmp_theme = $themes_table->read($_GET["id"]);
     if(!$tmp_theme)
-        header("Location: /admin_page.php");
+        header("Location: /courses");
     $theme = new Theme();
     $theme->id = $tmp_theme["id"];
     $theme->title = $tmp_theme["title"];
