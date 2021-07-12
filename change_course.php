@@ -50,12 +50,30 @@ if(isset($data["submit"]))
         $courses_table->update($course, "complexity");
         echo json_encode(["status"=>"OK"]);
     }
-    else if($data["code"]=="change_img_url")
+    else if($data["code"]=="change_image")
     {
-        $course->img_url = $data["new_img_url"];
-        $courses_table = new Courses_table();
-        $courses_table->update($course, "img_url");
-        echo json_encode(["status"=>"OK"]);
+        $uploaddir = __DIR__.'/media/courses_imgs/';
+
+        $apend= "course".$data["course_id"].'.jpg';
+
+        $uploadfile = "$uploaddir$apend";
+
+        if($_FILES['file']['type'] == 'image/gif' || $_FILES['file']['type'] == 'image/jpeg' || $_FILES['file']['type'] == 'image/png' || $_FILES['file']['type'] == 'image/jpg')
+        {
+            $status = move_uploaded_file($_FILES['file']['tmp_name'], $uploadfile);
+            if ($status)
+            {
+                $course->img_url = '/media/courses_imgs/'.$apend;
+                $courses_table = new Courses_table();
+                $courses_table->update($course, "img_url");
+                header("Location: /courses");
+            }
+            else
+                header("Location: /courses");
+        }
+        else
+            header("Location: /courses");
+
     }
 
 }
