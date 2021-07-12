@@ -75,6 +75,34 @@ if (isset($data["submit"])) {
         $tmp_task = $tasks_table->read($task->id);
         echo json_encode(["status"=>"OK", "code"=>"ch_location", "theme_id"=>$tmp_task["theme_id"]]);
     }
+    else if($data["code"]=="change_image")
+    {
+        $uploaddir = __DIR__.'/media/tasks_imgs/';
+
+        $apend= "task".$task->id.'.jpg';
+
+        $uploadfile = "$uploaddir$apend";
+
+        $tasks_table = new Tasks_table();
+        $tmp_task = $tasks_table->read($task->id);
+
+        if($_FILES['file']['type'] == 'image/gif' || $_FILES['file']['type'] == 'image/jpeg' || $_FILES['file']['type'] == 'image/png' || $_FILES['file']['type'] == 'image/jpg')
+        {
+            $status = move_uploaded_file($_FILES['file']['tmp_name'], $uploadfile);
+            if ($status)
+            {
+                $task->img_url = '/media/tasks_imgs/'.$apend;
+                $tasks_table = new Tasks_table();
+                $tasks_table->update($task, "img_url");
+                header("Location: /theme?id=$tmp_task[theme_id]");
+            }
+            else
+                header("Location: /theme?id=$tmp_task[theme_id]");
+        }
+        else
+            header("Location: /theme?id=$tmp_task[theme_id]");
+
+    }
 
 } else {
     $tasks_table = new Tasks_table();

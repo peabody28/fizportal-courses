@@ -17,7 +17,6 @@ if(isset($data["submit"]))
     if($data["type"]=="B")
         $task->answer = $data["task_answer"];
     $task->theme_id = $data["theme_id"];
-    $task->image_url = ($data["image_url"]=="")?null:$data["image_url"];
     $task->complexity = $data["task_complexity"];
 
     // TODO: ВОЗМОЖНО ЗДЕСЬ НУЖНА ПРОВЕРКА ВВЕДЕННЫХ ДАННЫХ

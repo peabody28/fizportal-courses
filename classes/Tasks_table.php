@@ -9,7 +9,7 @@ class Tasks_table implements Table
     public function create($task)
     {
         global $link;
-        $sql = sprintf("INSERT INTO tasks(text, answer, image_url, complexity, theme_id, type) VALUES ('%s', '%s', '%s', '%s', '%s', '%s')", $task->text, strip_tags($task->answer), $task->image_url, $task->complexity, $task->theme_id, $task->type);
+        $sql = sprintf("INSERT INTO tasks(text, answer, img_url, complexity, theme_id, type) VALUES ('%s', '%s', '%s', '%s', '%s', '%s')", $task->text, strip_tags($task->answer), $task->img_url, $task->complexity, $task->theme_id, $task->type);
         $result = mysqli_query($link, $sql);
         $task->id = mysqli_insert_id($link);
         return $task->id ? true: false;

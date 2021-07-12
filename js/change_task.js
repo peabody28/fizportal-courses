@@ -20,7 +20,9 @@ $("input[type = 'radio']").click(function(){
     }
 });
 
-$("form").submit(function (){
+
+
+$("#change_text_task").submit(function (){
     $.ajax(
         {
             url: "/change_task.php",
@@ -29,11 +31,59 @@ $("form").submit(function (){
             success: function (response){
                 let res = JSON.parse(response)
                 if(res["status"]=="OK")
-                {
-                    if (res["code"]=="ch_location")
-                        $(location).attr("href", "/theme?id="+res["theme_id"])
                     $("#message").html(res["message"])
-                }
+
+            }
+        }
+    )
+    return false;
+})
+
+$("#change_answer_task").submit(function (){
+    $.ajax(
+        {
+            url: "/change_task.php",
+            type: "POST",
+            data: $(this).serialize(),
+            success: function (response){
+                let res = JSON.parse(response)
+                if(res["status"]=="OK")
+                    $("#message").html(res["message"])
+
+            }
+        }
+    )
+    return false;
+})
+
+$("#change_complexity_task").submit(function (){
+    $.ajax(
+        {
+            url: "/change_task.php",
+            type: "POST",
+            data: $(this).serialize(),
+            success: function (response){
+                let res = JSON.parse(response)
+                if(res["status"]=="OK")
+                    $("#message").html(res["message"])
+
+            }
+        }
+    )
+    return false;
+})
+
+$("#delete_task").submit(function (){
+    $.ajax(
+        {
+            url: "/change_task.php",
+            type: "POST",
+            data: $(this).serialize(),
+            success: function (response){
+                let res = JSON.parse(response)
+                if(res["status"]=="OK")
+                    $("#message").html(res["message"])
+
             }
         }
     )

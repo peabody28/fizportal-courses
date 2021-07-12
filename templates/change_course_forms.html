@@ -48,9 +48,7 @@
         <input type="hidden" name="code" value="change_complexity">
         <input type="hidden" name="course_id" value="{{ course_id }}">
         <input type="hidden" name="submit">
-        <br>
-        <br>
-        <input class="btn izm" type="submit" value="Изменить">
+        <input type="submit" value="Загрузить файл!">
     </form>
 
 </div>
@@ -60,18 +58,14 @@
 
 <p>
 <div class="container-fluid">
-
-    <form id="change_img_url_course" method="POST">
-        <label class="row col-12 justify-content-center h2">Изменить путь к изабражению</label>
-        <input id="img_input" type="text" name="new_img_url" placeholder="Сейчас: {{ course_img_url }}">
-        <input type="hidden" name="code" value="change_img_url">
+    <form id="change_image_course" method="POST" enctype="multipart/form-data" action="/change_course.php">
+        <label class="row col-12 justify-content-center h2">Добавить изабражениe</label>
+        <input type="file" name="file">
+        <input type="hidden" name="code" value="change_image">
         <input type="hidden" name="course_id" value="{{ course_id }}">
         <input type="hidden" name="submit">
-        <br>
-        <br>
-        <input class="btn izm" type="submit" value="Изменить">
+        <input type="submit" value="Загрузить файл!">
     </form>
-
 </div>
 <p>
 
@@ -86,7 +80,6 @@
         <input type="hidden" name="course_id" value="{{ course_id }}">
         <input id="del_course_btn" class="btn" type="submit" value="Удалить курс">
     </form>
-
 </div>
 <p>
 
