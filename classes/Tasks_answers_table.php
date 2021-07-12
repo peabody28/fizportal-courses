@@ -27,9 +27,12 @@ class Tasks_answers_table implements Table
         // TODO: Implement update() method.
     }
 
-    public function delete($obj)
+    public function delete($task_id)
     {
-        // TODO: Implement delete() method.
+        global $link;
+        $sql = sprintf("DELETE FROM tasks_answers WHERE task_id='%s'", $task_id);
+        $res = mysqli_query($link, $sql);
+        return $res;
     }
 
     public function get_tasks_answers()

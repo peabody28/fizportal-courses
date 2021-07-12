@@ -67,12 +67,6 @@ if(isset($data["submit"]))
         }
 
     }
-    else if($data["code"]=="del_task")
-    {
-        $tasks_table = new Tasks_table();
-        $task = $tasks_table->delete($data["task_id"]);
-        echo json_encode(["status"=>"OK"]);
-    }
     else if($data["code"]=="get_task_block")
     {
         $task_block = new Render();

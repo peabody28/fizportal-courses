@@ -74,6 +74,7 @@ class Render
 
         if ($_SESSION["rights"]=="admin")
         {
+            $content .= "<div class='row justify-content-center'><a class='btn chg_task_btn' href='/change_task?id=$task[id]'>Изменить задачу</a></div><br><br>";
             $content .= "<form class='del_task' method='POST' onsubmit='del_task();return false;'>
             <input type='hidden' name='submit'>
             <input type='hidden' name='task_id' value='$task[id]'>

@@ -24,9 +24,12 @@ class Tasks_table implements Table
         return $task_data;
     }
 
-    public function update($obj, $column)
+    public function update($task, $column)
     {
-        // TODO: Implement update() method.
+        global $link;
+        $sql = sprintf("UPDATE tasks SET %s='%s' WHERE id = '%s'", $column, $task->$column, $task->id);
+        $result = mysqli_query($link, $sql);
+        return $result;
     }
 
     public function delete($id)

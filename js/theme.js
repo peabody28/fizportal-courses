@@ -10,6 +10,7 @@ $('.get_task').submit(function ()
                 var task = JSON.parse(res)
                 $("#task").html(task["block"])
                 $("#message").html("")
+                //MathJax.Hub.Queue(["Typeset",MathJax.Hub,"task"]); // обновление mathjax
             }
         }
     )
@@ -45,7 +46,7 @@ function del_task()
 {
     $.ajax(
         {
-            url: "/task.php",
+            url: "/change_task.php",
             type: "POST",
             data: $('.del_task').serialize(),
             success: function ()

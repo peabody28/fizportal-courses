@@ -21,28 +21,28 @@ if(isset($data["submit"]))
     {
         $themes_table = new Themes_table();
         $themes_table->delete($theme->id);
-        echo json_encode(["status"=>"OK"]);
+        echo json_encode(["status"=>"OK", "code"=>"ch_location"]);
     }
     else if ($data["code"]=="change_title")
     {
         $theme->title = $data["new_theme_title"];
         $themes_table = new Themes_table();
         $themes_table->update($theme, "title");
-        echo json_encode(["status"=>"OK"]);
+        echo json_encode(["status"=>"OK", "message"=>"Название изменено"]);
     }
     else if ($data["code"]=="change_text")
     {
         $theme->text = $data["new_theme_text"];
         $themes_table = new Themes_table();
         $themes_table->update($theme, "text");
-        echo json_encode(["status"=>"OK"]);
+        echo json_encode(["status"=>"OK", "message"=>"Описание изменено"]);
     }
     else if($data["code"]=="change_complexity")
     {
         $theme->complexity = $data["new_theme_comlexity"];
         $themes_table = new Themes_table();
         $themes_table->update($theme, "complexity");
-        echo json_encode(["status"=>"OK"]);
+        echo json_encode(["status"=>"OK", "message"=>"Сложность изменена"]);
     }
 
 }

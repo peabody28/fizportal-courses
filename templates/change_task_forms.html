@@ -1,0 +1,91 @@
+<div class="container-fluid">
+    <p>
+    <form id="change_text_task" method="POST">
+        <label class="row col-12 justify-content-center h2">Изменить текст задачи</label>
+        <textarea id="editor1"  name="new_task_text" placeholder="Сейчас: {{ task_text }}"></textarea>
+        <input type="hidden" name="code" value="change_text">
+        <input type="hidden" name="task_id" value="{{ task_id }}">
+        <input type="hidden" name="submit">
+        <br>
+        <input class="btn izm" type="submit" value="Изменить">
+    </form>
+    <p>
+</div>
+
+<br>
+<br>
+
+<form id="change_answer_task">
+    <input type="hidden" name="code" value="change_answer">
+    <label class="row col-12 justify-content-center h2">Изменить тип и ответ задачи</label><br>
+    <div class="form-check form-check-inline">
+        <input class="form-check-input" type="radio" name="type" id="A_radio" value="A">
+        <label class="form-check-label" for="A_radio">A</label>
+    </div>
+    <div class="form-check form-check-inline">
+        <input class="form-check-input" type="radio" name="type" id="B_radio" value="B" checked>
+        <label class="form-check-label" for="B_radio">B</label>
+    </div>
+    <br>
+    <div id="b_type">
+        <textarea id="editor2"  name="new_task_answer" placeholder="Сейчас: {{ task_answer }}"></textarea>
+        <input type="hidden" name="task_id" value="{{ task_id }}">
+        <input type="hidden" name="submit">
+        <br>
+    </div>
+
+    <div id="a_type" style="display: none;">
+        <label class="row col-12 justify-content-center h2">Ответы</label>
+        <div class="form-check form-check-inline">
+            <input class="form-check-input" type="checkbox" name="answ1" id="inlineCheckbox1" value="1">
+            <label class="form-check-label" for="inlineCheckbox1">1</label>
+        </div>
+        <div class="form-check form-check-inline">
+            <input class="form-check-input" type="checkbox" name="answ2" id="inlineCheckbox2" value="2">
+            <label class="form-check-label" for="inlineCheckbox2">2</label>
+        </div>
+        <div class="form-check form-check-inline">
+            <input class="form-check-input" type="checkbox" name="answ3" id="inlineCheckbox3" value="3">
+            <label class="form-check-label" for="inlineCheckbox3">3</label>
+        </div>
+        <div class="form-check form-check-inline">
+            <input class="form-check-input" type="checkbox" name="answ4" id="inlineCheckbox4" value="4">
+            <label class="form-check-label" for="inlineCheckbox4">4</label>
+        </div>
+        <div class="form-check form-check-inline">
+            <input class="form-check-input" type="checkbox" name="answ5" id="inlineCheckbox5" value="5">
+            <label class="form-check-label" for="inlineCheckbox5">5</label>
+        </div>
+    </div>
+    <input class="btn izm" type="submit" value="Изменить">
+</form>
+
+<br>
+<br>
+
+<div class="container-fluid">
+    <p>
+    <form id="change_complexity_task" method="POST">
+        <label class="row col-12 justify-content-center h2">Изменить сложность задачи (1-10)</label>
+        <input type="text" name="new_task_comlexity" placeholder="Сейчас: {{ task_complexity }}">
+        <input type="hidden" name="code" value="change_complexity">
+        <input type="hidden" name="task_id" value="{{ task_id }}">
+        <input type="hidden" name="submit">
+        <input class="btn izm" type="submit" value="Изменить">
+    </form>
+    <p>
+</div>
+
+<div class="container-fluid">
+    <p>
+    <form id="delete_task" method="POST">
+        <input type="hidden" name="submit">
+        <input type="hidden" name="code" value="delete">
+        <input type="hidden" name="theme_id" value="{{ task_id }}">
+        <input id="del_task_btn" class="btn" type="submit" value="Удалить задачу">
+    </form>
+    <p>
+</div>
+
+<div id="message"></div>
+
