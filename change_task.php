@@ -72,7 +72,8 @@ if (isset($data["submit"])) {
     {
         $tasks_table = new Tasks_table();
         $tasks_table->delete($task->id);
-        echo json_encode(["status"=>"OK"]);
+        $tmp_task = $tasks_table->read($task->id);
+        echo json_encode(["status"=>"OK", "code"=>"ch_location", "theme_id"=>$tmp_task["theme_id"]]);
     }
 
 } else {
@@ -89,7 +90,7 @@ if (isset($data["submit"])) {
     $page = new Render();
     $page->temp = 'main.html';
     $page->argv = ['title' => "change_task",
-        'css' => "/css/change_theme.css",
+        'css' => "/css/change_task.css",
         "name" => "<h2>$_SESSION[name] - admin-tools</h2>",
         "content" => $content,
         "js" => "/js/change_task.js"];

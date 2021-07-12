@@ -30,6 +30,8 @@ $("form").submit(function (){
                 let res = JSON.parse(response)
                 if(res["status"]=="OK")
                 {
+                    if (res["code"]=="ch_location")
+                        $(location).attr("href", "/theme?id="+res["theme_id"])
                     $("#message").html(res["message"])
                 }
             }
