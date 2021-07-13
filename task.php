@@ -99,6 +99,10 @@ if(isset($data["submit"]))
             echo json_encode(["status"=>"ERROR"]);
 
     }
+    else if($data["code"]=="get_task_block")
+    {
+
+    }
     else
         echo json_encode(["status"=>"wrong code"]);
 }

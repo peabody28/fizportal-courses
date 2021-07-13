@@ -118,6 +118,7 @@ if ($tmp_theme)
                     }
                     $content .= "<div class='row m-0 col-12 d-flex justify-content-center'><button class='btn send' type='submit'>Отправить</button></div>";
                     $content .= "</form></div><br>";
+                    $content .= "<div class='h2 d-flex justify-content-center' id='message'></div>";
                 }
 
             }

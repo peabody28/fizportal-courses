@@ -1,8 +1,18 @@
-<form id="add_file" method="POST" enctype="multipart/form-data" action="/materials?task_id={{ task_id }}.php">
+<form id="add_file" method="POST" enctype="multipart/form-data" action="/materials?task_id={{ task_id }}">
   <label class="row col-12 justify-content-center h2">Добавить файл</label>
   <input type="file" name="file">
   <input type="hidden" name="code" value="add_file">
   <input type="hidden" name="task_id" value="{{ task_id }}">
   <input type="hidden" name="submit">
   <input type="submit" value="Загрузить файл!">
+</form>
+<br>
+<br>
+<form id="add_video" method="POST" action="/materials?task_id={{ task_id }}">
+  <label class="row col-12 justify-content-center h2">Добавить видео по ссылке</label>
+  <input type="text" name="video_url">
+  <input type="hidden" name="code" value="add_video">
+  <input type="hidden" name="task_id" value="{{ task_id }}">
+  <input type="hidden" name="submit">
+  <input type="submit" value="Загрузить">
 </form>
