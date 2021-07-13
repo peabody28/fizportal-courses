@@ -76,11 +76,18 @@ if ($tmp_theme)
                 $task_block = new Render();
                 $content .="<div id='task'>";
                 $content .= $task_block->render_task($this_task);
+                if ($_SESSION["rights"] == "admin")
+                {
+                    $content .= "<div class='row justify-content-center'><a class='btn chg_task_btn' href='/change_task?id=$this_task[id]'>Изменить задачу</a></div><br><br>";
+                    $content .= " <div class='row d-flex justify-content-center'>
+                                                <button class='del_task' onclick='del_task($this_task[id]);return false;'>Удалить эту задачу</button>
+                                           </div><br><br>";
+                }
+                // материалы для задачи
+                $content .= "<br><br><div class='row justify-content-center'> <a href='/materials?task_id=$this_task[id]'>Материалы для задачи</a></div>";
                 $content .= "</div><br>";
 
                 $content .= "<div class='h2 d-flex justify-content-center' id='message'></div>";
-                // материалы для задачи
-                $content .= "<br><br><div class='row justify-content-center'> <a href='/materials?task_id=$this_task[id]'>Материалы для задачи</a></div>";
             }
 
         }

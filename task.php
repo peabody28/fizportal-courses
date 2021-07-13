@@ -115,7 +115,8 @@ if(isset($data["submit"]))
                                                 <button class='del_task' onclick='del_task($data[task_id]);return false;'>Удалить эту задачу</button>
                              </div><br><br>";
         }
-
+        // материалы для задачи
+        $task_block .= "<br><br><div class='row justify-content-center'> <a href='/materials?task_id=$data[task_id]'>Материалы для задачи</a></div>";
 
         echo json_encode(["block"=>$task_block]);
     }
