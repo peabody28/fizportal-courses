@@ -2,7 +2,7 @@ $("#create_course").submit(function ()
 {
     $.ajax(
         {
-            url: "/create_course.php",
+            url: "/add_course.php",
             type: "POST",
             data: $(this).serialize(),
             success: function ()

@@ -23,31 +23,31 @@ if ($tmp_theme)
     $users_courses_table = new Users_courses_table();
     $users_courses = $users_courses_table->read($_SESSION["id"]);
     if (in_array(["user_id" => $_SESSION["id"], "course_id" => $tmp_theme["course_id"]], $users_courses) || $_SESSION["rights"] == "admin") {
-        $tasks_table = new Tasks_table();
-        //беру задачи темы
-        $content = "<div class='row container-fluid justify-content-start m-0 p-0 pl-3'>";
-        $tasks_list = $tasks_table->get_tasks_theme($tmp_theme["id"]);
 
+        //беру задачи темы
+        $tasks_table = new Tasks_table();
+        $tasks_list = $tasks_table->get_tasks_theme($tmp_theme["id"]);
+        // сделанные пользователем задачи
         $users_tasks_table = new Users_tasks_table();
         $users_tasks = $users_tasks_table->get_users_tasks($_SESSION["id"]);
+
+        $content = "<div class='row container-fluid justify-content-start m-0 p-0 pl-3'>";
         $content .= "<a class='btn get_text_theme mr-1' href='/theme?id=$tmp_theme[id]&text'></a>";
         // отображение квадратов задачи
         foreach ($tasks_list as $task) {
             if(isset($_GET["task_id"]))
                 if ($_GET["task_id"]==$task["id"])
                     $this_task = $task;
-            if (in_array(["user_id" => $_SESSION["id"], "task_id" => $task["id"]], $users_tasks))
-                $button = "<a class='btn' id='$task[id]' href='/theme?id=$tmp_theme[id]&task_id=$task[id]'></a>";
-            else
-                $button = "<a class='btn close_btn' id='$task[id]' href='/theme?id=$tmp_theme[id]&task_id=$task[id]'></a>";
+            $button = (in_array(["user_id" => $_SESSION["id"], "task_id" => $task["id"]], $users_tasks))?"<a class='btn' id='$task[id]' href='/theme?id=$tmp_theme[id]&task_id=$task[id]'></a>":"<a class='btn close_btn' id='$task[id]' href='/theme?id=$tmp_theme[id]&task_id=$task[id]'></a>";
 
             $content .= "<form class='get_task mr-1' method='POST'>
                             <input type='hidden' name='task_id' value='$task[id]'>
                             <input type='hidden' name='submit' value='true'>
                             <input type='hidden' name='code' value='get_task'>
                             $button
-                         </form>  ";
+                         </form>";
         }
+
         // отображение супертеста
         $supertests_table = new Supertests_table();
         $tmp_sptest = $supertests_table->read_by_theme($tmp_theme["id"]);
@@ -58,7 +58,7 @@ if ($tmp_theme)
             $content .="<a class='btn ml-3 create add_task' href='/add_task?theme_id=$tmp_theme[id]'>Добавить задачу</a>";
 
         // задача или супертест или описание
-        $content .= "</div><br><br>" ;
+        $content .= "</div><br><br>" ; // закрыл блок с квадратами задач
 
         if(count($tasks_list) || isset($_GET["supertest"]))
         {
@@ -69,9 +69,9 @@ if ($tmp_theme)
                     header("Location: /theme?id=$tmp_theme[id]");
                     exit();
                 }
+
                 $task_block = new Render();
-                $content .="<div id='task'>";
-                $content .= $task_block->render_task($this_task);
+                $content .= "<div id='task'>".$task_block->render_task($this_task);
                 if ($_SESSION["rights"]=="admin")
                 {
                     $content .= "<div class='row justify-content-center'><a class='btn chg_task_btn' href='/change_task?id=$this_task[id]'>Изменить задачу</a></div><br><br>";
@@ -93,18 +93,28 @@ if ($tmp_theme)
                 $supertests_tasks_table = new Supertests_tasks_table();
                 $supertests_tasks_rows = $supertests_tasks_table->read($tmp_sp_test["id"]);
 
-                $supertests_tasks = [];
                 $tasks_table = new Tasks_table();
 
-                foreach ($supertests_tasks_rows as $row)
-                    array_push($supertests_tasks, $tasks_table->read($row["task_id"]));
-
+                // отображение задач супертеста
                 $supertest = new Render();
                 if ($_SESSION["rights"]=="admin")
                     $content .= "<div class='row justify-content-center'><a class='btn add_task_to_supertest_btn' href='/add_task?supertest_id=$tmp_sp_test[id]'>Добавить задачу в супертест</a></div><br><br>";
-                $content .="<div id='task'>";
-                $content .= $supertest->render_supertest($supertests_tasks);
-                $content .= "</div><br>";
+                if($supertests_tasks_rows)
+                {
+                    $content .= "<div id='task'>".
+                        "<form id='send_supertest_answers' method='POST'>
+                                <input type='hidden' name='submit'>
+                                <input type='hidden' name='code' value='send_supertest_answers'>
+                                <input type='hidden' name='theme_id' value='$_GET[id]'>";
+                    foreach ($supertests_tasks_rows as $row)
+                    {
+                        $task = $tasks_table->read($row["task_id"]);
+                        $content .= $supertest->render_supertest_task($task);
+                    }
+                    $content .= "<div class='row m-0 col-12 d-flex justify-content-center'><button class='btn send' type='submit'>Отправить</button></div>";
+                    $content .= "</form></div><br>";
+                }
+
             }
             else if(isset($_GET["text"]))
                 $content .="<div id='task'><div class='row m-0 p-0 justify-content-center h2'>Описание темы</div><br><div class='row m-0 p-0 justify-content-center h2'>$tmp_theme[text]</div></div>";

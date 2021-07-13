@@ -24,14 +24,14 @@ if (isset($data["submit"]))
 }
 else
 {
-    $content=file_get_contents(__DIR__."/templates/create_course_form.html");
+    $content=file_get_contents(__DIR__."/templates/add_course_form.html");
     $content .= "<br><br><div class='row col-12 p-0 m-0 ml-5 d-flex justify-content-start'><a class='btn back' href='/courses'>Вернуться к списку курсов</a></div><br><br>";
     $page = new Render();
     $page->temp = 'main.html';
     $page->argv = ['title' => "create_course",
-        'css' => "/css/create_course.css",
+        'css' => "/css/add_course.css",
         "name" => "<h2>$_SESSION[name] - admin-tools</h2>",
         "content" => $content,
-        "js" => "/js/create_course.js"];
+        "js" => "/js/add_course.js"];
     echo $page->render_temp();
 }

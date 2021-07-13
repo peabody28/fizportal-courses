@@ -40,6 +40,30 @@ $('.send_answer').submit(function ()
     return false;
 })
 
+$('#send_supertest_answers').submit(function ()
+{
+    console.log($('#send_supertest_answers').serialize())
+    $.ajax(
+        {
+            url: "/task.php",
+            type: "POST",
+            data: $('#send_supertest_answers').serialize(),
+            success: function (res)
+            {
+                var response = JSON.parse(res)
+                if (response["status"]=="OK")
+                {
+                    $("#message").html("Верно!")
+                    $(".supertest").css('background-color', '#50C878');
+                }
+                else
+                    $("#message").html("Неверный ответ!")
+            }
+        }
+    )
+    return false;
+})
+
 function del_task()
 {
     $.ajax(
