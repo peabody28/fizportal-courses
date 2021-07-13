@@ -26,7 +26,7 @@ class Render
     public function render_task($task)
     {
         $content = "";
-        $a_type_task = "<form method='POST' class='send_answer container-fluid'>
+        $a_type_task = "<form method='POST' class='send_answer container-fluid' onsubmit='send_answer();return false;'>
                             <input type='hidden' name='submit' >
                             <input type='hidden' name='task_id' value='$task[id]'>
                             <input type='hidden' name='code' value='send_answer'>
@@ -42,7 +42,7 @@ class Render
                             <div class='row m-0 col-12 d-flex justify-content-center'><button class='btn send' type='submit'>Отправить</button></div>
                         </form>";
 
-        $b_type_task = "<form class='send_answer' method='POST'>
+        $b_type_task = "<form class='send_answer' method='POST' onsubmit='send_answer();return false;'>
                     <input type='hidden' name='submit' >
                     <input type='hidden' name='task_id' value='$task[id]'>
                     <input type='hidden' name='code' value='send_answer'>

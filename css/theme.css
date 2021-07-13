@@ -9,6 +9,11 @@
 .get_task .close_btn {
   background-color: grey;
 }
+.get_task .supertest {
+  height: 26px;
+  width: 26px;
+  background-color: #cd1d1d;
+}
 .send_answer .btn {
   background-color: #b3b3b3;
 }
@@ -28,11 +33,6 @@
 }
 .chg_task_btn {
   background-color: #cd7857;
-}
-.supertest {
-  height: 26px;
-  width: 26px;
-  background-color: #cd1d1d;
 }
 .add_task_to_supertest_btn {
   background-color: #cd7857;

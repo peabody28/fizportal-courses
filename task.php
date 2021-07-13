@@ -3,6 +3,7 @@ require_once __DIR__."/classes/Render.php";
 require_once __DIR__."/classes/Tasks_table.php";
 require_once __DIR__."/classes/Users_tasks_table.php";
 require_once __DIR__."/classes/Supertests_table.php";
+require_once __DIR__."/classes/Supertests_tasks_table.php";
 require_once __DIR__."/classes/Tasks_answers_table.php";
 require_once __DIR__."/classes/Users_themes_table.php";
 require_once __DIR__."/classes/Professor.php";
@@ -98,6 +99,63 @@ if(isset($data["submit"]))
         else
             echo json_encode(["status"=>"ERROR"]);
 
+    }
+    else if ($data["code"]=="get_task")
+    {
+        $tasks_table = new Tasks_table();
+        $tmp_task = $tasks_table->read($data["task_id"]);
+
+        $block = new Render();
+
+        $task_block = $block->render_task($tmp_task);
+        if ($_SESSION["rights"]=="admin")
+        {
+            $task_block .= "<div class='row justify-content-center'><a class='btn chg_task_btn' href='/change_task?id=$data[task_id]'>Изменить задачу</a></div><br><br>";
+            $task_block .= " <div class='row d-flex justify-content-center'>
+                                                <button class='del_task' onclick='del_task($data[task_id]);return false;'>Удалить эту задачу</button>
+                             </div><br><br>";
+        }
+
+
+        echo json_encode(["block"=>$task_block]);
+    }
+    else if ($data["code"]=="get_supertest")
+    {
+
+        $supertests_tasks_table = new Supertests_tasks_table();
+        $supertests_tasks_rows = $supertests_tasks_table->read($data["supertest_id"]);
+
+        $tasks_table = new Tasks_table();
+
+        // отображение задач супертеста
+        $supertest = new Render();
+        $supertests_block = "";
+        if ($_SESSION["rights"]=="admin")
+            $supertests_block .= "<div class='row justify-content-center'><a class='btn add_task_to_supertest_btn' href='/add_task?supertest_id=$data[supertest_id]'>Добавить задачу в супертест</a></div><br><br>";
+
+        if($supertests_tasks_rows)
+        {
+            $supertests_block .=
+                                "<form class='send_answer' method='POST' onsubmit='send_answer();return false;'>
+                                    <input type='hidden' name='submit'>
+                                    <input type='hidden' name='code' value='send_supertest_answers'>
+                                    <input type='hidden' name='theme_id' value='$data[theme_id]'>";
+            foreach ($supertests_tasks_rows as $row)
+            {
+                $task = $tasks_table->read($row["task_id"]);
+                $supertests_block .= $supertest->render_supertest_task($task);
+                if ($_SESSION["rights"]=="admin")
+                {
+                    $supertests_block .= "<div class='row justify-content-center'><a class='btn chg_task_btn' href='/change_task?id=$task[id]'>Изменить задачу</a></div><br><br>";
+                    $supertests_block .= " <div class='row d-flex justify-content-center'>
+                                                <button class='del_task' onclick='del_task($task[id]);return false;'>Удалить эту задачу</button>
+                                           </div><br><br>";
+                }
+            }
+            $supertests_block .= "<div class='row m-0 col-12 d-flex justify-content-center'><button class='btn send' type='submit'>Отправить</button></div>";
+            $supertests_block .= "</form><br>";
+        }
+        echo json_encode(["block"=>$supertests_block]);
     }
     else
         echo json_encode(["status"=>"wrong code"]);
