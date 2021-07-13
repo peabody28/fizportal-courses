@@ -130,13 +130,13 @@ if(isset($data["submit"]))
         // отображение задач супертеста
         $supertest = new Render();
         $supertests_block = "";
-        if ($_SESSION["rights"]=="admin")
+        if ($_SESSION["rights"] == "admin")
             $supertests_block .= "<div class='row justify-content-center'><a class='btn add_task_to_supertest_btn' href='/add_task?supertest_id=$data[supertest_id]'>Добавить задачу в супертест</a></div><br><br>";
 
-        if($supertests_tasks_rows)
+        if ($supertests_tasks_rows)
         {
             $supertests_block .=
-                                "<form class='send_answer' method='POST' onsubmit='send_answer();return false;'>
+                "<form class='send_answer' method='POST' onsubmit='send_answer();return false;'>
                                     <input type='hidden' name='submit'>
                                     <input type='hidden' name='code' value='send_supertest_answers'>
                                     <input type='hidden' name='theme_id' value='$data[theme_id]'>";
@@ -144,7 +144,7 @@ if(isset($data["submit"]))
             {
                 $task = $tasks_table->read($row["task_id"]);
                 $supertests_block .= $supertest->render_supertest_task($task);
-                if ($_SESSION["rights"]=="admin")
+                if ($_SESSION["rights"] == "admin")
                 {
                     $supertests_block .= "<div class='row justify-content-center'><a class='btn chg_task_btn' href='/change_task?id=$task[id]'>Изменить задачу</a></div><br><br>";
                     $supertests_block .= " <div class='row d-flex justify-content-center'>
@@ -152,10 +152,11 @@ if(isset($data["submit"]))
                                            </div><br><br>";
                 }
             }
+        }
             $supertests_block .= "<div class='row m-0 col-12 d-flex justify-content-center'><button class='btn send' type='submit'>Отправить</button></div>";
             $supertests_block .= "</form><br>";
-        }
-        echo json_encode(["block"=>$supertests_block]);
+
+        echo json_encode(["block" => $supertests_block]);
     }
     else
         echo json_encode(["status"=>"wrong code"]);
