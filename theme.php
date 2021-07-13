@@ -83,6 +83,11 @@ if ($tmp_theme)
                                  </form>";
                 }
                 $content .= "</div><br>";// закрыл блок #task
+
+                $content .= "<div class='h2 d-flex justify-content-center' id='message'></div>";
+
+                // материалы для задачи
+                $content .= "<br><br><div class='row justify-content-center'> <a href='/materials?task_id=$this_task[id]'>Материалы для задачи</a></div>";
             }
             else if(isset($_GET["supertest"]))
             {
@@ -125,12 +130,15 @@ if ($tmp_theme)
                 $content .="<div id='task'>";
                 $content .= $task_block->render_task($this_task);
                 $content .= "</div><br>";
+
+                $content .= "<div class='h2 d-flex justify-content-center' id='message'></div>";
+                // материалы для задачи
+                $content .= "<br><br><div class='row justify-content-center'> <a href='/materials?task_id=$this_task[id]'>Материалы для задачи</a></div>";
             }
+
         }
         else
             $content .="<div id='task'><div class='row m-0 p-0 justify-content-center h2'>Описание темы</div><br><div class='row m-0 p-0 justify-content-center h2'>$tmp_theme[text]</div></div>";
-
-        $content .= "<div class='h2 d-flex justify-content-center' id='message'></div>";
     } else
         $content = "Вы не купили этот курс";
 
