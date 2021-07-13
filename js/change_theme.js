@@ -32,7 +32,8 @@ $("#delete_theme").submit(function ()
             data: $(this).serialize(),
             success: function (res){
                 let response = JSON.parse(res)
-
+                if (response["status"]=="OK")
+                    $(location).attr("href", "/courses")
             }
         }
     )

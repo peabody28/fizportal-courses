@@ -9,7 +9,6 @@ $("#B_radio").click(function (){
 });
 
 $("input[type = 'radio']").click(function(){
-    console.log($(this).attr("checked"))
     if($(this).attr("checked") == 'checked')
     {
         $(this).removeAttr('checked');

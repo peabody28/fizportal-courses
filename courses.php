@@ -34,7 +34,7 @@ else
     //рендеринг
     $content = "";
     if($_SESSION["rights"]=="admin")
-        $content = "<br><br><div class='row col-12 p-0 m-0 ml-5 d-flex justify-content-start'><a class='btn create' href='/create_course'>Cоздать курс</a> </div><br><br>";
+        $content = "<br><br><div class='row col-12 p-0 m-0 ml-5 d-flex justify-content-start'><a class='btn create' href='/add_course'>Cоздать курс</a> </div><br><br>";
     $close_course_block = new Close_course_block(); // некупленные курсы
     $course_block = new Course_block(); // купленные курсы
     $course_block_adm = new Course_block_adm();
