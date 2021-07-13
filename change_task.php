@@ -73,7 +73,7 @@ if (isset($data["submit"])) {
         $tasks_table = new Tasks_table();
         $tasks_table->delete($task->id);
         $tmp_task = $tasks_table->read($task->id);
-        echo json_encode(["status"=>"OK", "code"=>"ch_location", "theme_id"=>$tmp_task["theme_id"]]);
+        echo json_encode(["status"=>"OK"]);
     }
     else if($data["code"]=="change_image")
     {

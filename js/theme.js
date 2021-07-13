@@ -10,15 +10,16 @@ $('.get_task').submit(function ()
                 var task = JSON.parse(res)
                 $("#task").html(task["block"])
                 $("#message").html("")
-                //MathJax.Hub.Queue(["Typeset",MathJax.Hub,"task"]); // обновление mathjax
+                MathJax.typeset() // обновление mathjax
             }
         }
     )
     return false;
 })
 
-$('.send_answer').submit(function ()
+function send_answer()
 {
+    console.log()
     $.ajax(
         {
             url: "/task.php",
@@ -38,11 +39,10 @@ $('.send_answer').submit(function ()
         }
     )
     return false;
-})
+}
 
 $('#send_supertest_answers').submit(function ()
 {
-    console.log($('#send_supertest_answers').serialize())
     $.ajax(
         {
             url: "/task.php",
@@ -64,13 +64,14 @@ $('#send_supertest_answers').submit(function ()
     return false;
 })
 
-function del_task()
+function del_task(id)
 {
+    console.log(id)
     $.ajax(
         {
             url: "/change_task.php",
             type: "POST",
-            data: $('.del_task').serialize(),
+            data: "submit=true&code=del_task&task_id="+id,
             success: function ()
             {
                 location.reload();

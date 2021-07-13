@@ -10,10 +10,7 @@ $("#add_task").submit(function ()
                 var resp = JSON.parse(response)
                 if (resp["theme_id"])
                 {
-                    if(resp["supertest_id"])
-                        $(location).attr("href", "/theme?id="+resp["theme_id"]+"&supertest")
-                    else
-                        $(location).attr("href", "/theme?id="+resp["theme_id"])
+                    $(location).attr("href", "/theme?id="+resp["theme_id"])
                 }
             }
         }
