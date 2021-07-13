@@ -3,3 +3,4 @@
 composer.lock
 db.php
 db_connect.php
+media/*
