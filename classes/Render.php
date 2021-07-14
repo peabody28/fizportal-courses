@@ -45,6 +45,7 @@ class Render
         $b_type_task = "<form class='send_answer' method='POST' onsubmit='send_answer();return false;'>
                     <input type='hidden' name='submit' >
                     <input type='hidden' name='task_id' value='$task[id]'>
+                    <input type='hidden' name='theme_id' value='$task[theme_id]'>
                     <input type='hidden' name='code' value='send_answer'>
                     <input type='text' class='row' name='$task[id]_b_answer'><br>
                     <div class='row d-flex justify-content-center'><button class='btn send' type='submit'>Отправить</button></div>
