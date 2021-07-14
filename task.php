@@ -143,7 +143,7 @@ if(isset($data["submit"]))
         $users_progress_theme_table = new Users_progress_theme_table();
         $users_progress = $users_progress_theme_table->read(["user_id"=>$_SESSION["id"], "theme_id"=>$data["theme_id"]]);
 
-        if((int)$users_progress["progress"]<10)
+        if((int)$users_progress["progress"]<10 && $_SESSION["rights"]!="admin")
         {
             echo json_encode(["block" => "Вы решили мало задач ваш балл ".$users_progress["progress"]."/10"]);
             exit();

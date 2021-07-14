@@ -1,4 +1,3 @@
-@import url('/css/course.css');
 #catalog {
   font-weight: bold;
 }
@@ -7,5 +6,29 @@
 }
 .izm {
   background-color: #cd7857;
+}
+.cours-row .col-10 .cours-name {
+  white-space: normal;
+}
+.cours-row .col-10 .tandb {
+  border: 2px solid rgba(19, 20, 42, 0.42);
+}
+.cours-row .col-10 .title {
+  font-size: 18px;
+  background-color: #ffffff;
+}
+.cours-row .col-10 .title p {
+  margin: 0;
+}
+.cours-row .col-10 .btn-bl {
+  background-color: #cecece;
+}
+.cours-row .col-10 .get_course_btn {
+  background-color: #FDE37F;
+  color: black;
+}
+.cours-row .col-10 .open-btn {
+  background-color: #3d807a;
+  color: black;
 }
 /*# sourceMappingURL=courses.css.map */

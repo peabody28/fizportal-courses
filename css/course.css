@@ -1,29 +1,4 @@
-.cours-row .col-10 .cours-name {
-  white-space: normal;
-}
-.cours-row .col-10 .tandb {
-  border: 2px solid rgba(19, 20, 42, 0.42);
-}
-.cours-row .col-10 .title {
-  font-size: 18px;
-  background-color: #ffffff;
-}
-.cours-row .col-10 .title p {
-  margin: 0;
-}
-.cours-row .col-10 .btn-bl {
-  background-color: #cecece;
-}
-.cours-row .col-10 .get_course_btn {
-  background-color: #FDE37F;
-  color: black;
-}
-.cours-row .col-10 .open-btn {
-  background-color: #3d807a;
-  color: black;
-}
 .theme {
-  background-color: #cecece;
   border: 1px solid #343135;
   border-right: 20px solid #3d7f79;
 }
@@ -34,7 +9,28 @@
 .theme p {
   margin: 0;
 }
-.theme:hover {
+.green_theme {
+  background-color: #83ceb3;
+}
+.open_theme {
+  background-color: #cecece;
+}
+.close_theme {
+  background-color: #d7b0b0;
+  border-right: 20px solid #ad4242;
+}
+.close_theme a {
+  pointer-events: none;
+  /* делаем ссылку некликабельной */
+  cursor: default;
+  /* устанавливаем курсор в виде стрелки */
+  color: #999;
+  /* цвет текста для нективной ссылки */
+}
+.green_theme:hover {
+  background-color: #959494;
+}
+.open_theme:hover {
   background-color: #959494;
 }
 .create {

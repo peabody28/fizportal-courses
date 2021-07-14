@@ -26,9 +26,9 @@ class Users_mistakes_table implements Table
     public function read($user_id)
     {
         global $link;
-        $sql = sprintf("SELECT * FROM users_mistakes WHERE user_id='%s'", $user_id);
+        $sql = sprintf("SELECT task_id FROM users_mistakes WHERE user_id='%s'", $user_id);
         $result = mysqli_query($link, $sql);
-        $row = mysqli_fetch_array($result);
+        $row = mysqli_fetch_all($result, MYSQLI_ASSOC);
         return $row;
     }
 
@@ -36,13 +36,11 @@ class Users_mistakes_table implements Table
     {
         // TODO: Implement update() method.
     }
-
     public function delete($obj)
     {
         global $link;
         $sql = sprintf("DELETE FROM users_mistakes WHERE user_id='%s' AND task_id='%s'", $obj["user_id"], $obj["task_id"]);
         $result = mysqli_query($link, $sql);
-        $row = mysqli_fetch_array($result);
-        return $row;
+        return $result;
     }
 }
