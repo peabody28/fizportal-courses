@@ -29,6 +29,7 @@ class Render
         $a_type_task = "<form method='POST' class='send_answer container-fluid' onsubmit='send_answer();return false;'>
                             <input type='hidden' name='submit' >
                             <input type='hidden' name='task_id' value='$task[id]'>
+                            <input type='hidden' name='theme_id' value='$task[theme_id]'>
                             <input type='hidden' name='code' value='send_answer'>
                             <div class='row m-0 col-12 d-flex justify-content-center container'>
                                 <div class='col-12 col-md-5 row d-flex justify-content-between'>
@@ -51,10 +52,12 @@ class Render
                     <div class='row d-flex justify-content-center'><button class='btn send' type='submit'>Отправить</button></div>
                 </form>";
 
+        $image_block = $task["img_url"]?"<div class='col-12 m-0 p-0 d-flex justify-content-center'><img src='$task[img_url]' height='250' width='500' alt=''></div>":"";
         $content .=
             "<div class='row m-0 p-0 justify-content-center h2'>Условие</div><br>
-            <div class='opis m-0 p-0 d-flex justify-content-center'>
-                <div class='col-8'>$task[text]</div>
+            <div class=' row opis m-0 p-0 d-flex justify-content-center container'>
+                <div class='col-8 m-0 p-0 d-flex justify-content-start'>$task[text]</div>
+                $image_block
             </div><br><br>
             <div class='container-fluid row m-0 p-0 d-flex justify-content-center'>";
 
