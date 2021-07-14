@@ -80,7 +80,7 @@ if ($tmp_theme)
                 {
                     $content .= "<div class='row justify-content-center'><a class='btn chg_task_btn' href='/change_task?id=$this_task[id]'>Изменить задачу</a></div><br><br>";
                     $content .= " <div class='row d-flex justify-content-center'>
-                                                <button class='del_task' onclick='del_task($this_task[id]);return false;'>Удалить эту задачу</button>
+                                                <button class='btn del_task' onclick='del_task($this_task[id]);return false;'>Удалить эту задачу</button>
                                            </div><br><br>";
                 }
                 // материалы для задачи

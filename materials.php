@@ -11,8 +11,9 @@ if (isset($_POST["submit"])) {
 
     if ($_POST["code"] == "add_file")
     {
-        $uploaddir = __DIR__ . "/media/tasks_materials/";
 
+        $uploaddir = __DIR__ . "/media/tasks_materials/$_POST[task_id]/";
+        mkdir($uploaddir);
         $apend = "task" . $_POST["task_id"]."_".time().'.pdf';
 
         $uploadfile = "$uploaddir$apend";
@@ -20,12 +21,32 @@ if (isset($_POST["submit"])) {
         $status = move_uploaded_file($_FILES['file']['tmp_name'], $uploadfile);
         if ($status)
         {
-            $tasks_materials_table->add_file(["task_id"=>$_POST["task_id"], "url"=>"/media/tasks_materials/".$apend]);
+            $tasks_materials_table->add_file(["task_id"=>$_POST["task_id"], "url"=>"/media/tasks_materials/$_POST[task_id]/".$apend, "file_name"=>$_POST["file_name"]]);
             header("Location: /materials?task_id=$_POST[task_id]");
         }
         else
             header("Location: /materials?task_id=$_POST[task_id]");
 
+
+    }
+    else if ($_POST["code"] == "add_img")
+    {
+        $uploaddir = __DIR__ . "/media/tasks_materials/$_POST[task_id]/";
+        mkdir($uploaddir);
+        $inf = pathinfo($_FILES['file']['name']);
+        $apend = "task" . $_POST["task_id"]."_".time().".".$inf["extension"];
+
+        $uploadfile = "$uploaddir$apend";
+
+        $status = move_uploaded_file($_FILES['file']['tmp_name'], $uploadfile);
+        if ($status)
+        {
+            $url = "/media/tasks_materials/$_POST[task_id]/".$apend;
+            $tasks_materials_table->add_img(["task_id"=>$_POST["task_id"], "url"=>"/media/tasks_materials/$_POST[task_id]/".$apend]);
+            header("Location: /materials?task_id=$_POST[task_id]");
+        }
+        else
+            header("Location: /materials?task_id=$_POST[task_id]");
 
     }
     else if ($_POST["code"] == "add_video") {
@@ -62,7 +83,15 @@ else if (isset($_GET["task_id"]))
             if ($key=="video_url")
                 $content .= "<iframe width='560' height='315' src='$url' frameborder='0' allowfullscreen></iframe><br><br>";
             else if ($key=="file_url")
-                $content .= "<a href='$url'>ссылка</a><br><br>";
+            {
+                $name = ($item["file_name"])?:"link";
+                $content .= "<a href='$url'>$name</a><br><br>";
+            }
+            else if ($key=="img_url")
+            {
+                $content .= "<img src='$url' width='500' height='250' alt='img'><br><br>";
+            }
+
         }
 
     }

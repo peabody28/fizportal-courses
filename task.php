@@ -112,7 +112,7 @@ if(isset($data["submit"]))
         {
             $task_block .= "<div class='row justify-content-center'><a class='btn chg_task_btn' href='/change_task?id=$data[task_id]'>Изменить задачу</a></div><br><br>";
             $task_block .= " <div class='row d-flex justify-content-center'>
-                                                <button class='del_task' onclick='del_task($data[task_id]);return false;'>Удалить эту задачу</button>
+                                                <button class='btn del_task' onclick='del_task($data[task_id]);return false;'>Удалить эту задачу</button>
                              </div><br><br>";
         }
         // материалы для задачи
@@ -149,7 +149,7 @@ if(isset($data["submit"]))
                 {
                     $supertests_block .= "<div class='row justify-content-center'><a class='btn chg_task_btn' href='/change_task?id=$task[id]'>Изменить задачу</a></div><br><br>";
                     $supertests_block .= " <div class='row d-flex justify-content-center'>
-                                                <button class='del_task' onclick='del_task($task[id]);return false;'>Удалить эту задачу</button>
+                                                <button class='btn del_task' onclick='del_task($task[id]);return false;'>Удалить эту задачу</button>
                                            </div><br><br>";
                 }
             }
