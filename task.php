@@ -6,6 +6,7 @@ require_once __DIR__."/classes/Supertests_table.php";
 require_once __DIR__."/classes/Supertests_tasks_table.php";
 require_once __DIR__."/classes/Tasks_answers_table.php";
 require_once __DIR__."/classes/Users_themes_table.php";
+require_once __DIR__."/classes/Users_progress_theme.php";
 require_once __DIR__."/classes/Professor.php";
 session_start();
 
@@ -52,12 +53,19 @@ if(isset($data["submit"]))
         if($status)
         {
             $users_tasks_table = new Users_tasks_table();
-            $users_tasks_table->create(["user_id"=>$_SESSION["id"], "task_id"=>$data["task_id"]]);
+            $st = $users_tasks_table->create(["user_id"=>$_SESSION["id"], "task_id"=>$data["task_id"]]);
+            if($st)
+            {
+                $users_progress_theme = new Users_progress_theme();
+                $users_progress_theme->add_point(["user_id"=>$_SESSION["id"], "theme_id"=>$data["theme_id"]]);
+            }
             echo json_encode(["status" => "OK", "task_id"=>$data["task_id"]]);
         }
         else
         {
-            // TODO: Добавление задачи в работу над ошибками
+            // удаляем балл ТОЛЬКО ЕСЛИ ЗАДАЧИ НЕТ В РО !!!
+            $users_progress_theme = new Users_progress_theme();
+            $users_progress_theme->delete_point(["user_id"=>$_SESSION["id"], "theme_id"=>$data["theme_id"]]);
             echo json_encode(["status" => "ERROR"]);
         }
     }
@@ -115,6 +123,7 @@ if(isset($data["submit"]))
                                                 <button class='del_task' onclick='del_task($data[task_id]);return false;'>Удалить эту задачу</button>
                              </div><br><br>";
         }
+        $task_block .= "<div class='row justify-content-center h2' id='message'></div>";
         // материалы для задачи
         $task_block .= "<br><br><div class='row justify-content-center'> <a href='/materials?task_id=$data[task_id]'>Материалы для задачи</a></div>";
 
