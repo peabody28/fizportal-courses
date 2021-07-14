@@ -39,7 +39,14 @@ class Tasks_materials_table implements Table
     public function add_file($materials)
     {
         global $link;
-        $sql = sprintf("INSERT INTO tasks_materials(task_id, file_url) VALUES ('%s', '%s')", $materials["task_id"], $materials["url"]);
+        $sql = sprintf("INSERT INTO tasks_materials(task_id, file_url, file_name) VALUES ('%s', '%s', '%s')", $materials["task_id"], $materials["url"], $materials["file_name"]);
+        $result = mysqli_query($link, $sql);
+        return $result;
+    }
+    public function add_img($materials)
+    {
+        global $link;
+        $sql = sprintf("INSERT INTO tasks_materials(task_id, img_url) VALUES ('%s', '%s')", $materials["task_id"], $materials["url"]);
         $result = mysqli_query($link, $sql);
         return $result;
     }

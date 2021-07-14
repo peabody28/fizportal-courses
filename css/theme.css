@@ -14,9 +14,6 @@
   width: 26px;
   background-color: #cd1d1d;
 }
-.send_answer .btn {
-  background-color: #b3b3b3;
-}
 .create {
   background-color: #3d7f79;
 }
@@ -25,7 +22,7 @@
   width: 26px;
   background-color: #cd7857;
 }
-.delete {
+.del_task {
   background-color: #fc8f8f;
 }
 .send {
