@@ -6,10 +6,10 @@ require_once __DIR__."/classes/Tasks_table.php";
 require_once __DIR__."/classes/Users_tasks_table.php";
 require_once __DIR__."/classes/Users_courses_table.php";
 require_once __DIR__."/classes/Users_themes_table.php";
-require_once __DIR__."/classes/Users_mistakes_table.php";
+require_once __DIR__."/classes/Professor.php";
 require_once __DIR__."/classes/Supertests_table.php";
 require_once __DIR__."/classes/Supertests_tasks_table.php";
-require_once __DIR__ . "/classes/Users_progress_theme_table.php";
+require_once __DIR__."/classes/Users_progress_theme_table.php";
 require_once __DIR__."/classes/Render.php";
 session_start();
 
@@ -26,101 +26,27 @@ if ($tmp_theme)
     $users_courses_table = new Users_courses_table();
     $users_courses = $users_courses_table->read($_SESSION["id"]);
     if (in_array(["user_id" => $_SESSION["id"], "course_id" => $tmp_theme["course_id"]], $users_courses) || $_SESSION["rights"] == "admin") {
+
         // проверка доступа к теме
-
-        $themes_list_full = $themes_table->get_courses_themes($tmp_theme["course_id"]);
-        $themes_ids = [];
-        foreach ($themes_list_full as $theme)
-            $themes_ids[] = $theme["id"];
-
-        $users_themes_table = new Users_themes_table();
-        $users_themes_list = $users_themes_table->read($_SESSION["id"]);
-
-        if(!in_array(["user_id" => $_SESSION["id"], "theme_id" => $tmp_theme["id"]], $users_themes_list) && $_SESSION["rights"]!="admin")
+        $professor = new Professor();
+        $theme_status = $professor->theme_status($tmp_theme);
+        if ($theme_status=="close")
         {
-            if($tmp_theme["id"]!=$themes_ids[0])// первая тема курса
-            {
+            $content = "<div class='row container-fluid justify-content-start m-0 p-0 pl-3'>Вы пока не можете решать эту тему</div>";
+            $file = basename(__FILE__, ".php");
 
-                if($tmp_theme["id"]==$themes_ids[1]) //вторая тема курса
-                {
-                    if(!in_array(["user_id" => $_SESSION["id"], "theme_id" => $themes_ids[0]], $users_themes_list))// решена ли первая?
-                    {
-                        $content = "<div class='row container-fluid justify-content-start m-0 p-0 pl-3'>Вы не можете открыть эту тему</div>";
+            $page = new Render();
+            $page->temp = 'main.html';
+            $page->argv = ['title'=>strip_tags($tmp_theme["title"]),
+                'css'=>"/css/theme.css",
+                "name"=>"<h2>$_SESSION[name]</h2>",
+                "content"=>$content,
+                "js"=>"/js/theme.js"] ;
 
-                        $file = basename(__FILE__, ".php");
-
-                        $page = new Render();
-                        $page->temp = 'main.html';
-                        $page->argv = ['title'=>"error",
-                            'css'=>"/css/theme.css",
-                            "name"=>"<h2>$_SESSION[name]</h2>",
-                            "content"=>$content,
-                            "js"=>"/js/theme.js"] ;
-
-                        echo $page->render_temp();
-                        exit();
-                    }
-                }
-                else // >= 3 тема курса
-                {
-                    if(!in_array(["user_id" => $_SESSION["id"], "theme_id" => $themes_ids[1]], $users_themes_list))// если предыдущая не решена
-                    {
-                        $content = "<div class='row container-fluid justify-content-start m-0 p-0 pl-3'>Вы не можете открыть эту тему</div>";
-
-                        $file = basename(__FILE__, ".php");
-
-                        $page = new Render();
-                        $page->temp = 'main.html';
-                        $page->argv = ['title'=>"error",
-                            'css'=>"/css/theme.css",
-                            "name"=>"<h2>$_SESSION[name]</h2>",
-                            "content"=>$content,
-                            "js"=>"/js/theme.js"] ;
-
-                        echo $page->render_temp();
-                        exit();
-                    }
-                    else
-                    {
-                        $close = false;
-                        $tasks_table = new Tasks_table();
-                        $id = array_search($tmp_theme["id"], $themes_ids)-2;
-                        $tasks_theme_full = $tasks_table->get_tasks_theme($themes_ids[$id]);
-                        $tasks_ids = []; // задачи темы
-                        foreach ($tasks_theme_full as $task)
-                            $tasks_ids[] = $task["id"];
-
-                        $users_mistakes_table = new Users_mistakes_table();
-                        $mistakes = $users_mistakes_table->read($_SESSION["id"]); // работа над ошибками пользователя
-                        foreach ($mistakes as $mistake)
-                        {
-                            if (in_array($mistake["task_id"], $tasks_ids))
-                            {
-                                $close = true;
-                                break;
-                            }
-                        }
-                        if ($close)
-                        {
-                            $content = "<div class='row container-fluid justify-content-start m-0 p-0 pl-3'>Вы не можете открыть эту тему</div>";
-
-                            $file = basename(__FILE__, ".php");
-
-                            $page = new Render();
-                            $page->temp = 'main.html';
-                            $page->argv = ['title'=>"error",
-                                'css'=>"/css/theme.css",
-                                "name"=>"<h2>$_SESSION[name]</h2>",
-                                "content"=>$content,
-                                "js"=>"/js/theme.js"] ;
-
-                            echo $page->render_temp();
-                            exit();
-                        }
-                    }
-                }
-            }
+            echo $page->render_temp();
+            exit();
         }
+
         //беру задачи темы
         $tasks_table = new Tasks_table();
         $tasks_list = $tasks_table->get_tasks_theme($tmp_theme["id"]);

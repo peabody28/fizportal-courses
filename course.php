@@ -5,8 +5,8 @@ require_once __DIR__."/classes/Courses_table.php";
 require_once __DIR__."/classes/Users_courses_table.php";
 require_once __DIR__."/classes/Themes_table.php";
 require_once __DIR__."/classes/Users_themes_table.php";
-require_once __DIR__."/classes/Users_mistakes_table.php";
 require_once __DIR__."/classes/Tasks_table.php";
+require_once __DIR__."/classes/Professor.php";
 require_once __DIR__."/classes/Render.php";
 session_start();
 
@@ -30,51 +30,20 @@ if ($course["id"])
         $themes_table = new Themes_table();
         $themes_list = $themes_table->get_courses_themes($course["id"]);
 
-        $users_themes_table = new Users_themes_table();
-        $users_themes_list = $users_themes_table->read($_SESSION["id"]);
         // отображаю
         for ($theme_id=0; $theme_id<count($themes_list); $theme_id++) {
             $theme = $themes_list[$theme_id];
 
-            $class = "";
+            $professor = new Professor();
+            $theme_status = $professor->theme_status($theme);
 
-            if (in_array(["user_id" => $_SESSION["id"], "theme_id" => $theme["id"]], $users_themes_list))
+            if ($theme_status=="solved")
                 $class = "green_theme";
-            else if ($theme_id == 0)
+            else if ($theme_status=="open")
                 $class = "open_theme";
-            else if ($theme_id == 1)
-            {
-                if (in_array(["user_id" => $_SESSION["id"], "theme_id" => (int)$theme["id"]-1], $users_themes_list))
-                    $class = "open_theme";
-                else
-                    $class = "close_theme";
-            }
-            else
-            {
-                if (in_array(["user_id" => $_SESSION["id"], "theme_id" => $theme["id"]-1], $users_themes_list))
-                {
-                    $close = false;
-                    $tasks_table = new Tasks_table();
-                    $tasks_theme_full = $tasks_table->get_tasks_theme($theme["id"]-2);
-                    $tasks_ids = []; // задачи темы
-                    foreach ($tasks_theme_full as $task)
-                        $tasks_ids[] = $task["id"];
+            else if ($theme_status=="close")
+                $class = "close_theme";
 
-                    $users_mistakes_table = new Users_mistakes_table();
-                    $mistakes = $users_mistakes_table->read($_SESSION["id"]); // работа над ошибками пользователя
-                    foreach ($mistakes as $mistake)
-                    {
-                        if (in_array($mistake["task_id"], $tasks_ids))
-                        {
-                            $close = true;
-                            break;
-                        }
-                    }
-                    $class = $close?"close_theme":"open_theme";
-                }
-                else
-                    $class = "close_theme";
-            }
             if($_SESSION["rights"]=="admin")
                 $class = "open_theme";
             $content .= "<div class='row theme $class m-0 p-0 mb-3 ml-2 mr-2 pl-2 pt-1'>";
