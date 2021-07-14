@@ -3,7 +3,7 @@
     <div class="container-fluid">
         <form id="change_title_course" method="POST">
             <label class="row col-12 justify-content-center h2">Изменить имя курса</label>
-            <textarea id="editor1"  name="new_course_title" placeholder="Сейчас: {{ course_title }}"></textarea>
+            <textarea id="editor1"  name="new_course_title">{{ course_title }}</textarea>
             <input type="hidden" name="code" value="change_title">
             <input type="hidden" name="course_id" value="{{ course_id }}">
             <input type="hidden" name="submit">
@@ -17,7 +17,7 @@
 <div class="container-fluid">
     <form id="change_text_course" method="POST">
         <label class="row col-12 justify-content-center h2">Изменить описание курса</label>
-        <textarea id="editor2"  name="new_course_text" placeholder="Сейчас: {{ course_text }}"></textarea>
+        <textarea id="editor2"  name="new_course_text">{{ course_text }}</textarea>
         <input type="hidden" name="code" value="change_text">
         <input type="hidden" name="submit">
         <input type="hidden" name="course_id" value="{{ course_id }}">
