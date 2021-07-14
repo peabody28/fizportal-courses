@@ -4,6 +4,10 @@ require_once __DIR__."/classes/Course.php";
 require_once __DIR__."/classes/Courses_table.php";
 require_once __DIR__."/classes/Users_courses_table.php";
 require_once __DIR__."/classes/Themes_table.php";
+require_once __DIR__."/classes/Users_themes_table.php";
+require_once __DIR__."/classes/Users_progress_theme_table.php";
+require_once __DIR__."/classes/Tasks_table.php";
+require_once __DIR__."/classes/Professor.php";
 require_once __DIR__."/classes/Render.php";
 session_start();
 
@@ -26,10 +30,31 @@ if ($course["id"])
         //беру темы курса
         $themes_table = new Themes_table();
         $themes_list = $themes_table->get_courses_themes($course["id"]);
-        $render = new Render();
-        foreach ($themes_list as $theme)
-        {
-            $content .= $render->render_theme($theme);
+
+        // отображаю
+        for ($theme_id=0; $theme_id<count($themes_list); $theme_id++) {
+            $theme = $themes_list[$theme_id];
+
+            $professor = new Professor();
+            $theme_status = $professor->theme_status($theme);
+
+            if ($theme_status=="solved")
+                $class = "green_theme";
+            else if ($theme_status=="open")
+                $class = "open_theme";
+            else if ($theme_status=="close")
+                $class = "close_theme";
+
+            if($_SESSION["rights"]=="admin")
+                $class = "open_theme";
+
+            $users_progress_theme_table = new Users_progress_theme_table();
+            $progress = $users_progress_theme_table->read(["user_id"=>$_SESSION["id"], "theme_id"=>$theme["id"]]);
+            $progress = $progress?$progress["progress"]:"0";
+            $content .= "<div class='row theme $class m-0 p-0 mb-3 ml-2 mr-2 pl-2 pt-1'>";
+            $content .= "<a class='text-start text-break col-12 h2 m-0 p-0' href='/theme?id=$theme[id]'>$theme[title]</a>";
+            $content .= "<span class='col-12 m-0 p-0'>progress:&nbsp;&nbsp;". $progress ."/10</span>";
+            $content .= "</div><br>";
             if($_SESSION["rights"]=="admin")
             {
                $content.= "<div class='row m-0 p-0 mb-3 ml-2 mr-2'>

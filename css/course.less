@@ -1,50 +1,5 @@
-.cours-row
-{
-
-  //min-height: 150px;
-  .col-10
-  {
-
-    .cours-name
-    {
-      white-space: normal;
-      //height: 40px;
-    }
-    .tandb
-    {
-      //min-height: 200px;
-      border: 2px solid rgba(19, 20, 42, 0.42);
-    }
-    .title
-    {
-      //min-height: 170px;
-      //white-space: break-spaces;
-      p
-      {
-        margin: 0;
-      }
-      font-size: 18px;
-      background-color: #ffffff;
-    }
-    .btn-bl
-    {
-      background-color: #cecece;
-    }
-    .get_course_btn
-    {
-      background-color: #FDE37F;
-      color: black;
-    }
-    .open-btn
-    {
-      background-color: #3d807a;
-      color: black;
-    }
-  }
-}
 .theme
 {
-  background-color: #cecece;
   border: 1px solid #343135;
   border-right: 20px solid #3d7f79;
   a
@@ -57,11 +12,36 @@
     margin: 0;
   }
 }
-.theme:hover
+
+.green_theme
 {
-  //border-right: 20px solid #f69f53;
+  background-color: rgb(131, 206, 179);
+}
+.open_theme
+{
+  background-color: #cecece;
+}
+.close_theme
+{
+  background-color: #d7b0b0;
+  border-right: 20px solid #ad4242;
+  a
+  {
+    pointer-events: none; /* делаем ссылку некликабельной */
+    cursor: default;  /* устанавливаем курсор в виде стрелки */
+    color: #999; /* цвет текста для нективной ссылки */
+  }
+}
+
+.green_theme:hover
+{
   background-color: #959494;
 }
+.open_theme:hover
+{
+  background-color: #959494;
+}
+
 
 .create
 {

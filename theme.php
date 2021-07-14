@@ -5,8 +5,11 @@ require_once __DIR__."/classes/Themes_table.php";
 require_once __DIR__."/classes/Tasks_table.php";
 require_once __DIR__."/classes/Users_tasks_table.php";
 require_once __DIR__."/classes/Users_courses_table.php";
+require_once __DIR__."/classes/Users_themes_table.php";
+require_once __DIR__."/classes/Professor.php";
 require_once __DIR__."/classes/Supertests_table.php";
 require_once __DIR__."/classes/Supertests_tasks_table.php";
+require_once __DIR__."/classes/Users_progress_theme_table.php";
 require_once __DIR__."/classes/Render.php";
 session_start();
 
@@ -19,10 +22,30 @@ $tmp_theme = $themes_table->read($data["id"]);
 
 if ($tmp_theme)
 {
-    // проверка доступа к теме
+    // проверка покупки курса
     $users_courses_table = new Users_courses_table();
     $users_courses = $users_courses_table->read($_SESSION["id"]);
     if (in_array(["user_id" => $_SESSION["id"], "course_id" => $tmp_theme["course_id"]], $users_courses) || $_SESSION["rights"] == "admin") {
+
+        // проверка доступа к теме
+        $professor = new Professor();
+        $theme_status = $professor->theme_status($tmp_theme);
+        if ($theme_status=="close" && $_SESSION["rights"]!="admin")
+        {
+            $content = "<div class='row container-fluid justify-content-start m-0 p-0 pl-3'>Вы пока не можете решать эту тему</div>";
+            $file = basename(__FILE__, ".php");
+
+            $page = new Render();
+            $page->temp = 'main.html';
+            $page->argv = ['title'=>strip_tags($tmp_theme["title"]),
+                'css'=>"/css/theme.css",
+                "name"=>"<h2>$_SESSION[name]</h2>",
+                "content"=>$content,
+                "js"=>"/js/theme.js"] ;
+
+            echo $page->render_temp();
+            exit();
+        }
 
         //беру задачи темы
         $tasks_table = new Tasks_table();
@@ -49,6 +72,13 @@ if ($tmp_theme)
         }
 
         // отображение супертеста
+        $users_progress_theme_table = new Users_progress_theme_table();
+        $users_progress = $users_progress_theme_table->read(["user_id"=>$_SESSION["id"], "theme_id"=>$tmp_theme["id"]]);
+
+        $disabled = "";
+        if((int)$users_progress["progress"]<10 && $_SESSION["rights"]!="admin")
+            $disabled="disabled";
+
         $supertests_table = new Supertests_table();
         $tmp_sptest = $supertests_table->read_by_theme($tmp_theme["id"]);
 
@@ -57,7 +87,7 @@ if ($tmp_theme)
                             <input type='hidden' name='theme_id' value='$tmp_theme[id]'>
                             <input type='hidden' name='submit' value='true'>
                             <input type='hidden' name='code' value='get_supertest'>
-                            <button class='btn supertest'></button>
+                            <button class='btn supertest' $disabled></button>
                          </form>";
 
         // кнопка "добавить задачу"
@@ -87,7 +117,6 @@ if ($tmp_theme)
                 $content .= "<div class='h2 d-flex justify-content-center' id='message'></div>";
                 $content .= "<br><br><div class='row justify-content-center'> <a href='/materials?task_id=$this_task[id]'>Материалы для задачи</a></div>";
                 $content .= "</div><br>";
-
 
             }
 
