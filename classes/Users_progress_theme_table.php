@@ -16,7 +16,7 @@ class Users_progress_theme_table implements Table
     public function read($obj)
     {
         global $link;
-        $sql = sprintf("SELECT * FROM users_progress_theme WHERE user_id='%s' AND theme_id='%s'", $obj["user_id"], $obj["theme_id"]);
+        $sql = sprintf("SELECT progress FROM users_progress_theme WHERE user_id='%s' AND theme_id='%s'", $obj["user_id"], $obj["theme_id"]);
         $result = mysqli_query($link, $sql);
         $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
         return $row;

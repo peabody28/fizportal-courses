@@ -5,6 +5,7 @@ require_once __DIR__."/classes/Courses_table.php";
 require_once __DIR__."/classes/Users_courses_table.php";
 require_once __DIR__."/classes/Themes_table.php";
 require_once __DIR__."/classes/Users_themes_table.php";
+require_once __DIR__."/classes/Users_progress_theme_table.php";
 require_once __DIR__."/classes/Tasks_table.php";
 require_once __DIR__."/classes/Professor.php";
 require_once __DIR__."/classes/Render.php";
@@ -46,8 +47,13 @@ if ($course["id"])
 
             if($_SESSION["rights"]=="admin")
                 $class = "open_theme";
+
+            $users_progress_theme_table = new Users_progress_theme_table();
+            $progress = $users_progress_theme_table->read(["user_id"=>$_SESSION["id"], "theme_id"=>$theme["id"]]);
+            $progress = $progress?$progress["progress"]:"0";
             $content .= "<div class='row theme $class m-0 p-0 mb-3 ml-2 mr-2 pl-2 pt-1'>";
             $content .= "<a class='text-start text-break col-12 h2 m-0 p-0' href='/theme?id=$theme[id]'>$theme[title]</a>";
+            $content .= "<span class='col-12 m-0 p-0'>progress:&nbsp;&nbsp;". $progress ."/10</span>";
             $content .= "</div><br>";
             if($_SESSION["rights"]=="admin")
             {

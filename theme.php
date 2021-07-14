@@ -30,7 +30,7 @@ if ($tmp_theme)
         // проверка доступа к теме
         $professor = new Professor();
         $theme_status = $professor->theme_status($tmp_theme);
-        if ($theme_status=="close")
+        if ($theme_status=="close" && $_SESSION["rights"]!="admin")
         {
             $content = "<div class='row container-fluid justify-content-start m-0 p-0 pl-3'>Вы пока не можете решать эту тему</div>";
             $file = basename(__FILE__, ".php");

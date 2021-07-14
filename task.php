@@ -179,6 +179,7 @@ if(isset($data["submit"]))
                 }
             }
         }
+            $supertests_block .= "<div class='row justify-content-center h2' id='message'></div>";
             $supertests_block .= "<div class='row m-0 col-12 d-flex justify-content-center'><button class='btn send' type='submit'>Отправить</button></div>";
             $supertests_block .= "</form><br>";
 
