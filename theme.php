@@ -84,10 +84,11 @@ if ($tmp_theme)
                                            </div><br><br>";
                 }
                 // материалы для задачи
+                $content .= "<div class='h2 d-flex justify-content-center' id='message'></div>";
                 $content .= "<br><br><div class='row justify-content-center'> <a href='/materials?task_id=$this_task[id]'>Материалы для задачи</a></div>";
                 $content .= "</div><br>";
 
-                $content .= "<div class='h2 d-flex justify-content-center' id='message'></div>";
+
             }
 
         }
