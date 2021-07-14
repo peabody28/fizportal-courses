@@ -6,7 +6,8 @@ require_once __DIR__."/classes/Supertests_table.php";
 require_once __DIR__."/classes/Supertests_tasks_table.php";
 require_once __DIR__."/classes/Tasks_answers_table.php";
 require_once __DIR__."/classes/Users_themes_table.php";
-require_once __DIR__."/classes/Users_progress_theme.php";
+require_once __DIR__."/classes/Users_progress_theme_table.php";
+require_once __DIR__."/classes/Users_mistakes_table.php";
 require_once __DIR__."/classes/Professor.php";
 session_start();
 
@@ -52,20 +53,28 @@ if(isset($data["submit"]))
         $status = $prof->check_task($task);
         if($status)
         {
+            // добавляю задачу в список решенных пользователем
             $users_tasks_table = new Users_tasks_table();
             $st = $users_tasks_table->create(["user_id"=>$_SESSION["id"], "task_id"=>$data["task_id"]]);
             if($st)
             {
-                $users_progress_theme = new Users_progress_theme();
-                $users_progress_theme->add_point(["user_id"=>$_SESSION["id"], "theme_id"=>$data["theme_id"]]);
+                // добавляю балл
+                $users_progress_theme_table = new Users_progress_theme_table();
+                $users_progress_theme_table->add_point(["user_id"=>$_SESSION["id"], "theme_id"=>$data["theme_id"]]);
             }
             echo json_encode(["status" => "OK", "task_id"=>$data["task_id"]]);
         }
         else
         {
-            // удаляем балл ТОЛЬКО ЕСЛИ ЗАДАЧИ НЕТ В РО !!!
-            $users_progress_theme = new Users_progress_theme();
-            $users_progress_theme->delete_point(["user_id"=>$_SESSION["id"], "theme_id"=>$data["theme_id"]]);
+            // добавляю задачу в РО
+            $users_mistakes_table = new Users_mistakes_table();
+            $st = $users_mistakes_table->create(["user_id"=>$_SESSION["id"], "task_id"=>$data["task_id"]]);
+            if($st)
+            {
+                // Cнимаю балл за неверное решение
+                $users_progress_theme_table = new Users_progress_theme_table();
+                $users_progress_theme_table->delete_point(["user_id"=>$_SESSION["id"], "theme_id"=>$data["theme_id"]]);
+            }
             echo json_encode(["status" => "ERROR"]);
         }
     }
@@ -131,7 +140,14 @@ if(isset($data["submit"]))
     }
     else if ($data["code"]=="get_supertest")
     {
+        $users_progress_theme_table = new Users_progress_theme_table();
+        $users_progress = $users_progress_theme_table->read(["user_id"=>$_SESSION["id"], "theme_id"=>$data["theme_id"]]);
 
+        if((int)$users_progress["progress"]<10)
+        {
+            echo json_encode(["block" => "Вы решили мало задач ваш балл ".$users_progress["progress"]."/10"]);
+            exit();
+        }
         $supertests_tasks_table = new Supertests_tasks_table();
         $supertests_tasks_rows = $supertests_tasks_table->read($data["supertest_id"]);
 

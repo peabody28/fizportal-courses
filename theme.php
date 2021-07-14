@@ -7,6 +7,7 @@ require_once __DIR__."/classes/Users_tasks_table.php";
 require_once __DIR__."/classes/Users_courses_table.php";
 require_once __DIR__."/classes/Supertests_table.php";
 require_once __DIR__."/classes/Supertests_tasks_table.php";
+require_once __DIR__ . "/classes/Users_progress_theme_table.php";
 require_once __DIR__."/classes/Render.php";
 session_start();
 
@@ -49,6 +50,13 @@ if ($tmp_theme)
         }
 
         // отображение супертеста
+        $users_progress_theme_table = new Users_progress_theme_table();
+        $users_progress = $users_progress_theme_table->read(["user_id"=>$_SESSION["id"], "theme_id"=>$tmp_theme["id"]]);
+
+        $disabled = "";
+        if((int)$users_progress["progress"]<10)
+            $disabled="disabled";
+
         $supertests_table = new Supertests_table();
         $tmp_sptest = $supertests_table->read_by_theme($tmp_theme["id"]);
 
@@ -57,7 +65,7 @@ if ($tmp_theme)
                             <input type='hidden' name='theme_id' value='$tmp_theme[id]'>
                             <input type='hidden' name='submit' value='true'>
                             <input type='hidden' name='code' value='get_supertest'>
-                            <button class='btn supertest'></button>
+                            <button class='btn supertest' $disabled></button>
                          </form>";
 
         // кнопка "добавить задачу"
@@ -87,7 +95,6 @@ if ($tmp_theme)
                 $content .= "<div class='h2 d-flex justify-content-center' id='message'></div>";
                 $content .= "<br><br><div class='row justify-content-center'> <a href='/materials?task_id=$this_task[id]'>Материалы для задачи</a></div>";
                 $content .= "</div><br>";
-
 
             }
 
