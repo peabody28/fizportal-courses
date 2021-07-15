@@ -56,7 +56,7 @@ if(isset($data["submit"]))
             // добавляю задачу в список решенных пользователем
             $users_tasks_table = new Users_tasks_table();
             $st = $users_tasks_table->create(["user_id"=>$_SESSION["id"], "task_id"=>$data["task_id"]]);
-            if($st)
+            if($st) // если решается впервые
             {
                 // добавляю балл
                 $users_progress_theme_table = new Users_progress_theme_table();
@@ -66,17 +66,29 @@ if(isset($data["submit"]))
         }
         else
         {
-            // добавляю задачу в РО
-            $users_mistakes_table = new Users_mistakes_table();
-            $st = $users_mistakes_table->create(["user_id"=>$_SESSION["id"], "task_id"=>$data["task_id"]]);
-            if($st)
+            $users_tasks_table = new Users_tasks_table();
+            $users_tasks = $users_tasks_table->read($_SESSION["id"]);
+
+            if(!in_array(["user_id"=>$_SESSION["id"], "task_id"=>$data["task_id"]], $users_tasks)) // если пользователь эту задачу еще не решал
             {
-                // Cнимаю балл за неверное решение
-                $users_progress_theme_table = new Users_progress_theme_table();
-                $users_progress_theme_table->delete_point(["user_id"=>$_SESSION["id"], "theme_id"=>$data["theme_id"]]);
+                // добавляю задачу в РО
+                $users_mistakes_table = new Users_mistakes_table();
+                $st = $users_mistakes_table->create(["user_id"=>$_SESSION["id"], "task_id"=>$data["task_id"]]);
+                // если $st==true то задачу первый раз решили неверно и я могу снять балл
+                $users_themes_table = new Users_themes_table();
+                $users_themes = $users_themes_table->read($_SESSION["id"]);
+
+                if($st && !in_array(["user_id"=>$_SESSION["id"], "theme_id"=>$data["theme_id"]], $users_themes)) // если тема не выполнена
+                {
+                    // Cнимаю балл за неверное решение
+                    $users_progress_theme_table = new Users_progress_theme_table();
+                    $users_progress_theme_table->delete_point(["user_id"=>$_SESSION["id"], "theme_id"=>$data["theme_id"]]);
+                }
+
             }
             echo json_encode(["status" => "ERROR"]);
         }
+
     }
     else if($data["code"]=="send_supertest_answers")
     {

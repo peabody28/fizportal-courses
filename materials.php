@@ -57,11 +57,14 @@ if (isset($_POST["submit"])) {
 else if (isset($_GET["task_id"]))
 {
     $content = "";
+
+    $tasks_table = new Tasks_table();
+    $tmp_task = $tasks_table->read($_GET["task_id"]);
+
     if ($_SESSION["rights"]=="admin")
     {
         // выбор типа материала (от этого зависит папка)
-        $tasks_table = new Tasks_table();
-        $tmp_task = $tasks_table->read($_GET["task_id"]);
+
         // добавление материалов
         $forms = new Render();
         $forms->temp = "add_materials_to_task_forms.html";
@@ -89,7 +92,7 @@ else if (isset($_GET["task_id"]))
             }
             else if ($key=="img_url")
             {
-                $content .= "<img src='$url' width='500' height='250' alt='img'><br><br>";
+                $content .= "<img src='$url' height='250' alt='img'><br><br>";
             }
 
         }

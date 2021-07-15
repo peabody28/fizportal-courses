@@ -52,7 +52,7 @@ class Render
                     <div class='row d-flex justify-content-center'><button class='btn send' type='submit'>Отправить</button></div>
                 </form>";
 
-        $image_block = $task["img_url"]?"<div class='col-12 m-0 p-0 d-flex justify-content-center'><img src='$task[img_url]' height='250' width='500' alt=''></div>":"";
+        $image_block = $task["img_url"]?"<div class='col-12 m-0 p-0 d-flex justify-content-center'><img src='$task[img_url]' height='250' alt=''></div>":"";
         $content .=
             "<div class='row m-0 p-0 justify-content-center h2'>Условие</div><br>
             <div class=' row opis m-0 p-0 d-flex justify-content-center container'>

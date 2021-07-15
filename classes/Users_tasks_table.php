@@ -21,7 +21,11 @@ class Users_tasks_table implements Table
     }
     public function read($id)
     {
-        // TODO: Implement read() method.
+        global $link;
+        $sql = sprintf("SELECT * FROM users_tasks WHERE user_id='%s'", $id);
+        $res = mysqli_query($link, $sql);
+        $rows = mysqli_fetch_all($res, MYSQLI_ASSOC);
+        return $rows;
     }
     public function update($obj, $column)
     {
