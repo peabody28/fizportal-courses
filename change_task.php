@@ -110,7 +110,7 @@ if (isset($data["submit"])) {
 
     $forms = new Render();
     $forms->temp = "change_task_forms.html";
-    $forms->argv = ["task_id"=>$tmp_task["id"], "task_text"=>$tmp_task["text"], "task_answer"=>$tmp_task["answer"], "task_complexity"=>$tmp_task["complexity"]];
+    $forms->argv = ["task_id"=>$tmp_task["id"], "task_text"=>$tmp_task["text"], "task_answer"=>$tmp_task["answer"], "task_complexity"=>$tmp_task["complexity"], "theme_id" => $tmp_task["theme_id"]];
 
 
     $content = $forms->render_temp();

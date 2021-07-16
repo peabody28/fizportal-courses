@@ -34,4 +34,9 @@
 .add_task_to_supertest_btn {
   background-color: #cd7857;
 }
+#task img {
+  max-width: 100%;
+  height: auto;
+  max-height: 300px;
+}
 /*# sourceMappingURL=theme.css.map */

@@ -11,9 +11,21 @@
     </form>
     <p>
 </div>
-
 <br>
-<br>
+<p>
+<div class="container-fluid">
+    <form method="POST" enctype="multipart/form-data" action="/change_task.php">
+        <label class="row col-12 justify-content-center h2">Добавить изабражениe</label>
+        <br>
+        <input type="file" name="file">
+        <input type="hidden" name="code" value="change_image">
+        <input type="hidden" name="task_id" value="{{ task_id }}">
+        <input type="hidden" name="submit">
+        <input type="submit" value="Загрузить файл!">
+    </form>
+</div>
+<p>
+    <br><br>
 
 <form id="change_answer_task">
     <input type="hidden" name="code" value="change_answer">
@@ -75,20 +87,6 @@
     </form>
     <p>
 </div>
-
-<p>
-<div class="container-fluid">
-    <form method="POST" enctype="multipart/form-data" action="/change_task.php">
-        <label class="row col-12 justify-content-center h2">Добавить изабражениe</label>
-        <input type="file" name="file">
-        <input type="hidden" name="code" value="change_image">
-        <input type="hidden" name="task_id" value="{{ task_id }}">
-        <input type="hidden" name="submit">
-        <input type="submit" value="Загрузить файл!">
-    </form>
-</div>
-<p>
-
 <div class="container-fluid">
     <p>
     <form id="delete_task" method="POST">
@@ -102,3 +100,4 @@
 
 <div id="message"></div>
 
+<br><br><a class='btn btn-primary' href='/theme?id={{ theme_id }}'>Вернуться к теме</a><br><br><br>
