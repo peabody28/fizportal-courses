@@ -106,6 +106,11 @@ class Professor
 
     public function check_time($row)
     {
+
+        $users_themes_table = new Users_themes_table();
+        $users_themes_list= $users_themes_table->read($_SESSION["id"]);
+        if(in_array(["user_id"=>$_SESSION["id"], "theme_id"=>$row["theme_id"]], $users_themes_list) || $_SESSION["rights"]=="admin") // пользователь уже сделал тему
+            return true;
         // узнаю лимит выполнения темы
         $themes_limits_table = new Themes_limits_table();
         $answ = $themes_limits_table->read($row["theme_id"]);
@@ -122,7 +127,7 @@ class Professor
 
             if($delta <= $limit*60) // если разница во времени меньше времени на тему(30м) - пропускаем
                 return true;
-            else if($delta > $limit*60 && $delta < 1800+3600*5) // если разница во времени больше времени на тему и меньше штрафа+время на тему (5ч+30м) - запрет на решение
+            else if($delta > $limit*60 && $delta < $limit*60*2) // если разница во времени больше времени на тему и меньше штрафа+время на тему (5ч+30м) - запрет на решение
                 return false;
             else // если разница во времени больше штрафа+время на тему - пропускаем и записываем новое время в таблицу
                 return "update";

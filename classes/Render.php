@@ -111,8 +111,7 @@ class Render
         $content .=
             "<div class='row m-0 p-0 justify-content-center h2'>Условие</div><br>
             <div class=' row opis m-0 p-0 d-flex justify-content-center container'>
-                <div class='col-8 m-0 p-0 d-flex justify-content-start'></div>
-                
+                <div class='col-8 m-0 p-0 d-flex justify-content-start'>$task[text]</div>
             </div><br><br>
             <div class='container-fluid row m-0 p-0 d-flex justify-content-center'>";
 
