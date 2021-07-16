@@ -38,7 +38,18 @@
   </form>
   <p>
 </div>
-
+<div class="container-fluid">
+  <p>
+  <form id="change_time_limit_theme" method="POST">
+    <label class="row col-12 justify-content-center h2">Изменить время на выполнения темы (минуты)</label>
+    <input type="text" name="new_theme_time_limit">
+    <input type="hidden" name="code" value="change_time_limit">
+    <input type="hidden" name="theme_id" value="{{ theme_id }}">
+    <input type="hidden" name="submit">
+    <input class="btn izm" type="submit" value="Изменить">
+  </form>
+  <p>
+</div>
 <div class="container-fluid">
   <p>
   <form id="delete_theme" method="POST">

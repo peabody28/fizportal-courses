@@ -36,7 +36,13 @@ function send_answer()
                         $( ".supertest" ).prop( "disabled", false );
                 }
                 else
-                    $("#message").html("Неверный ответ!")
+                {
+                    if(response["code"]=="TIME")
+                        $("#content").html("<h2>Время решения темы истекло, возвращайтесь позже</h2>")
+                    else
+                        $("#message").html("Неверный ответ!")
+                }
+
             }
         }
     )

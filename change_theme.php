@@ -6,6 +6,7 @@ require_once __DIR__."/classes/Courses_table.php";
 require_once __DIR__."/classes/Theme.php";
 require_once __DIR__."/classes/Themes_table.php";
 require_once __DIR__."/classes/Tasks_table.php";
+require_once __DIR__."/classes/Themes_limits_table.php";
 require_once __DIR__."/classes/Render.php";
 session_start();
 
@@ -43,6 +44,12 @@ if(isset($data["submit"]))
         $themes_table = new Themes_table();
         $themes_table->update($theme, "complexity");
         echo json_encode(["status"=>"OK", "message"=>"Сложность изменена"]);
+    }
+    else if($data["code"]=="change_time_limit")
+    {
+        $themes_limits_table = new Themes_limits_table();
+        $themes_limits_table->update(["theme_id"=>$data["theme_id"], "time_limit"=>$data["new_theme_time_limit"]], "time_limit");
+        echo json_encode(["status"=>"OK", "message"=>"Лимит изменен"]);
     }
 
 }

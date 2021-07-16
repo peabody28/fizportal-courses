@@ -124,7 +124,6 @@ class Render
         return $content;
     }
 
-
     public function render_task($task)
     {
         $content = "";

@@ -4,6 +4,8 @@ require_once __DIR__."/Users_themes_table.php";
 require_once __DIR__."/Themes_table.php";
 require_once __DIR__."/Users_mistakes_table.php";
 require_once __DIR__."/Tasks_table.php";
+require_once __DIR__."/Users_themes_time.php";
+require_once __DIR__."/Themes_limits_table.php";
 
 class Professor
 {
@@ -101,5 +103,40 @@ class Professor
             return false;
 
     }
+
+    public function check_time($row)
+    {
+        // узнаю лимит выполнения темы
+        $themes_limits_table = new Themes_limits_table();
+        $answ = $themes_limits_table->read($row["theme_id"]);
+        $limit = $answ?$answ["time_limit"]:null;
+        if(!$limit)
+            return true;
+        $users_themes_time = new Users_themes_time();
+        $resp = $users_themes_time->read($row);
+        $time = $resp["time"];
+        if ($time)
+        {
+            $real_time = time();
+            $delta = $real_time - (int)$time;
+
+            if($delta <= $limit*60) // если разница во времени меньше времени на тему(30м) - пропускаем
+                return true;
+            else if($delta > $limit*60 && $delta < 1800+3600*5) // если разница во времени больше времени на тему и меньше штрафа+время на тему (5ч+30м) - запрет на решение
+                return false;
+            else // если разница во времени больше штрафа+время на тему - пропускаем и записываем новое время в таблицу
+                return "update";
+        }
+        else
+           return "update";
+    }
+
+    public function set_time($row)
+    {
+        $users_themes_time = new Users_themes_time();
+        $row["time"]=time();
+        $users_themes_time->update($row, "time");
+    }
+
 
 }

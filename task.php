@@ -10,38 +10,12 @@ require_once __DIR__."/classes/Users_progress_theme_table.php";
 require_once __DIR__."/classes/Users_mistakes_table.php";
 require_once __DIR__."/classes/Professor.php";
 require_once __DIR__."/classes/Task_handler.php";
+require_once __DIR__."/classes/Users_themes_time.php";
 session_start();
 
 
 $data=$_POST;
 $tasks_table = new Tasks_table();
-
-
-function construct_task($id)
-{
-    global $tasks_table;
-    global $data;
-
-    $tmp_task = $tasks_table->read($id);
-
-    $task = ["id"=>$tmp_task["id"], "type"=>$tmp_task["type"]];
-    if($tmp_task["type"]=="A")
-    {
-        $tasks_answers_table = new Tasks_answers_table();
-        $task["answers"] = $tasks_answers_table->read($task["id"]);
-
-        $task["user_answers"] = [];
-        for($i=1; $i<=5; $i++)
-            if (isset($data["$tmp_task[id]_a_answ$i"]))
-                $task["user_answers"][] = $i;
-    }
-    else
-    {
-        $task["answer"] =  $tmp_task["answer"];
-        $task["user_answer"]=$data["$tmp_task[id]_b_answer"];
-    }
-    return $task;
-}
 
 
 if(isset($data["submit"]))

@@ -47,51 +47,59 @@ if ($tmp_theme)
             exit();
         }
 
-        //беру задачи темы
-        $tasks_table = new Tasks_table();
-        $tasks_list = $tasks_table->get_tasks_theme($tmp_theme["id"]);
-        // сделанные пользователем задачи
-        $users_tasks_table = new Users_tasks_table();
-        $users_tasks = $users_tasks_table->get_users_tasks($_SESSION["id"]);
-        // прогресс
-        $users_progress_theme_table = new Users_progress_theme_table();
-        $users_progress = $users_progress_theme_table->read(["user_id"=>$_SESSION["id"], "theme_id"=>$tmp_theme["id"]]);
-        // супертест
-        $supertests_table = new Supertests_table();
-        $tmp_sptest = $supertests_table->read_by_theme($tmp_theme["id"]);
-
-        $render = new Render();
-        $response = $render->render_tasks_theme($tmp_theme, $tasks_list, $users_tasks, $users_progress, $tmp_sptest);
-        $content = $response["content"];
-
-
-        if(count($tasks_list))
+        // прошло ли время блокировки темы?
+        $status = $professor->check_time(["user_id"=>$_SESSION["id"], "theme_id"=>$tmp_theme["id"]]);
+        if($status !== false) // true or "update"
         {
-            if(isset($_GET["text"]))
-                $content .="<div id='task'><div class='row m-0 p-0 justify-content-center h2'>Описание темы</div><br><div class='row m-0 p-0 justify-content-center h2'>$tmp_theme[text]</div></div>";
-            else
+            //беру задачи темы
+            $tasks_table = new Tasks_table();
+            $tasks_list = $tasks_table->get_tasks_theme($tmp_theme["id"]);
+            // сделанные пользователем задачи
+            $users_tasks_table = new Users_tasks_table();
+            $users_tasks = $users_tasks_table->get_users_tasks($_SESSION["id"]);
+            // прогресс
+            $users_progress_theme_table = new Users_progress_theme_table();
+            $users_progress = $users_progress_theme_table->read(["user_id"=>$_SESSION["id"], "theme_id"=>$tmp_theme["id"]]);
+            // супертест
+            $supertests_table = new Supertests_table();
+            $tmp_sptest = $supertests_table->read_by_theme($tmp_theme["id"]);
+
+            $render = new Render();
+            $response = $render->render_tasks_theme($tmp_theme, $tasks_list, $users_tasks, $users_progress, $tmp_sptest);
+            $content = $response["content"];
+
+
+            if(count($tasks_list))
             {
-                // рендер первой задачи
-                $this_task = $tasks_list[0];
-                $task_block = new Render();
-                $content .="<div id='task'>";
-                $content .= $task_block->render_task($this_task);
-                if ($_SESSION["rights"] == "admin")
+                if(isset($_GET["text"]))
+                    $content .="<div id='task'><div class='row m-0 p-0 justify-content-center h2'>Описание темы</div><br><div class='row m-0 p-0 justify-content-center h2'>$tmp_theme[text]</div></div>";
+                else
                 {
-                    $content .= "<div class='row justify-content-center'><a class='btn chg_task_btn' href='/change_task?id=$this_task[id]'>Изменить задачу</a></div><br><br>";
-                    $content .= " <div class='row d-flex justify-content-center'>
+                    // рендер первой задачи
+                    $this_task = $tasks_list[0];
+                    $task_block = new Render();
+                    $content .="<div id='task'>";
+                    $content .= $task_block->render_task($this_task);
+                    if ($_SESSION["rights"] == "admin")
+                    {
+                        $content .= "<div class='row justify-content-center'><a class='btn chg_task_btn' href='/change_task?id=$this_task[id]'>Изменить задачу</a></div><br><br>";
+                        $content .= " <div class='row d-flex justify-content-center'>
                                                 <button class='btn del_task' onclick='del_task($this_task[id]);return false;'>Удалить эту задачу</button>
                                            </div><br><br>";
+                    }
+                    // материалы для задачи
+                    $content .= "<div class='h2 d-flex justify-content-center' id='message'></div>";
+                    $content .= "<br><br><div class='row justify-content-center'> <a href='/materials?task_id=$this_task[id]'>Материалы для задачи</a></div>";
+                    $content .= "</div><br>";
                 }
-                // материалы для задачи
-                $content .= "<div class='h2 d-flex justify-content-center' id='message'></div>";
-                $content .= "<br><br><div class='row justify-content-center'> <a href='/materials?task_id=$this_task[id]'>Материалы для задачи</a></div>";
-                $content .= "</div><br>";
-            }
 
+            }
+            else
+                $content .="<div id='task'><div class='row m-0 p-0 justify-content-center h2'>Описание темы</div><br><div class='row m-0 p-0 justify-content-center h2'>$tmp_theme[text]</div></div>";
         }
         else
-            $content .="<div id='task'><div class='row m-0 p-0 justify-content-center h2'>Описание темы</div><br><div class='row m-0 p-0 justify-content-center h2'>$tmp_theme[text]</div></div>";
+            $content = "<h2>Время решения темы истекло, возвращайтесь позже</h2>";
+
     } else
         $content = "Вы не купили этот курс";
 }
