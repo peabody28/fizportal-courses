@@ -75,7 +75,7 @@ else if (isset($_GET["task_id"]))
 
         // встроить видео по ссылке
     }
-    $content .= "<br><br><a class='btn btn-primary' href='/theme?id=$tmp_task[theme_id]'>Вернуться к задаче</a><br><br><br>";
+    $content .= "<br><br><a class='btn btn-primary' href='/theme?id=$tmp_task[theme_id]'>Вернуться к теме</a><br><br><br>";
 
     $urls = $tasks_materials_table->read($_GET["task_id"]);
     foreach ($urls as $item) {
