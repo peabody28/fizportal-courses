@@ -18,6 +18,9 @@ class Task_handler
         $task = $this->construct_task();
 
         $prof = new Professor();
+        $status_time = $prof->check_time(["user_id"=>$_SESSION["id"], "theme_id"=>$this->data["theme_id"]]);
+        if(!$status_time)
+            return ["status" => "ERROR", "code"=>"TIME"];
         $status = $prof->check_task($task);
 
         $users_tasks_table = new Users_tasks_table();

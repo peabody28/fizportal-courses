@@ -10,6 +10,7 @@ require_once __DIR__."/classes/Users_progress_theme_table.php";
 require_once __DIR__."/classes/Users_mistakes_table.php";
 require_once __DIR__."/classes/Professor.php";
 require_once __DIR__."/classes/Task_handler.php";
+require_once __DIR__."/classes/Users_themes_time.php";
 session_start();
 
 

@@ -4,6 +4,7 @@ require_once __DIR__."/Users_themes_table.php";
 require_once __DIR__."/Themes_table.php";
 require_once __DIR__."/Users_mistakes_table.php";
 require_once __DIR__."/Tasks_table.php";
+require_once __DIR__."/Users_themes_time.php";
 
 class Professor
 {
@@ -100,6 +101,37 @@ class Professor
         else
             return false;
 
+    }
+
+    public function check_time($row)
+    {
+        $themes_table = new Themes_table();
+        $users_themes_time = new Users_themes_time();
+        $resp = $users_themes_time->read($row);
+        $time = $resp["time"];
+        if ($time)
+        {
+            $real_time = time();
+            $delta = $real_time - (int)$time;
+
+            if($delta <= 1800) // если разница во времени меньше времени на тему(30м) - пропускаем
+                return true;
+            else if($delta > 1800 && $delta < 1800+3600*5) // если разница во времени больше времени на тему и меньше штрафа+время на тему (5ч+30м) - запрет на решение
+                return false;
+            else // если разница во времени больше штрафа+время на тему - пропускаем и записываем новое время в таблицу
+            {
+                $row["time"]=$real_time;
+                $users_themes_time->update($row, "time");
+                return true;
+            }
+        }
+        else
+        {
+            // впервые решает тему
+            $row["time"]=time();
+            $users_themes_time->create($row);
+            return true;
+        }
     }
 
 }
