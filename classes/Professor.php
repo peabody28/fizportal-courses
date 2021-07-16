@@ -27,6 +27,7 @@ class Professor
 
         return $status;
     }
+
     public function theme_status($theme)
     {
         // список тем курса
@@ -76,4 +77,29 @@ class Professor
         }
 
     }
+
+    public function mistakes_status($theme_id)
+    {
+
+        $themes_table = new Themes_table();
+        $theme = $themes_table->read($theme_id); // тема для которой делается РО
+
+        $themes_list_full = $themes_table->get_courses_themes($theme["course_id"]);
+
+        $users_themes_table = new Users_themes_table();
+        $users_themes_list = $users_themes_table->read($_SESSION["id"]);
+
+        $themes_ids = [];
+        foreach ($themes_list_full as $item)
+            $themes_ids[] = $item["id"];
+
+        $tec_local_id = array_search($theme_id, $themes_ids);
+        $sled_id = $themes_list_full[(int)$tec_local_id+1]["id"];
+        if(in_array(["user_id"=>$_SESSION["id"], "theme_id"=>$sled_id], $users_themes_list))
+            return true;
+        else
+            return false;
+
+    }
+
 }

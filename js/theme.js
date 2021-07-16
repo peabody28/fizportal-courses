@@ -32,6 +32,8 @@ function send_answer()
                 {
                     $("#message").html("Верно!")
                     $("#"+response["task_id"]).css('background-color', '#50C878');
+                    if(response["progress"]!==null)
+                        $( ".supertest" ).prop( "disabled", false );
                 }
                 else
                     $("#message").html("Неверный ответ!")

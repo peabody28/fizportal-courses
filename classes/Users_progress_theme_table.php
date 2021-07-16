@@ -41,7 +41,7 @@ class Users_progress_theme_table implements Table
         // TODO: Implement delete() method.
     }
 
-    public function add_point($target)
+    public function add_point($target, $count=1)
     {
         $row = $this->read($target);
         if(!$row){
@@ -50,7 +50,7 @@ class Users_progress_theme_table implements Table
         }
         else
         {
-            $target["progress"]=(string)((int)$row["progress"]+1);
+            $target["progress"]=(string)((int)$row["progress"]+$count);
             $this->update($target, "set_point");
         }
     }

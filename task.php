@@ -9,6 +9,7 @@ require_once __DIR__."/classes/Users_themes_table.php";
 require_once __DIR__."/classes/Users_progress_theme_table.php";
 require_once __DIR__."/classes/Users_mistakes_table.php";
 require_once __DIR__."/classes/Professor.php";
+require_once __DIR__."/classes/Task_handler.php";
 session_start();
 
 
@@ -45,90 +46,24 @@ function construct_task($id)
 
 if(isset($data["submit"]))
 {
+    $task_handler = new Task_handler();
+    $task_handler->data = $data;
+
     if ($data["code"]=="send_answer")
     {
-        $task = construct_task($data["task_id"]);
-
-        $prof = new Professor();
-        $status = $prof->check_task($task);
-        if($status)
-        {
-            // добавляю задачу в список решенных пользователем
-            $users_tasks_table = new Users_tasks_table();
-            $st = $users_tasks_table->create(["user_id"=>$_SESSION["id"], "task_id"=>$data["task_id"]]);
-            if($st) // если решается впервые
-            {
-                // добавляю балл
-                $users_progress_theme_table = new Users_progress_theme_table();
-                $users_progress_theme_table->add_point(["user_id"=>$_SESSION["id"], "theme_id"=>$data["theme_id"]]);
-            }
-            echo json_encode(["status" => "OK", "task_id"=>$data["task_id"]]);
-        }
-        else
-        {
-            $users_tasks_table = new Users_tasks_table();
-            $users_tasks = $users_tasks_table->read($_SESSION["id"]);
-
-            if(!in_array(["user_id"=>$_SESSION["id"], "task_id"=>$data["task_id"]], $users_tasks)) // если пользователь эту задачу еще не решал
-            {
-                // добавляю задачу в РО
-                $users_mistakes_table = new Users_mistakes_table();
-                $st = $users_mistakes_table->create(["user_id"=>$_SESSION["id"], "task_id"=>$data["task_id"]]);
-                // если $st==true то задачу первый раз решили неверно и я могу снять балл
-                $users_themes_table = new Users_themes_table();
-                $users_themes = $users_themes_table->read($_SESSION["id"]);
-
-                if($st && !in_array(["user_id"=>$_SESSION["id"], "theme_id"=>$data["theme_id"]], $users_themes)) // если тема не выполнена
-                {
-                    // Cнимаю балл за неверное решение
-                    $users_progress_theme_table = new Users_progress_theme_table();
-                    $users_progress_theme_table->delete_point(["user_id"=>$_SESSION["id"], "theme_id"=>$data["theme_id"]]);
-                }
-
-            }
-            echo json_encode(["status" => "ERROR"]);
-        }
-
+        $resp = $task_handler->send_answer();
+        echo json_encode($resp);
+    }
+    else if($data["code"]=="send_mistake_answer")
+    {
+        $resp = $task_handler->send_mistake_answer();
+        echo json_encode($resp);
     }
     else if($data["code"]=="send_supertest_answers")
     {
-        $str = "";
-        foreach ($data as $key => $val)
-        {
-            if($key=="code" || $key == "submit")
-                continue;
-            $str .= "&".$key."=";
-        }
-        $match = [];
-        preg_match_all("/&([0-9]*)_{1}a{0,1}b{0,1}_{1}/u", $str, $match);
-
-        $tasks = [];
-
-        foreach (array_unique($match[1]) as $task_id)
-        {
-            $task = construct_task($task_id);
-            array_push($tasks, $task);
-        }
-
-        // проверка
-        $status = true;
-        $prof = new Professor();
-        foreach ($tasks as $item)
-        {
-            $status = $prof->check_task($item);
-            if(!$status)
-                break;
-        }
-        if ($status)
-        {
-            $users_themes_table = new Users_themes_table();
-            $users_themes_table->create(["user_id"=>$_SESSION["id"], "theme_id"=>$data["theme_id"]]);
-            echo json_encode(["status"=>"OK"]);
-        }
-        else
-            echo json_encode(["status"=>"ERROR"]);
-
-    }
+        $resp = $task_handler->send_supertest_answer();
+        echo json_encode($resp);
+    }// class Task_view
     else if ($data["code"]=="get_task")
     {
         $tasks_table = new Tasks_table();
@@ -144,8 +79,22 @@ if(isset($data["submit"]))
                                                 <button class='btn del_task' onclick='del_task($data[task_id]);return false;'>Удалить эту задачу</button>
                              </div><br><br>";
         }
-        $task_block .= "<div class='row justify-content-center h2' id='message'></div>";
         // материалы для задачи
+        $task_block .= "<div class='row justify-content-center h2' id='message'></div>";
+        $task_block .= "<br><br><div class='row justify-content-center'> <a href='/materials?task_id=$data[task_id]'>Материалы для задачи</a></div>";
+
+        echo json_encode(["block"=>$task_block]);
+    }
+    else if ($data["code"]=="get_mistake")
+    {
+        $tasks_table = new Tasks_table();
+        $tmp_task = $tasks_table->read($data["task_id"]);
+
+        $block = new Render();
+
+        $task_block = $block->render_mistake($tmp_task);
+        // материалы для задачи
+        $task_block .= "<div class='row justify-content-center h2' id='message'></div>";
         $task_block .= "<br><br><div class='row justify-content-center'> <a href='/materials?task_id=$data[task_id]'>Материалы для задачи</a></div>";
 
         echo json_encode(["block"=>$task_block]);
@@ -157,7 +106,8 @@ if(isset($data["submit"]))
 
         if((int)$users_progress["progress"]<10 && $_SESSION["rights"]!="admin")
         {
-            echo json_encode(["block" => "Вы решили мало задач ваш балл ".$users_progress["progress"]."/10"]);
+            $progress = $users_progress["progress"]?:"0";
+            echo json_encode(["block" => "Вы решили мало задач ваш балл ".$progress."/10"]);
             exit();
         }
         $supertests_tasks_table = new Supertests_tasks_table();
