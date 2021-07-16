@@ -1,6 +1,5 @@
 <?php
 require_once __DIR__."/Table.php";
-require_once __DIR__."/../db_connect.php";
 
 
 class Users_tasks_table implements Table

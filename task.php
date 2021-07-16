@@ -18,33 +18,6 @@ $data=$_POST;
 $tasks_table = new Tasks_table();
 
 
-function construct_task($id)
-{
-    global $tasks_table;
-    global $data;
-
-    $tmp_task = $tasks_table->read($id);
-
-    $task = ["id"=>$tmp_task["id"], "type"=>$tmp_task["type"]];
-    if($tmp_task["type"]=="A")
-    {
-        $tasks_answers_table = new Tasks_answers_table();
-        $task["answers"] = $tasks_answers_table->read($task["id"]);
-
-        $task["user_answers"] = [];
-        for($i=1; $i<=5; $i++)
-            if (isset($data["$tmp_task[id]_a_answ$i"]))
-                $task["user_answers"][] = $i;
-    }
-    else
-    {
-        $task["answer"] =  $tmp_task["answer"];
-        $task["user_answer"]=$data["$tmp_task[id]_b_answer"];
-    }
-    return $task;
-}
-
-
 if(isset($data["submit"]))
 {
     $task_handler = new Task_handler();

@@ -1,6 +1,6 @@
 <?php
 require_once __DIR__."/Table.php";
-require_once __DIR__."/../db_connect.php";
+
 
 class Tasks_materials_table implements Table
 {

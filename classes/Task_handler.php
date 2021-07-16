@@ -6,6 +6,7 @@ require_once __DIR__."/Users_mistakes_table.php";
 require_once __DIR__."/Users_themes_table.php";
 require_once __DIR__."/Tasks_table.php";
 require_once __DIR__."/Tasks_answers_table.php";
+require_once __DIR__."/Themes_limits_table.php";
 
 
 class Task_handler
@@ -18,11 +19,14 @@ class Task_handler
         $task = $this->construct_task();
 
         $prof = new Professor();
-        $status_time = $prof->check_time(["user_id"=>$_SESSION["id"], "theme_id"=>$this->data["theme_id"]]);
-        if(!$status_time)
-            return ["status" => "ERROR", "code"=>"TIME"];
-        $status = $prof->check_task($task);
 
+        $status_time = $prof->check_time(["user_id"=>$_SESSION["id"], "theme_id"=>$this->data["theme_id"], "limit"=>$this->data["limit"]]);
+        if($status_time===false)
+            return ["status" => "ERROR", "code"=>"TIME"];
+        if ($status_time==="update")
+            $prof->set_time(["user_id"=>$_SESSION["id"], "theme_id"=>$this->data["theme_id"]]);
+
+        $status = $prof->check_task($task);
         $users_tasks_table = new Users_tasks_table();
         if($status)
         {

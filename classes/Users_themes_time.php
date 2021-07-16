@@ -25,10 +25,15 @@ class Users_themes_time implements Table
 
     public function update($obj, $column)
     {
-        global $link;
-        $sql = sprintf("UPDATE users_themes_time SET %s = '%s' WHERE user_id = '%s' AND theme_id='%s'", $column, $obj["$column"], $obj["user_id"], $obj["theme_id"]);
-        $result = mysqli_query($link, $sql);
-        return $result;
+        if ($this->read($obj))
+        {
+            global $link;
+            $sql = sprintf("UPDATE users_themes_time SET time = '%s' WHERE user_id = '%s' AND theme_id='%s'", $obj["time"], $obj["user_id"], $obj["theme_id"]);
+            $result = mysqli_query($link, $sql);
+            return $result;
+        }
+        else
+            $this->create($obj);
     }
 
     public function delete($obj)

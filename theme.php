@@ -48,20 +48,8 @@ if ($tmp_theme)
         }
 
         // прошло ли время блокировки темы?
-        $users_themes_time = new Users_themes_time();
-        $resp = $users_themes_time->read(["user_id"=>$_SESSION["id"], "theme_id"=>$tmp_theme["id"]]);
-        $time = $resp["time"];
-        $status = true;
-        if ($time)
-        {
-            $real_time = time();
-            $delta = $real_time - (int)$time;
-            if ($delta > 1800 && $delta < 1800+3600*5) // если разница во времени больше времени на тему и меньше штрафа+время на тему (5ч+30м) - запрет на решение
-                $status = false;
-        }
-        else
-            $status = true;
-        if($status)
+        $status = $professor->check_time(["user_id"=>$_SESSION["id"], "theme_id"=>$tmp_theme["id"]]);
+        if($status !== false) // true or "update"
         {
             //беру задачи темы
             $tasks_table = new Tasks_table();
