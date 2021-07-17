@@ -16,12 +16,18 @@ class Render
         return $twig->render($this->temp, $this->argv);
     }
 
-    public function render_theme($theme): string
+    public function render_theme($theme, $class, $progress, $is_admin=false)
     {
-        global $twig;
-        $theme_blocks = $twig->render("theme.html", ["title" => $theme["title"], "text" => $theme["text"], "id" => $theme["id"]]);
-        return $theme_blocks;
+        $content = "<div class='row theme $class m-0 p-0 mb-3 ml-2 mr-2 pl-2 pt-1'>
+                        <a class='text-start text-break col-12 h2 m-0 p-0' href='/theme?id=$theme[id]'>$theme[title]</a>
+                        <span class='col-12 m-0 p-0'>progress:&nbsp;&nbsp;$progress/10</span>
+                    </div><br>";
+        if($is_admin)
+            $content.= "<div class='row m-0 p-0 mb-3 ml-2 mr-2'><a class='btn izm' href='/change_theme?id=$theme[id]'>Изменить</a></div>";
+
+        return ["block"=>$content];
     }
+
     public function render_tasks_theme($theme, $tasks_list, $users_tasks, $users_progress, $sptest)
     {
         $content = "<div class='row container-fluid justify-content-start m-0 p-0 pl-3'>";
@@ -107,11 +113,12 @@ class Render
                     <div class='row d-flex justify-content-center'><button class='btn send' type='submit'>Отправить</button></div>
                 </form>";
 
-        $image_block = $task["img_url"]?"<div class='col-12 m-0 p-0 d-flex justify-content-center'><img src='$task[img_url]' height='250' alt=''></div>":"";
+        $image_block = $task["img_url"]?"<img src='$task[img_url]' alt=''>":"";
+        $task["text"] = str_replace("{{ img }}", "<br><div class='container-fluid row d-flex justify-content-center m-0 p-0 '>".$image_block."</div><br>", $task["text"]);
         $content .=
             "<div class='row m-0 p-0 justify-content-center h2'>Условие</div><br>
-            <div class=' row opis m-0 p-0 d-flex justify-content-center container'>
-                <div class='col-8 m-0 p-0 d-flex justify-content-start'>$task[text]</div>
+            <div class='row opis m-0 p-0 d-flex justify-content-center container-fluid'>
+                <div class='col-8 m-0 p-0 text-break'>$task[text]</div>
             </div><br><br>
             <div class='container-fluid row m-0 p-0 d-flex justify-content-center'>";
 
@@ -202,5 +209,26 @@ class Render
 
         $content.="</div><br><br>";
         return $content;
+    }
+
+    public function render_course($course, $status)
+    {
+        if($status=="admin")
+        {
+            $this->temp = "course_block_adm.html";
+            $this->argv = ["title" => $course["title"], "text" => $course["text"], "id" => $course["id"], "img_url"=>$course["img_url"]];
+            return $this->render_temp();
+        }
+        else if($status=="open")
+        {
+            $this->temp = "course_block.html";
+            $this->argv = ["title" => $course["title"], "text" => $course["text"], "id" => $course["id"], "img_url"=>$course["img_url"]];
+            return $this->render_temp();
+        }
+        else {
+            $this->temp = "close_course_block.html";
+            $this->argv = ["title" => $course["title"], "text" => $course["text"], "id" => $course["id"], "price"=>$course["price"], "img_url"=>$course["img_url"]];
+            return $this->render_temp();
+        }
     }
 }

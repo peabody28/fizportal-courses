@@ -12,4 +12,9 @@
 .send {
   background-color: #b3b3b3;
 }
+#task img {
+  max-width: 100%;
+  height: auto;
+  max-height: 300px;
+}
 /*# sourceMappingURL=mistakes.css.map */

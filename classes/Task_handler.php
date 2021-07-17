@@ -13,7 +13,6 @@ class Task_handler
 {
     public $data;
 
-
     public function send_answer()
     {
         $task = $this->construct_task();

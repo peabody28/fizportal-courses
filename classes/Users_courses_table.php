@@ -8,7 +8,7 @@ class Users_courses_table implements Table
     public function create($users_courses)
     {
         global $link;
-        $sql = sprintf("INSERT INTO users_courses(user_id, course_id) VALUES ('%s', '%s')", $users_courses->user_id, $users_courses->course_id);
+        $sql = sprintf("INSERT INTO users_courses(user_id, course_id) VALUES ('%s', '%s')", $users_courses["user_id"], $users_courses["course_id"]);
         $result = mysqli_query($link, $sql);
         return $result;
     }

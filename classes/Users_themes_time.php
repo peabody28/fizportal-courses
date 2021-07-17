@@ -33,7 +33,7 @@ class Users_themes_time implements Table
             return $result;
         }
         else
-            $this->create($obj);
+            return $this->create($obj);
     }
 
     public function delete($obj)
