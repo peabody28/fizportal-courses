@@ -8,7 +8,7 @@ class Tasks_answers_table implements Table
     public function create($task_answer)
     {
         global $link;
-        $sql = sprintf("INSERT INTO tasks_answers(task_id, answer) VALUES ('%s', '%s')", $task_answer->task_id, $task_answer->answer);
+        $sql = sprintf("INSERT INTO tasks_answers(task_id, answer) VALUES ('%s', '%s')", $task_answer["task_id"], $task_answer["answer"]);
         $result = mysqli_query($link, $sql);
         return $result;
     }

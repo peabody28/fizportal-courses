@@ -2,7 +2,6 @@
 require_once __DIR__."/auth.php";
 require_once __DIR__."/classes/Courses_table.php";
 require_once __DIR__."/classes/Users_courses_table.php";
-require_once __DIR__."/classes/Users_courses.php";
 require_once __DIR__."/classes/Render.php";
 session_start();
 

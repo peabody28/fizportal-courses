@@ -3,7 +3,6 @@ require_once __DIR__."/auth.php";
 require_once __DIR__."/auth_root.php";
 require_once __DIR__."/classes/Task.php";
 require_once __DIR__."/classes/Tasks_table.php";
-require_once __DIR__."/classes/Tasks_answer.php";
 require_once __DIR__."/classes/Tasks_answers_table.php";
 require_once __DIR__."/classes/Supertests_table.php";
 require_once __DIR__."/classes/Supertests_tasks_table.php";
@@ -30,16 +29,11 @@ if(isset($data["submit"]))
 
     if($data["type"]=="A" && $response)
     {
-        $tasks_answer = new Tasks_answer();
         $tasks_answers_table = new Tasks_answers_table();
-        $tasks_answer->task_id = $task->id;
         for($i=1; $i<=5;$i++)
         {
             if(isset($data["answ".$i]))
-            {
-                $tasks_answer->answer=$data["answ".$i];
-                $tasks_answers_table->create($tasks_answer);
-            }
+                $tasks_answers_table->create(["task_id"=>$task->id, "answer"=>$data["answ".$i]]);
         }
     }
     if ($data["theme_id"])

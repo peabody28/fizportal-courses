@@ -1,8 +1,6 @@
 <?php
 require_once __DIR__."/auth.php";
 require_once __DIR__."/auth_root.php";
-require_once __DIR__."/classes/Course.php";
-require_once __DIR__."/classes/Courses_table.php";
 require_once __DIR__."/classes/Theme.php";
 require_once __DIR__."/classes/Themes_table.php";
 require_once __DIR__."/classes/Tasks_table.php";

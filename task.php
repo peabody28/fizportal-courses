@@ -35,20 +35,20 @@ if(isset($data["submit"]))
     }
     else if ($data["code"]=="get_task")
     {
-        $tasks_constructor = new Tasks_block_constructor();
-        $response = $tasks_constructor->get_task_block($data["task_id"], ($_SESSION["rights"]=="admin"));
+        $tasks_block_constructor = new Tasks_block_constructor();
+        $response = $tasks_block_constructor->get_task_block($data["task_id"], ($_SESSION["rights"]=="admin"));
         echo json_encode(["block"=>$response["block"]]);
     }
     else if ($data["code"]=="get_mistake")
     {
-        $tasks_constructor = new Tasks_block_constructor();
-        $response = $tasks_constructor->get_mistake_block($data["task_id"]);
+        $tasks_block_constructor = new Tasks_block_constructor();
+        $response = $tasks_block_constructor->get_mistake_block($data["task_id"]);
         echo json_encode(["block"=>$response["block"]]);
     }
     else if ($data["code"]=="get_supertest")
     {
-        $tasks_constructor = new Tasks_block_constructor();
-        $resp = $tasks_constructor->get_supertest_block($_SESSION["id"], $data["theme_id"], ($_SESSION["rights"]=="admin"), $data["supertest_id"]);
+        $tasks_block_constructor = new Tasks_block_constructor();
+        $resp = $tasks_block_constructor->get_supertest_block($_SESSION["id"], $data["theme_id"], ($_SESSION["rights"]=="admin"), $data["supertest_id"]);
         echo json_encode(["block" => $resp["block"]]);
     }
     else

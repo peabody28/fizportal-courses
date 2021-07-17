@@ -3,6 +3,8 @@ require_once __DIR__."/Tasks_table.php";
 require_once __DIR__."/Render.php";
 require_once __DIR__."/Users_progress_theme_table.php";
 require_once __DIR__."/Supertests_tasks_table.php";
+require_once __DIR__."/Professor.php";
+
 
 
 class Tasks_block_constructor
@@ -48,11 +50,11 @@ class Tasks_block_constructor
         $users_progress_theme_table = new Users_progress_theme_table();
         $users_progress = $users_progress_theme_table->read(["user_id"=>$user_id, "theme_id"=>$theme_id]);
 
-        if((int)$users_progress["progress"]<10 && !$is_admin)
-        {
-            $progress = $users_progress["progress"]?:"0";
-            return ["block" => "Вы решили мало задач ваш балл ".$progress."/10"];
-        }
+        $professor = new Professor();
+        $resp = $professor->check_access_supertest($users_progress, $is_admin);
+        if(!$resp["status"])
+            return ["block"=>$resp["error"]];
+
         $supertests_tasks_table = new Supertests_tasks_table();
         $supertests_tasks_rows = $supertests_tasks_table->read($sptest_id);
 
