@@ -4,7 +4,7 @@ require_once __DIR__."/Users_themes_table.php";
 require_once __DIR__."/Themes_table.php";
 require_once __DIR__."/Users_mistakes_table.php";
 require_once __DIR__."/Tasks_table.php";
-require_once __DIR__."/Users_themes_time.php";
+require_once __DIR__ . "/Users_themes_time_table.php";
 require_once __DIR__."/Themes_limits_table.php";
 
 class Professor
@@ -117,7 +117,7 @@ class Professor
         $limit = $answ?$answ["time_limit"]:null;
         if(!$limit)
             return true;
-        $users_themes_time = new Users_themes_time();
+        $users_themes_time = new Users_themes_time_table();
         $resp = $users_themes_time->read($row);
         $time = $resp["time"];
         if ($time)
@@ -138,7 +138,7 @@ class Professor
 
     public function set_time($row)
     {
-        $users_themes_time = new Users_themes_time();
+        $users_themes_time = new Users_themes_time_table();
         $row["time"]=time();
         $users_themes_time->update($row, "time");
     }

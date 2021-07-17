@@ -1,9 +1,8 @@
 <?php
 require_once __DIR__."/Table.php";
-require_once __DIR__."/../db_connect.php";
 
 
-class Users_themes_time implements Table
+class Users_themes_time_table implements Table
 {
 
     public function create($obj)
