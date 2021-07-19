@@ -4,7 +4,7 @@ require_once __DIR__."/Users_themes_table.php";
 require_once __DIR__."/Themes_table.php";
 require_once __DIR__."/Users_mistakes_table.php";
 require_once __DIR__."/Tasks_table.php";
-require_once __DIR__."/Users_themes_time.php";
+require_once __DIR__ . "/Users_themes_time_table.php";
 require_once __DIR__."/Themes_limits_table.php";
 
 class Professor
@@ -117,7 +117,7 @@ class Professor
         $limit = $answ?$answ["time_limit"]:null;
         if(!$limit)
             return true;
-        $users_themes_time = new Users_themes_time();
+        $users_themes_time = new Users_themes_time_table();
         $resp = $users_themes_time->read($row);
         $time = $resp["time"];
         if ($time)
@@ -138,9 +138,19 @@ class Professor
 
     public function set_time($row)
     {
-        $users_themes_time = new Users_themes_time();
+        $users_themes_time = new Users_themes_time_table();
         $row["time"]=time();
         $users_themes_time->update($row, "time");
+    }
+
+    public function check_access_supertest($users_progress, $is_admin=false)
+    {
+        if((int)$users_progress["progress"]<10 && !$is_admin)
+        {
+            $progress = $users_progress["progress"]?:"0";
+            return ["status"=>false ,"error" => "Вы решили мало задач ваш балл ".$progress."/10"];
+        }
+        return ["status"=>true];
     }
 
 

@@ -8,6 +8,7 @@ require_once __DIR__."/classes/Users_themes_table.php";
 require_once __DIR__."/classes/Users_progress_theme_table.php";
 require_once __DIR__."/classes/Tasks_table.php";
 require_once __DIR__."/classes/Professor.php";
+require_once __DIR__."/classes/Manager.php";
 require_once __DIR__."/classes/Render.php";
 session_start();
 
@@ -20,9 +21,9 @@ $course = $courses_table->read($data["id"]);
 if ($course["id"])
 {
     // проверяю, есть ли курс у пользователя
-    $users_courses_table = new Users_courses_table();
-    $users_courses_list = $users_courses_table->read($_SESSION["id"]);
-    if(in_array(["user_id"=>$_SESSION["id"], "course_id"=>$course["id"]], $users_courses_list) || $_SESSION["rights"]=="admin")
+    $manager = new Manager();
+    $status = $manager->check_course($_SESSION["id"], $course["id"]);
+    if($status || $_SESSION["rights"]=="admin")
     {
         $content = "<div class='row container-fluid justify-content-center m-0 p-0'><h2>Темы</h2></div>";
         if($_SESSION["rights"]=="admin")
@@ -42,25 +43,20 @@ if ($course["id"])
                 $class = "green_theme";
             else if ($theme_status=="open")
                 $class = "open_theme";
-            else if ($theme_status=="close")
+            else
                 $class = "close_theme";
-
             if($_SESSION["rights"]=="admin")
                 $class = "open_theme";
 
+
             $users_progress_theme_table = new Users_progress_theme_table();
             $progress = $users_progress_theme_table->read(["user_id"=>$_SESSION["id"], "theme_id"=>$theme["id"]]);
+
             $progress = $progress?$progress["progress"]:"0";
-            $content .= "<div class='row theme $class m-0 p-0 mb-3 ml-2 mr-2 pl-2 pt-1'>";
-            $content .= "<a class='text-start text-break col-12 h2 m-0 p-0' href='/theme?id=$theme[id]'>$theme[title]</a>";
-            $content .= "<span class='col-12 m-0 p-0'>progress:&nbsp;&nbsp;". $progress ."/10</span>";
-            $content .= "</div><br>";
-            if($_SESSION["rights"]=="admin")
-            {
-               $content.= "<div class='row m-0 p-0 mb-3 ml-2 mr-2'>
-                                <a class='btn izm' href='/change_theme?id=$theme[id]'>Изменить</a>
-                          </div>";
-            }
+            $render = new Render();
+            $theme_block = $render->render_theme($theme, $class, $progress, ($_SESSION["rights"]=="admin"));
+
+            $content .= $theme_block["block"];
         }
 
     }

@@ -3,7 +3,6 @@ require_once __DIR__ . "/auth.php";
 require_once __DIR__ . "/auth_root.php";
 require_once __DIR__ . "/classes/Task.php";
 require_once __DIR__ . "/classes/Tasks_table.php";
-require_once __DIR__ . "/classes/Tasks_answer.php";
 require_once __DIR__ . "/classes/Tasks_answers_table.php";
 require_once __DIR__ . "/classes/Render.php";
 
@@ -34,7 +33,6 @@ if (isset($data["submit"])) {
             $tasks_table->update($task, "type");
             $tasks_table->update($task, "answer");
 
-            $tasks_answer = new Tasks_answer();
             $tasks_answers_table = new Tasks_answers_table();
             $tasks_answers_table->delete($task->id);
         }
@@ -46,17 +44,12 @@ if (isset($data["submit"])) {
             $tasks_table->update($task, "answer");
 
             // добавляю ответы в таблицу ответов части А
-            $tasks_answer = new Tasks_answer();
             $tasks_answers_table = new Tasks_answers_table();
             $tasks_answers_table->delete($task->id);
-            $tasks_answer->task_id = $task->id;
             for($i=1; $i<=5;$i++)
             {
                 if(isset($data["answ".$i]))
-                {
-                    $tasks_answer->answer=$data["answ".$i];
-                    $tasks_answers_table->create($tasks_answer);
-                }
+                    $tasks_answers_table->create(["task_id"=>$task->id, "answer"=>$data["answ".$i]]);
             }
         }
         echo json_encode(["status"=>"OK", "message"=>"Ответ изменен"]);
