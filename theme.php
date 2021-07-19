@@ -7,6 +7,7 @@ require_once __DIR__."/classes/Professor.php";
 require_once __DIR__."/classes/Manager.php";
 require_once __DIR__."/classes/Supertests_table.php";
 require_once __DIR__."/classes/Users_progress_theme_table.php";
+require_once __DIR__."/classes/Tasks_block_constructor.php";
 require_once __DIR__."/classes/Render.php";
 session_start();
 
@@ -54,28 +55,31 @@ if ($tmp_theme)
                 if(count($tasks_list))
                 {
                     if(isset($_GET["text"]))
-                        $content .="<div id='task'><div class='row m-0 p-0 justify-content-center h2'>Описание темы</div><br><div class='row m-0 p-0 justify-content-center h2'>$tmp_theme[text]</div></div>";
+                        $content .="<div id='task' class='p-0 m-0 mt-5 pt-5 d-flex justify-content-center align-items-center row container-fluid'>
+                                        <div class='tt p-0 m-0 row container-fluid d-flex justify-content-center'>
+                                            <div class='col-12 m-0 p-0 d-flex justify-content-center h2'>Описание темы</div>
+                                            <div class='col-12 m-0 p-0 d-flex justify-content-center h2'>$tmp_theme[text]</div>
+                                        </div>
+                               </div>";
                     else
                     {
                         // рендер первой задачи
                         $this_task = $tasks_list[0];
-                        $content .="<div id='task'>";
-                        $content .= $render->render_task($this_task);
-                        if ($_SESSION["rights"] == "admin")
-                        {
-                            $content .= "<div class='row justify-content-center'><a class='btn chg_task_btn' href='/change_task?id=$this_task[id]'>Изменить задачу</a></div><br><br>";
-                            $content .= " <div class='row d-flex justify-content-center'>
-                                                <button class='btn del_task' onclick='del_task($this_task[id]);return false;'>Удалить эту задачу</button>
-                                           </div><br><br>";
-                        }
-                        // материалы для задачи
-                        $content .= "<div class='h2 d-flex justify-content-center' id='message'></div>";
-                        $content .= "<br><br><div class='row justify-content-center'> <a href='/materials?task_id=$this_task[id]'>Материалы для задачи</a></div>";
-                        $content .= "</div><br>";
+                        $content .="<div id='task' class='p-0 m-0 mt-5 pt-5 d-flex justify-content-center align-items-center row container-fluid'><div class='tt p-0 m-0 row container-fluid d-flex justify-content-center'>";
+
+                        $tasks_block_constructor = new Tasks_block_constructor();
+                        $response = $tasks_block_constructor->get_task_block($this_task["id"], ($_SESSION["rights"]=="admin"));
+                        $content .= $response["block"];
+                        $content .= "</div></div><br>";
                     }
                 }
                 else
-                    $content .="<div id='task'><div class='row m-0 p-0 justify-content-center h2'>Описание темы</div><br><div class='row m-0 p-0 justify-content-center h2'>$tmp_theme[text]</div></div>";
+                    $content .="<div id='task' class='p-0 m-0 mt-5 pt-5 d-flex justify-content-center align-items-center row container-fluid'>
+                                        <div class='tt p-0 m-0 row container-fluid d-flex justify-content-center'>
+                                            <div class='col-12 m-0 p-0 d-flex justify-content-center h2'>Описание темы</div>
+                                            <div class='col-12 m-0 p-0 d-flex justify-content-center h2'>$tmp_theme[text]</div>
+                                        </div>
+                               </div>";
             }
             else
                 $content = "<h2>Время решения темы истекло, возвращайтесь позже</h2>";

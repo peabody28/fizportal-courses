@@ -35,7 +35,7 @@ if (isset($_GET["theme_id"])) {
                 $render = new Render();
                 $content .= $render->render_mistakes($mistakes);
 
-                $content .= "<div id='task'></div>";
+                $content .= "<div id='task' class='p-0 m-0 mt-5 pt-5 d-flex justify-content-center align-items-center row container-fluid'><div class='tt p-0 m-0 row container-fluid d-flex justify-content-center'></div></div>";
                 $page = new Render();
                 $page->temp = 'main.html';
                 $page->argv = ['title' => "mistakes",

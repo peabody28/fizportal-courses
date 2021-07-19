@@ -8,7 +8,8 @@ $('.get_task').submit(function ()
             success: function (res)
             {
                 var task = JSON.parse(res)
-                $("#task").html(task["block"])
+                console.log(task["block"])
+                $(".tt").html(task["block"])
                 $("#message").html("")
                 MathJax.typeset() // обновление mathjax
             }
