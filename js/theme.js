@@ -23,7 +23,6 @@ $('.get_task').submit(function ()
 
 function send_answer()
 {
-    console.log()
     $.ajax(
         {
             url: "/task.php",
@@ -50,6 +49,11 @@ function send_answer()
                         $("#message").html("Неверный ответ!")
                     }
 
+                }
+                if($('.lock').length)
+                {
+                    $('.lock').toggleClass('lock').toggleClass('in_process');
+                    inter()
                 }
 
             }
@@ -97,3 +101,57 @@ function del_task(id)
     )
     return false;
 }
+
+function inter() {
+
+    var Seconds = $('#sec').text(), int;
+    var Minutes = $('#min').text(), int;
+    var Hours = $('#hours').text(), int;
+
+    int = setInterval(function () { // запускаем интервал
+        if (Seconds > 0)
+        {
+            Seconds--; // вычитаем 1
+            if (Math.trunc(Seconds / 10) == 0)
+                $('#sec').text("0" + Seconds);
+            else
+                $('#sec').text(Seconds); // выводим получившееся значение в блок
+        }
+        else if (Seconds == 0)
+        {
+            if (Minutes == 0)
+            {
+                if (Hours == 0)
+                {
+                    location.reload()
+                }
+                else
+                {
+                    Hours--;
+                    Seconds = 59;
+                    Minutes = 59;
+                    $('#sec').text(59)
+                    $('#min').text(59)
+                    if (Math.trunc(Hours / 10) == 0)
+                        $('#hours').text("0" + Hours);
+                    else
+                        $('#hours').text(Hours);
+                }
+            } else {
+                $('#sec').text(59)
+                Seconds = 59;
+                Minutes--;
+                if (Math.trunc(Minutes / 10) == 0)
+                    $('#min').text("0" + Minutes);
+                else
+                    $('#min').text(Minutes);
+            }
+        }
+    }, 1000);
+}
+
+if($('.in_process').length)
+    inter()
+
+if($('.blocked').length)
+    inter()
