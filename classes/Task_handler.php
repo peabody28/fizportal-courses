@@ -19,10 +19,10 @@ class Task_handler
 
         $prof = new Professor();
 
-        $status_time = $prof->check_time(["user_id"=>$_SESSION["id"], "theme_id"=>$this->data["theme_id"], "limit"=>$this->data["limit"]]);
-        if($status_time===false)
+        $response = $prof->check_time(["user_id"=>$_SESSION["id"], "theme_id"=>$this->data["theme_id"], "limit"=>$this->data["limit"]]);
+        if($response["status"]===false)
             return ["status" => "ERROR", "code"=>"TIME"];
-        if ($status_time==="update")
+        if ($response["status"]==="update")
             $prof->set_time(["user_id"=>$_SESSION["id"], "theme_id"=>$this->data["theme_id"]]);
 
         $status = $prof->check_task($task);

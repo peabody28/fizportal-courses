@@ -110,11 +110,11 @@ class Professor
         $users_themes_table = new Users_themes_table();
         $users_themes_list= $users_themes_table->read($_SESSION["id"]);
         if(in_array(["user_id"=>$_SESSION["id"], "theme_id"=>$row["theme_id"]], $users_themes_list) || $_SESSION["rights"]=="admin") // пользователь уже сделал тему
-            return true;
+            return ["status"=>true, "theme_is_solved"=>true];
         // узнаю лимит выполнения темы
         $themes_limits_table = new Themes_limits_table();
         $answ = $themes_limits_table->read($row["theme_id"]);
-        $limit = $answ?$answ["time_limit"]:null;
+        $limit = $answ?(int)$answ["time_limit"]:null;
         if(!$limit)
             return true;
         $users_themes_time = new Users_themes_time_table();
@@ -126,14 +126,25 @@ class Professor
             $delta = $real_time - (int)$time;
 
             if($delta <= $limit*60) // если разница во времени меньше времени на тему(30м) - пропускаем
-                return true;
-            else if($delta > $limit*60 && $delta < $limit*60*2) // если разница во времени больше времени на тему и меньше штрафа+время на тему (5ч+30м) - запрет на решение
-                return false;
+            {
+                $hours = (int)(($limit*60-$delta)/3600);
+                $min = (int)(($limit*60-$delta)/60)-$hours*60;
+                $sec = ($limit*60-$delta)-$hours*3600-$min*60;
+                return ["status"=>true, "theme_is_solved"=>false, "hours"=>$hours, "min"=>$min, "sec"=>$sec];
+            }
+            else if($delta > $limit*60 && $delta < $limit*60*2+$limit*60) // если разница во времени больше времени на тему и меньше штрафа+время на тему (5ч+30м) - запрет на решение
+            {
+                $hours = (int)(($limit*2*60+$limit*60 - $delta)/3600);
+                $min = (int)(($limit*2*60+$limit*60 - $delta)/60) - $hours*60;
+                $sec = (int)(($limit*2*60+$limit*60 - $delta)) - $hours*3600 - $min*60;
+                return ["status"=>false, "theme_is_solved"=>false, "hours"=>$hours, "min"=>$min, "sec"=>$sec];
+            }
+
             else // если разница во времени больше штрафа+время на тему - пропускаем и записываем новое время в таблицу
-                return "update";
+                return ["status"=>"update", "theme_is_solved"=>false, "hours"=>(int)($limit/60), "min"=>$limit-((int)($limit/60))*60, "sec"=>0];
         }
         else
-           return "update";
+            return ["status"=>"update", "theme_is_solved"=>false, "hours"=>(int)($limit/60), "min"=>$limit-((int)($limit/60))*60, "sec"=>0];
     }
 
     public function set_time($row)

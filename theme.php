@@ -33,8 +33,9 @@ if ($tmp_theme)
         if($theme_status == "open" || $theme_status == "solved" || $_SESSION["rights"]=="admin")
         {
             // прошло ли время блокировки темы?
-            $status = $professor->check_time(["user_id"=>$_SESSION["id"], "theme_id"=>$tmp_theme["id"]]);
-            if($status !== false) // true or "update"
+            $response = $professor->check_time(["user_id"=>$_SESSION["id"], "theme_id"=>$tmp_theme["id"]]);
+
+            if($response["status"] !== false) // true or "update"
             {
                 //беру задачи темы
                 $tasks_table = new Tasks_table();
@@ -53,8 +54,24 @@ if ($tmp_theme)
                 $tmp_sptest = $supertests_table->read_by_theme($tmp_theme["id"]);
                 // рендер блоков задач и супертеста
                 $render = new Render();
-                $response = $render->render_tasks_theme($tmp_theme, $tasks_list, $users_tasks, $users_mistakes, $users_progress, $tmp_sptest);
-                $content = $response["content"];
+                $tasks_blocks = $render->render_tasks_theme($tmp_theme, $tasks_list, $users_tasks, $users_mistakes, $users_progress, $tmp_sptest);
+                $content = $tasks_blocks["content"];
+
+                if(isset($response["sec"]))
+                {
+                    $class = ($response["status"]===true)?"in_process":"lock";
+                    $hours_null = "";
+                    $min_null = "";
+                    $sec_null = "";
+                    if((int)($response["hours"]/10)==0)
+                        $hours_null = "0";
+                    if((int)($response["min"]/10)==0)
+                        $min_null = "0";
+                    if((int)($response["sec"]/10)==0)
+                        $sec_null = "0";
+                    $content .= "<br><div class='row m-0 p-0 h2 $class'><div id='hours'>$hours_null$response[hours]</div>:<div id='min'>$min_null$response[min]</div>:<div id='sec'>$sec_null$response[sec]</div></div>";
+                }
+
 
                 if(count($tasks_list))
                 {
@@ -86,7 +103,21 @@ if ($tmp_theme)
                                </div>";
             }
             else
-                $content = "<h2>Время решения темы истекло, возвращайтесь позже</h2>";
+            {
+                $content = "<h2>Время решения темы истекло, возвращайтесь через</h2>";
+
+                $hours_null = "";
+                $min_null = "";
+                $sec_null = "";
+                if((int)($response["hours"]/10)==0)
+                    $hours_null = "0";
+                if((int)($response["min"]/10)==0)
+                    $min_null = "0";
+                if((int)($response["sec"]/10)==0)
+                    $sec_null = "0";
+                $content .= "<br><div class='row m-0 p-0 h2 blocked'><div id='hours'>$hours_null$response[hours]</div>:<div id='min'>$min_null$response[min]</div>:<div id='sec'>$sec_null$response[sec]</div></div>";
+            }
+
         }
         else
             $content = "<div class='row container-fluid justify-content-start m-0 p-0 pl-3'>Вы пока не можете решать эту тему</div>";
