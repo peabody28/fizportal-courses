@@ -28,15 +28,24 @@ class Render
         return ["block"=>$content];
     }
 
-    public function render_tasks_theme($theme, $tasks_list, $users_tasks, $users_progress, $sptest)
+    public function render_tasks_theme($theme, $tasks_list, $users_tasks, $users_mistakes, $users_progress, $sptest)
     {
         $content = "<div class='row container-fluid justify-content-start m-0 p-0 pl-3'>";
-        $content .= "<a class='btn get_text_theme mr-1' href='/theme?id=$theme[id]&text'></a>";
+        $content .= "<a class='btn get_text_theme mr-1 mt-2' href='/theme?id=$theme[id]&text'></a>";
         // отображение квадратов задачи
         foreach ($tasks_list as $task) {
-            $button = (in_array(["user_id" => $_SESSION["id"], "task_id" => $task["id"]], $users_tasks))?"<button class='btn' id='$task[id]'></button>":"<button class='btn close_btn' id='$task[id]'></button>";
 
-            $content .= "<form class='get_task mr-1' method='POST'>
+            if(!in_array(["user_id" => $_SESSION["id"], "task_id" => $task["id"]], $users_tasks))
+            {
+                if(in_array(["task_id" => $task["id"]], $users_mistakes))
+                    $button = "<button class='btn red' id='$task[id]' disabled></button>";
+                else
+                    $button = "<button class='btn close_btn' id='$task[id]'></button>";
+            }
+            else
+                $button = "<button class='btn' id='$task[id]'></button>";
+
+            $content .= "<form class='get_task mr-1 mt-2' method='POST'>
                             <input type='hidden' name='task_id' value='$task[id]'>
                             <input type='hidden' name='submit' value='true'>
                             <input type='hidden' name='code' value='get_task'>
@@ -49,7 +58,7 @@ class Render
         if((int)$users_progress["progress"]<10 && $_SESSION["rights"]!="admin")
             $disabled="disabled";
 
-        $content .= "<form class='get_task mr-1 supertest' method='POST'>
+        $content .= "<form class='get_task mr-1 mt-2 supertest' method='POST'>
                             <input type='hidden' name='supertest_id' value='$sptest[id]'>
                             <input type='hidden' name='theme_id' value='$theme[id]'>
                             <input type='hidden' name='submit' value='true'>
@@ -150,13 +159,16 @@ class Render
                             <div class='row m-0 mt-3 col-12 d-flex justify-content-center'><button class='btn send' type='submit'>Отправить</button></div>
                         </form>";
 
-        $b_type_task = "<form class='send_answer' method='POST' onsubmit='send_answer();return false;'>
+        $b_type_task = "<form class='send_answer container-fluid d-flex justify-content-center' method='POST' onsubmit='send_answer();return false;'>
                     <input type='hidden' name='submit' >
                     <input type='hidden' name='task_id' value='$task[id]'>
                     <input type='hidden' name='theme_id' value='$task[theme_id]'>
                     <input type='hidden' name='code' value='send_answer'>
-                    <input type='text' class='row' name='$task[id]_b_answer'><br>
-                    <div class='row d-flex justify-content-center'><button class='btn send' type='submit'>Отправить</button></div>
+                    <div class='row col-8'>
+                        <input type='text' class='col-8' name='$task[id]_b_answer'>
+                        <button class='btn send col-4 text-break' type='submit'>Отправить</button>
+                    </div>
+                    
                 </form>";
 
         $image_block = $task["img_url"]?"<img src='$task[img_url]' alt=''>":"";

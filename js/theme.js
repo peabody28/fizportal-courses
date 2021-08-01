@@ -1,5 +1,8 @@
 $('.get_task').submit(function ()
 {
+    $('.get_task').css('position', 'static');
+    $(this).css('position', 'relative');
+    $(this).css('top', '5px');
     $.ajax(
         {
             url: "/task.php",
@@ -9,7 +12,7 @@ $('.get_task').submit(function ()
             {
                 var task = JSON.parse(res)
                 console.log(task["block"])
-                $(".tt").html(task["block"])
+                $("#tt").html(task["block"])
                 $("#message").html("")
                 MathJax.typeset() // обновление mathjax
             }
@@ -41,7 +44,12 @@ function send_answer()
                     if(response["code"]=="TIME")
                         $("#content").html("<h2>Время решения темы истекло, возвращайтесь позже</h2>")
                     else
+                    {
+                        $("#"+response["task_id"]).css('background-color', '#d53e4f');
+                        $("#"+response["task_id"]).prop( "disabled", true );
                         $("#message").html("Неверный ответ!")
+                    }
+
                 }
 
             }

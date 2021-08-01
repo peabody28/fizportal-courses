@@ -12,7 +12,10 @@
 .get_task .supertest {
   height: 26px;
   width: 26px;
-  background-color: #cd1d1d;
+  background-color: #592ce0;
+}
+.get_task .red {
+  background-color: #d53e4f;
 }
 .create {
   background-color: #3d7f79;
@@ -41,6 +44,9 @@
   max-width: 100%;
   height: auto;
   max-height: 300px;
+}
+#task #tt {
+  background-color: #d9e6ef;
 }
 .opis p {
   display: flex;

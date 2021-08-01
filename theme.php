@@ -3,6 +3,7 @@ require_once __DIR__."/auth.php";
 require_once __DIR__."/classes/Themes_table.php";
 require_once __DIR__."/classes/Tasks_table.php";
 require_once __DIR__."/classes/Users_tasks_table.php";
+require_once __DIR__."/classes/Users_mistakes_table.php";
 require_once __DIR__."/classes/Professor.php";
 require_once __DIR__."/classes/Manager.php";
 require_once __DIR__."/classes/Supertests_table.php";
@@ -41,6 +42,9 @@ if ($tmp_theme)
                 // сделанные пользователем задачи
                 $users_tasks_table = new Users_tasks_table();
                 $users_tasks = $users_tasks_table->get_users_tasks($_SESSION["id"]);
+                //РО
+                $users_mistakes_table = new Users_mistakes_table();
+                $users_mistakes = $users_mistakes_table->read($_SESSION["id"]);
                 // прогресс
                 $users_progress_theme_table = new Users_progress_theme_table();
                 $users_progress = $users_progress_theme_table->read(["user_id"=>$_SESSION["id"], "theme_id"=>$tmp_theme["id"]]);
@@ -49,14 +53,14 @@ if ($tmp_theme)
                 $tmp_sptest = $supertests_table->read_by_theme($tmp_theme["id"]);
                 // рендер блоков задач и супертеста
                 $render = new Render();
-                $response = $render->render_tasks_theme($tmp_theme, $tasks_list, $users_tasks, $users_progress, $tmp_sptest);
+                $response = $render->render_tasks_theme($tmp_theme, $tasks_list, $users_tasks, $users_mistakes, $users_progress, $tmp_sptest);
                 $content = $response["content"];
 
                 if(count($tasks_list))
                 {
                     if(isset($_GET["text"]))
                         $content .="<div id='task' class='p-0 m-0 mt-5 pt-5 d-flex justify-content-center align-items-center row container-fluid'>
-                                        <div class='tt p-0 m-0 row container-fluid d-flex justify-content-center'>
+                                        <div id='tt' class='p-3 pt-5 m-0 ml-5 mr-5 row container-fluid d-flex justify-content-center'>
                                             <div class='col-12 m-0 p-0 d-flex justify-content-center h2'>Описание темы</div>
                                             <div class='col-12 m-0 p-0 d-flex justify-content-center h2'>$tmp_theme[text]</div>
                                         </div>
@@ -65,7 +69,7 @@ if ($tmp_theme)
                     {
                         // рендер первой задачи
                         $this_task = $tasks_list[0];
-                        $content .="<div id='task' class='p-0 m-0 mt-5 pt-5 d-flex justify-content-center align-items-center row container-fluid'><div class='tt p-0 m-0 row container-fluid d-flex justify-content-center'>";
+                        $content .="<div id='task' class='p-0 m-0 mt-5 pt-5 d-flex justify-content-center align-items-center row container-fluid'><div id='tt' class='p-3 pt-5 m-0 ml-5 mr-5 row container-fluid d-flex justify-content-center'>";
 
                         $tasks_block_constructor = new Tasks_block_constructor();
                         $response = $tasks_block_constructor->get_task_block($this_task["id"], ($_SESSION["rights"]=="admin"));
@@ -75,7 +79,7 @@ if ($tmp_theme)
                 }
                 else
                     $content .="<div id='task' class='p-0 m-0 mt-5 pt-5 d-flex justify-content-center align-items-center row container-fluid'>
-                                        <div class='tt p-0 m-0 row container-fluid d-flex justify-content-center'>
+                                        <div id='tt' class='p-0 m-0 row container-fluid d-flex justify-content-center'>
                                             <div class='col-12 m-0 p-0 d-flex justify-content-center h2'>Описание темы</div>
                                             <div class='col-12 m-0 p-0 d-flex justify-content-center h2'>$tmp_theme[text]</div>
                                         </div>
