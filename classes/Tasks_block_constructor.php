@@ -19,14 +19,14 @@ class Tasks_block_constructor
         $task_block = $block->render_task($tmp_task);
         if ($is_admin)
         {
-            $task_block .= "<div class='row justify-content-center'><a class='btn chg_task_btn' href='/change_task?id=$id'>Изменить задачу</a></div><br><br>";
-            $task_block .= " <div class='row d-flex justify-content-center'>
+            $task_block .= "<div class='col-12 mt-3 d-flex justify-content-center'><a class='btn chg_task_btn' href='/change_task?id=$id'>Изменить задачу</a></div>";
+            $task_block .= " <div class='col-12 mt-3 d-flex justify-content-center'>
                                                 <button class='btn del_task' onclick='del_task($id);return false;'>Удалить эту задачу</button>
-                             </div><br><br>";
+                             </div>";
         }
         // материалы для задачи
-        $task_block .= "<div class='row justify-content-center h2' id='message'></div>";
-        $task_block .= "<br><br><div class='row justify-content-center'> <a href='/materials?task_id=$id'>Материалы для задачи</a></div>";
+        $task_block .= "<div class='h2 d-flex justify-content-center col-12 mt-3' id='message'></div>";
+        $task_block .= "<div class='col-12 mt-5 d-flex justify-content-center'> <a href='/materials?task_id=$tmp_task[id]'>Материалы для задачи</a></div>";
         return ["block"=>$task_block];
 
     }
@@ -40,8 +40,8 @@ class Tasks_block_constructor
 
         $task_block = $block->render_mistake($tmp_task);
         // материалы для задачи
-        $task_block .= "<div class='row justify-content-center h2' id='message'></div>";
-        $task_block .= "<br><br><div class='row justify-content-center'> <a href='/materials?task_id=$id'>Материалы для задачи</a></div>";
+        $task_block .= "<div class='h2 d-flex justify-content-center col-12 mt-3' id='message'></div>";
+        $task_block .= "<div class='col-12 mt-5 d-flex justify-content-center'> <a href='/materials?task_id=$tmp_task[id]'>Материалы для задачи</a></div>";
         return ["block"=>$task_block];
     }
 
@@ -64,12 +64,11 @@ class Tasks_block_constructor
         $supertest = new Render();
         $supertests_block = "";
         if ($is_admin)
-            $supertests_block .= "<div class='row justify-content-center'><a class='btn add_task_to_supertest_btn' href='/add_task?supertest_id=$sptest_id'>Добавить задачу в супертест</a></div><br><br>";
-
+            $supertests_block .= "<div class='col-12 d-flex justify-content-center mb-5'><a class='btn add_task_to_supertest_btn' href='/add_task?supertest_id=$sptest_id'>Добавить задачу в супертест</a></div>";
         if ($supertests_tasks_rows)
         {
             $supertests_block .=
-                "<form class='send_answer' method='POST' onsubmit='send_answer();return false;'>
+                "<form class='send_answer col-12' method='POST' onsubmit='send_answer();return false;'>
                                     <input type='hidden' name='submit'>
                                     <input type='hidden' name='code' value='send_supertest_answers'>
                                     <input type='hidden' name='theme_id' value='$theme_id'>";
@@ -79,15 +78,15 @@ class Tasks_block_constructor
                 $supertests_block .= $supertest->render_supertest_task($task);
                 if ($is_admin)
                 {
-                    $supertests_block .= "<div class='row justify-content-center'><a class='btn chg_task_btn' href='/change_task?id=$task[id]'>Изменить задачу</a></div><br><br>";
-                    $supertests_block .= " <div class='row d-flex justify-content-center'>
+                    $supertests_block .= "<div class='col-12 mt-3 d-flex justify-content-center'><a class='btn chg_task_btn' href='/change_task?id=$task[id]'>Изменить задачу</a></div>";
+                    $supertests_block .= " <div class='col-12 mt-3 d-flex justify-content-center'>
                                                 <button class='btn del_task' onclick='del_task($task[id]);return false;'>Удалить эту задачу</button>
                                            </div><br><br>";
                 }
             }
         }
-        $supertests_block .= "<div class='row justify-content-center h2' id='message'></div>";
-        $supertests_block .= "<div class='row m-0 col-12 d-flex justify-content-center'><button class='btn send' type='submit'>Отправить</button></div>";
+        $supertests_block .= "<hr><div class='m-0 col-12 mt-5 d-flex justify-content-center'><button class='btn send' type='submit'>Отправить</button></div>";
+        $supertests_block .= "<div class='col-12 mt-3 d-flex justify-content-center h2' id='message'></div>";
         $supertests_block .= "</form><br>";
         return ["block"=>$supertests_block];
     }

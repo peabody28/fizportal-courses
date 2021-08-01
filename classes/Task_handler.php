@@ -40,6 +40,7 @@ class Task_handler
         }
         else
         {
+            $resp = ["status" => "ERROR"];
             $users_tasks = $users_tasks_table->read($_SESSION["id"]);
 
             if(!in_array(["user_id"=>$_SESSION["id"], "task_id"=>$this->data["task_id"]], $users_tasks)) // если пользователь эту задачу еще не решал
@@ -57,9 +58,9 @@ class Task_handler
                     $users_progress_theme_table = new Users_progress_theme_table();
                     $users_progress_theme_table->delete_point(["user_id"=>$_SESSION["id"], "theme_id"=>$this->data["theme_id"]]);
                 }
-
+                $resp["task_id"] = $this->data["task_id"];
             }
-            return ["status" => "ERROR"];
+            return $resp;
         }
 
     }
