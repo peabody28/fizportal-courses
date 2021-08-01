@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>{{ title }}</title>
+    <title>login</title>
     <script src="/vendor/components/jquery/jquery.js"></script>
     <link rel="stylesheet" href="/vendor/twbs/bootstrap/dist/css/bootstrap.css">
     <link rel="stylesheet" href="/css/in.css">
@@ -14,9 +14,9 @@
             <div class="row justify-content-center align-items-center">
                 <div class="col-md-offset-3 col-12 col-sm-12">
                     <form id="form" method="POST" class="form-horizontal">
-                        <div id="lb">{{ nm }}</div>
+                        <div id="lb">ВХОД</div>
                         <div class="form-group">
-                            <input type="text" class="form-control" placeholder="Имя" autocomplete="off" name="name">
+                            <input type="text" class="form-control" placeholder="Имя или email" autocomplete="off" name="name_or_email">
                         </div>
                         <div class="form-group">
                             <input type="password" class="form-control" placeholder="Пароль" name="password">
@@ -28,11 +28,11 @@
                         </div>
                         <div class='row' id='down'>
                             <div id='bt' class='col-12 col-md-auto'>
-                                <button type="submit" class="btn btn-default" >{{ btn_text }}</button>
+                                <button type="submit" class="btn btn-default" >Войти</button>
                                 <input type="hidden" name="submit" value="true">
                             </div>
                             <div id='reg' class='col-12 col-md-auto my-2 my-md-0'>
-                                <a href='{{ a_href }}'>{{ a_text }}</a>
+                                <a href='/signup'>Регистрация</a>
                             </div>
                         </div>
                         </div>
@@ -44,7 +44,7 @@
             </div>
         </div>
     </div>
-    <script src="{{ js }}"></script>
+    <script src="/js/login.js"></script>
     <script src="/vendor/twbs/bootstrap/dist/js/bootstrap.js"></script>
 </body>
 </html>

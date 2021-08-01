@@ -13,6 +13,7 @@ if (isset($data["submit"]))
     // создание объекта пользователя
     $user = new User();
     $user->name = $data["name"];
+    $user->email = $data["email"];
     $user->password = $data["password"];
     // валидация данных
     $validator = new Validator();
@@ -23,9 +24,12 @@ if (isset($data["submit"]))
     {
         // проверка на доступность имени
         $users_table = new Users_table();
-        $user_data = $users_table->check_existence_username($user->name); //id найденного пользователя
-        if($user_data)
+        $name_status = $users_table->check_existence_username($user->name); //id найденного пользователя
+        $email_status = $users_table->check_existence_email($user->email); //id найденного пользователя
+        if($name_status)
            $response = ["status"=>"ERROR", "error"=>"Это имя занято"];
+        else if($email_status)
+            $response = ["status"=>"ERROR", "error"=>"Данный email уже зарегестрирован"];
         else
         {
             // добавление в базу
@@ -52,9 +56,5 @@ if (isset($data["submit"]))
 }
 else
 {
-    $page = new Render();
-    $page->temp = 'login.html';
-    $page->argv = ['title'=>"signup", 'nm'=>"РЕГИСТРАЦИЯ",
-        'btn_text'=>"Создать", 'a_href'=>"/login", 'a_text'=>"Войти", "js"=>"/js/signup.js"] ;
-    echo $page->render_temp();
+    echo file_get_contents("templates/signup.html");
 }

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>signup</title>
+  <script src="/vendor/components/jquery/jquery.js"></script>
+  <link rel="stylesheet" href="/vendor/twbs/bootstrap/dist/css/bootstrap.css">
+  <link rel="stylesheet" href="/css/in.css">
+</head>
+<body>
+<div id="wrapper" class="container-fluid justify-content-center align-items-center">
+  <div class="container col-12 col-sm-5 col-lg-4 col-xl-3">
+    <div class="row justify-content-center align-items-center">
+      <div class="col-md-offset-3 col-12 col-sm-12">
+        <form id="form" method="POST" class="form-horizontal">
+          <div id="lb">РЕГИСТРАЦИЯ</div>
+          <div class="form-group">
+            <input type="text" class="form-control" placeholder="Имя" autocomplete="off" name="name">
+          </div>
+          <div class="form-group">
+            <input type="text" class="form-control" placeholder="Email" autocomplete="off" name="email">
+          </div>
+          <div class="form-group">
+            <input type="password" class="form-control" placeholder="Пароль" name="password">
+          </div>
+          <div class="form-group container">
+            <div class="main-checkbox">
+              <input type="checkbox" name="check">
+              <label >Запомнить</label>
+            </div>
+            <div class='row' id='down'>
+              <div id='bt' class='col-12 col-md-auto'>
+                <button type="submit" class="btn btn-default" >Создать</button>
+                <input type="hidden" name="submit" value="true">
+              </div>
+              <div id='reg' class='col-12 col-md-auto my-2 my-md-0'>
+                <a href='/login'>Войти</a>
+              </div>
+            </div>
+          </div>
+          <div class="form-group col-12">
+            <div id="error"></div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<script src="/js/signup.js"></script>
+<script src="/vendor/twbs/bootstrap/dist/js/bootstrap.js"></script>
+</body>
+</html>
