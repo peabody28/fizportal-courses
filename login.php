@@ -9,21 +9,22 @@ $data = $_POST;
 
 if (isset($data["submit"]))
 {
-    $user = new User();
-    $user->name = $data["name"];
 
-    if($user->name=="" or $data["password"]=="")
+    if($data["name_or_email"]=="" or $data["password"]=="")
         $response = ["status"=>"ERROR", "error"=>"Заполни поля"];
     else
     {
         // поиск в базе пользователей
         $users_table = new Users_table();
-        $user_data = $users_table->check_existence_username($user->name); //данные найденного пользователя
+        $user_data = $users_table->check_existence($data["name_or_email"]); //данные найденного пользователя
         if($user_data)
         {
             if($user_data["password"] == md5(md5($data["password"])))
             {
                 // дополняю обьект данными из БД
+                $user = new User();
+                $user->name = $user_data["name"];
+                $user->email = $user_data["email"];
                 $user->id = $user_data["id"];
                 $user->password = $data["password"];
                 $user->rights = $user_data["rights"];
@@ -47,16 +48,12 @@ if (isset($data["submit"]))
                 $response = ["status"=>"ERROR", "error"=>"Неверный пароль"];
         }
         else
-            $response = ["status"=>"ERROR", "error"=>"Такое имя не зарегестрировано"];
+            $response = ["status"=>"ERROR", "error"=>"Не удалось вас найти"];
     }
     echo json_encode($response);
 }
 else
 {
-    $page = new Render();
-    $page->temp = 'login.html';
-    $page->argv = ['title'=>"login", 'nm'=>"ВХОД",
-        'btn_text'=>"Войти", 'a_href'=>"/signup", 'a_text'=>"создать акк", "js"=>"/js/login.js"]  ;
-    echo $page->render_temp();
+    echo file_get_contents("templates/login.html");
 }
 

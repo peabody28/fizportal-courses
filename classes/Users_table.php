@@ -8,7 +8,7 @@ class Users_table implements Table
     public function create($user): bool
     {
         global $link;
-        $sql = sprintf("INSERT INTO users(name, password, hash) VALUES ('%s', '%s', '%s')", $user->name, md5(md5($user->password)), $user->hash );
+        $sql = sprintf("INSERT INTO users(name, email, password, hash) VALUES ('%s','%s', '%s', '%s')", $user->name, $user->email, md5(md5($user->password)), $user->hash );
         $result = mysqli_query($link, $sql);
         $user->id = mysqli_insert_id($link);
         return $result;
@@ -35,6 +35,23 @@ class Users_table implements Table
     {
         global $link;
         $sql = sprintf("SELECT * FROM users WHERE name = '%s'", $name);
+        $result = mysqli_query($link, $sql);
+        $user_data = mysqli_fetch_array($result, MYSQLI_ASSOC);
+        return $user_data;
+    }
+    public function check_existence_email($email)
+    {
+        global $link;
+        $sql = sprintf("SELECT * FROM users WHERE email = '%s'", $email);
+        $result = mysqli_query($link, $sql);
+        $user_data = mysqli_fetch_array($result, MYSQLI_ASSOC);
+        return $user_data;
+    }
+
+    public function check_existence($str)
+    {
+        global $link;
+        $sql = sprintf("SELECT * FROM users WHERE name = '%s' OR email = '%s'", $str, $str);
         $result = mysqli_query($link, $sql);
         $user_data = mysqli_fetch_array($result, MYSQLI_ASSOC);
         return $user_data;
