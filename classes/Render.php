@@ -138,7 +138,7 @@ class Render
         $content .=
             "
             <div class='row opis m-0 p-0 mb-3 d-flex justify-content-center container-fluid'>
-                <div class='col-12 m-0 p-0 text-break fs-6'>$task[text]</div>
+                <div class='col-12 m-0 p-0 text-break'>$task[text]</div>
             </div>
             <div class='container-fluid row m-0 mt-2 p-0 d-flex justify-content-center'>";
 

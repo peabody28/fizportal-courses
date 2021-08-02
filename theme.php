@@ -76,17 +76,17 @@ if ($tmp_theme)
                 if(count($tasks_list))
                 {
                     if(isset($_GET["text"]))
-                        $content .="<div id='task' class='p-0 m-0 mt-5 pt-5 d-flex justify-content-center align-items-center row container-fluid'>
-                                        <div id='tt' class='p-3 pt-5 m-0 ml-5 mr-5 row container-fluid d-flex justify-content-center'>
-                                            <div class='col-12 m-0 p-0 d-flex justify-content-center h2'>Описание темы</div>
-                                            <div class='col-12 m-0 p-0 d-flex justify-content-center h2'>$tmp_theme[text]</div>
+                        $content .="<div id='task' class='p-0 m-0 mt-5 pt-md-5 d-flex justify-content-center align-items-center row container-fluid'>
+                                        <div id='tt' class='p-3 pt-5 m-0 ml-md-5 mr-md-5 row container-fluid d-flex justify-content-center'>
+                                            <div class='col-12 m-0 p-0 d-flex justify-content-center'>Описание темы</div>
+                                            <div class='col-12 m-0 p-0 d-flex justify-content-center'>$tmp_theme[text]</div>
                                         </div>
                                </div>";
                     else
                     {
                         // рендер первой задачи
                         $this_task = $tasks_list[0];
-                        $content .="<div id='task' class='p-0 m-0 mt-5 pt-5 d-flex justify-content-center align-items-center row container-fluid'>
+                        $content .="<div id='task' class='p-0 m-0 mt-5 pt-md-5 d-flex justify-content-center align-items-center row container-fluid'>
                                         <div id='tt' class='p-4 pt-5 m-0 ml-md-5 mr-md-5 row container-fluid d-flex justify-content-center'>";
 
                         $tasks_block_constructor = new Tasks_block_constructor();
@@ -96,10 +96,10 @@ if ($tmp_theme)
                     }
                 }
                 else
-                    $content .="<div id='task' class='p-0 m-0 mt-5 pt-5 d-flex justify-content-center align-items-center row container-fluid'>
-                                        <div id='tt' class='p-0 m-0 row container-fluid d-flex justify-content-center'>
-                                            <div class='col-12 m-0 p-0 d-flex justify-content-center h2'>Описание темы</div>
-                                            <div class='col-12 m-0 p-0 d-flex justify-content-center h2'>$tmp_theme[text]</div>
+                    $content .="<div id='task' class='p-0 m-0 mt-5 pt-md-5 d-flex justify-content-center align-items-center row container-fluid'>
+                                        <div id='tt' class='p-3 pt-5 m-0 ml-md-5 mr-md-5 row container-fluid d-flex justify-content-center'>
+                                            <div class='col-12 m-0 p-0 d-flex justify-content-center'>Описание темы</div>
+                                            <div class='col-12 m-0 p-0 d-flex justify-content-center'>$tmp_theme[text]</div>
                                         </div>
                                </div>";
             }

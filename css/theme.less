@@ -64,7 +64,9 @@
     max-height: 300px
   }
 
-  min-height: 800px;
+  @media (min-width: 576px) {
+    min-height: 800px;
+  }
   #tt
   {
     background-color: #d9e6ef;
@@ -84,3 +86,13 @@
   }
 }
 
+#tt
+{
+   // адаптивный шрифт текста задачи
+    @media (max-width: 576px) {
+      font-size: 15px;
+    }
+    @media (min-width: 576px) {
+      font-size: 20px;
+    }
+}

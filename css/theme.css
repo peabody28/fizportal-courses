@@ -37,13 +37,15 @@
 .add_task_to_supertest_btn {
   background-color: #cd7857;
 }
-#task {
-  min-height: 800px;
-}
 #task img {
   max-width: 100%;
   height: auto;
   max-height: 300px;
+}
+@media (min-width: 576px) {
+  #task {
+    min-height: 800px;
+  }
 }
 #task #tt {
   background-color: #d9e6ef;
@@ -55,5 +57,15 @@
 }
 .ch_b label {
   width: 100%;
+}
+@media (max-width: 576px) {
+  #tt {
+    font-size: 15px;
+  }
+}
+@media (min-width: 576px) {
+  #tt {
+    font-size: 20px;
+  }
 }
 /*# sourceMappingURL=theme.css.map */
