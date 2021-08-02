@@ -56,7 +56,7 @@ if ($tmp_theme)
                 $render = new Render();
                 $tasks_blocks = $render->render_tasks_theme($tmp_theme, $tasks_list, $users_tasks, $users_mistakes, $users_progress, $tmp_sptest);
                 $content = $tasks_blocks["content"];
-
+                // время
                 if(isset($response["sec"]))
                 {
                     $class = ($response["status"]===true)?"in_process":"lock";
@@ -69,10 +69,11 @@ if ($tmp_theme)
                         $min_null = "0";
                     if((int)($response["sec"]/10)==0)
                         $sec_null = "0";
-                    $content .= "<br><div class='row m-0 p-0 h2 $class'><div id='hours'>$hours_null$response[hours]</div>:<div id='min'>$min_null$response[min]</div>:<div id='sec'>$sec_null$response[sec]</div></div>";
+                    $content .= "<br><div class='row m-0 p-0 ml-3 h2 $class'><div id='hours'>$hours_null$response[hours]</div>:<div id='min'>$min_null$response[min]</div>:<div id='sec'>$sec_null$response[sec]</div></div>";
                 }
 
-
+                // кнопка "назад к темам"
+                $content .= "<br> <a class='btn ml-3' id='back_to_themes_btn' href='/course?id=$tmp_theme[course_id]'>Назад к темам</a>";
                 if(count($tasks_list))
                 {
                     if(isset($_GET["text"]))
