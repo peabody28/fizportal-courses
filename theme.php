@@ -91,7 +91,7 @@ if ($tmp_theme)
                                         <div id='tt' class='p-4 pt-5 m-0 ml-md-5 mr-md-5 row container-fluid d-flex justify-content-center'>";
 
                         $tasks_block_constructor = new Tasks_block_constructor();
-                        $response = $tasks_block_constructor->get_task_block($this_task["id"], ($_SESSION["rights"]=="admin"));
+                        $response = $tasks_block_constructor->get_task_block($this_task["id"], $tasks_list[1]["id"], ($_SESSION["rights"]=="admin"));
                         $content .= $response["block"];
                         $content .= "</div></div><br>";
                     }

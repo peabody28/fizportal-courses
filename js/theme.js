@@ -11,7 +11,6 @@ $('.get_task').submit(function ()
             success: function (res)
             {
                 var task = JSON.parse(res)
-                console.log(task["block"])
                 $("#tt").html(task["block"])
                 $("#message").html("")
                 MathJax.typeset() // обновление mathjax
@@ -20,6 +19,13 @@ $('.get_task').submit(function ()
     )
     return false;
 })
+
+function get_next_task(id)
+{
+    var next = $('#'+id).parent()
+    next.submit()
+}
+
 
 function send_answer()
 {

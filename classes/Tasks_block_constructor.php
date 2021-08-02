@@ -9,14 +9,14 @@ require_once __DIR__."/Professor.php";
 
 class Tasks_block_constructor
 {
-    public function get_task_block($id, $is_admin=false)
+    public function get_task_block($id, $next_id=null, $is_admin=false)
     {
         $tasks_table = new Tasks_table();
         $tmp_task = $tasks_table->read($id);
 
         $block = new Render();
 
-        $task_block = $block->render_task($tmp_task);
+        $task_block = $block->render_task($tmp_task, $next_id, 0);
         if ($is_admin)
         {
             $task_block .= "<div class='col-12 mt-3 d-flex justify-content-center'><a class='btn chg_task_btn' href='/change_task?id=$id'>Изменить задачу</a></div>";
