@@ -79,11 +79,10 @@ class Render
                             <button class='btn supertest' $disabled></button>
                          </form>";
 
+        $content .= "</div>" ; // закрыл блок с квадратами задач
         // кнопка "добавить задачу"
         if ($_SESSION["rights"]=="admin")
-            $content .="<a class='btn ml-3 create add_task' href='/add_task?theme_id=$theme[id]'>Добавить задачу</a>";
-
-        $content .= "</div>" ; // закрыл блок с квадратами задач
+            $content .="<div class='row m-0 mt-3 p-0 pl-3'><a class='btn create add_task' href='/add_task?theme_id=$theme[id]'>Добавить задачу</a></div>";
 
         return ["content"=>$content];
 

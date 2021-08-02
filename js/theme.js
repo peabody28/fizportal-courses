@@ -1,3 +1,10 @@
+
+var first = $('.get_text_theme').next()
+first.css('position', 'relative');
+first.css('top', '5px');
+
+var intervalId = 0;
+
 $('.get_task').submit(function ()
 {
     $('.get_task').css('position', 'static');
@@ -58,6 +65,7 @@ function send_answer()
                     }
 
                 }
+
                 if($('.lock').length)
                 {
                     $('.lock').toggleClass('lock').toggleClass('in_process');
@@ -70,20 +78,23 @@ function send_answer()
     return false;
 }
 
-$('#send_supertest_answers').submit(function ()
+function send_supertest_answers()
 {
+    console.log($('.send_supertest_answers').serialize())
     $.ajax(
         {
             url: "/task.php",
             type: "POST",
-            data: $('#send_supertest_answers').serialize(),
+            data: $('.send_supertest_answers').serialize(),
             success: function (res)
             {
                 var response = JSON.parse(res)
                 if (response["status"]=="OK")
                 {
                     $("#message").html("Верно!")
-                    $(".supertest").css('background-color', '#50C878');
+                    // стопаю таймер
+                    if (intervalId)
+                        clearInterval(intervalId)
                 }
                 else
                     $("#message").html("Неверный ответ!")
@@ -91,7 +102,7 @@ $('#send_supertest_answers').submit(function ()
         }
     )
     return false;
-})
+}
 
 function del_task(id)
 {
@@ -116,7 +127,7 @@ function inter() {
     var Minutes = $('#min').text(), int;
     var Hours = $('#hours').text(), int;
 
-    int = setInterval(function () { // запускаем интервал
+    intervalId = setInterval(function () { // запускаем интервал
         if (Seconds > 0)
         {
             Seconds--; // вычитаем 1
