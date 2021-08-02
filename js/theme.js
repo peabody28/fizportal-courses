@@ -46,6 +46,8 @@ function send_answer()
                 var response = JSON.parse(res)
                 if (response["status"]=="OK")
                 {
+                    $('#message').addClass("green_mess")
+                    $('#message').removeClass("red_mess")
                     $("#message").html("Верно!")
                     $("#"+response["task_id"]).css('background-color', '#50C878');
                     if(response["progress"]>=10)
@@ -59,9 +61,11 @@ function send_answer()
                         $("#message").html("Вы сможете решить эту задачу в работе над ошибками")
                     else
                     {
+                        $('#message').addClass("red_mess")
+                        $('#message').removeClass("green_mess")
+                        $("#message").html("Неверный ответ!")
                         $("#"+response["task_id"]).css('background-color', '#d53e4f');
                         $("#"+response["task_id"]).prop( "disabled", true );
-                        $("#message").html("Неверный ответ!")
                     }
 
                 }

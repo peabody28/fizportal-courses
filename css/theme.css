@@ -1,9 +1,6 @@
 #back_to_themes_btn {
   background-color: #d5a03e;
 }
-.izm {
-  background-color: #466b9b;
-}
 .get_task .btn {
   height: 26px;
   width: 26px;
@@ -19,9 +16,6 @@
 }
 .get_task .red {
   background-color: #d53e4f;
-}
-.create {
-  background-color: #3d7f79;
 }
 .get_text_theme {
   height: 26px;
@@ -52,6 +46,27 @@
 }
 #task #tt {
   background-color: #d9e6ef;
+}
+#task #tt #message {
+  min-height: 50px;
+}
+@media (max-width: 576px) {
+  #task #tt #message {
+    font-size: 20px;
+  }
+}
+@media (min-width: 576px) {
+  #task #tt #message {
+    font-size: 25px;
+  }
+}
+#task #tt .red_mess {
+  color: #d53e4f;
+  font-weight: bold;
+}
+#task #tt .green_mess {
+  color: #50C878;
+  font-weight: bold;
 }
 .ch_b input {
   width: 100%;
