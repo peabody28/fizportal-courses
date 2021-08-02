@@ -33,7 +33,7 @@ class Render
         $content = "<div class='row container-fluid justify-content-start m-0 p-0 pl-3'>";
         $content .= "<a class='btn get_text_theme mr-1 mt-2' href='/theme?id=$theme[id]&text'></a>";
         // отображение квадратов задачи
-        $c= count($tasks_list);
+
         for($i=0; $i<count($tasks_list); $i++)
         {
             $task = $tasks_list[$i];
@@ -92,22 +92,36 @@ class Render
     {
         $content = "<div class='row container-fluid justify-content-start m-0 p-0 pl-3'>";
 
-        foreach ($mistakes as $task) {
+        for($i=0; $i<count($mistakes); $i++)
+        {
+            $task = $mistakes[$i];
+            $last = ($i==count($mistakes)-1);
+
+            if(!$last)
+            {
+                $nt_id = $mistakes[$i+1]["id"];
+                $next_task = "<input type='hidden' name='next_task_id' value='$nt_id'>";
+            }
+            else
+                $next_task = "";
+
             $content .= "<form class='get_mistake mr-1' method='POST'>
                             <input type='hidden' name='task_id' value='$task[id]'>
                             <input type='hidden' name='submit' value='true'>
                             <input type='hidden' name='code' value='get_mistake'>
+                            $next_task
                             <button class='btn close_btn' id='$task[id]'></button>
                          </form>";
         }
+
         $content .= "</div><br><br>" ; // закрыл блок с квадратами задач
 
         return $content;
     }
 
-    public function render_mistake($task)
+    public function render_mistake($task, $next_id)
     {
-        return $this->render_task($task, null,1);
+        return $this->render_task($task, $next_id,1);
     }
 
     public function render_task($task, $next_id, $is_mistake=false)
@@ -116,7 +130,7 @@ class Render
         $code = $is_mistake?"send_mistake_answer":"send_answer";
 
         $content = "";
-        $a_type_task = "<form method='POST' class='send_answer p-0 m-0 row container-fluid' onsubmit='$func;return false;'>
+        $a_type_task = "<form method='POST' class='$code p-0 m-0 row container-fluid' onsubmit='$func;return false;'>
                             <input type='hidden' name='submit' >
                             <input type='hidden' name='task_id' value='$task[id]'>
                             <input type='hidden' name='theme_id' value='$task[theme_id]'>
@@ -133,7 +147,7 @@ class Render
                             <div class='row m-0 mt-3 col-12 d-flex justify-content-center'><button class='btn send' type='submit'>Отправить</button></div>
                         </form>";
 
-        $b_type_task = "<form class='send_answer container-fluid d-flex justify-content-center m-0 p-0' method='POST' onsubmit='$func;return false;'>
+        $b_type_task = "<form class='$code container-fluid d-flex justify-content-center m-0 p-0' method='POST' onsubmit='$func;return false;'>
                     <input type='hidden' name='submit' >
                     <input type='hidden' name='task_id' value='$task[id]'>
                     <input type='hidden' name='theme_id' value='$task[theme_id]'>

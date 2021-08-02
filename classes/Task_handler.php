@@ -85,10 +85,10 @@ class Task_handler
             $users_mistakes_table = new Users_mistakes_table();
             $users_mistakes_table->delete(["user_id"=>$_SESSION["id"], "task_id"=>$this->data["task_id"]]);
 
-            return ["status" => "OK"];
+            return ["status" => "OK", "task_id"=>$this->data["task_id"]];
         }
         else
-            return ["status" => "ERROR"];
+            return ["status" => "ERROR", "task_id"=>$this->data["task_id"]];
     }
 
     public function send_supertest_answer()

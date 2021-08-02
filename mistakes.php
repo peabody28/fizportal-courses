@@ -4,6 +4,7 @@ require_once __DIR__ . "/classes/Render.php";
 require_once __DIR__ . "/classes/Themes_table.php";
 require_once __DIR__ . "/classes/Users_mistakes_table.php";
 require_once __DIR__ . "/classes/Tasks_table.php";
+require_once __DIR__ . "/classes/Tasks_block_constructor.php";
 require_once __DIR__ . "/classes/Professor.php";
 session_start();
 
@@ -35,7 +36,16 @@ if (isset($_GET["theme_id"])) {
                 $render = new Render();
                 $content .= $render->render_mistakes($mistakes);
 
-                $content .= "<div id='task' class='p-0 m-0 mt-5 pt-5 d-flex justify-content-center align-items-center row container-fluid'><div class='tt p-0 m-0 row container-fluid d-flex justify-content-center'></div></div>";
+                $content .="<div id='task' class='p-0 m-0 mt-5 pt-md-5 d-flex justify-content-center align-items-center row container-fluid'>
+                                <div id='tt' class='p-4 pt-5 m-0 ml-md-5 mr-md-5 row container-fluid d-flex justify-content-center'>";
+
+                $this_task = $mistakes[0];
+
+                $tasks_block_constructor = new Tasks_block_constructor();
+                $response = $tasks_block_constructor->get_mistake_block($this_task["id"], $mistakes[1]["id"]);
+                $content .= $response["block"];
+                $content.=" </div></div>";
+
                 $page = new Render();
                 $page->temp = 'main.html';
                 $page->argv = ['title' => "mistakes",

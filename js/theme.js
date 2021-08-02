@@ -1,10 +1,9 @@
-
 var first = $('.get_text_theme').next()
+first.css('position', 'static');
 first.css('position', 'relative');
 first.css('top', '5px');
 
-var intervalId = 0;
-
+>>>>>>> design
 $('.get_task').submit(function ()
 {
     $('.get_task').css('position', 'static');
