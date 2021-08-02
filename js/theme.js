@@ -3,7 +3,6 @@ first.css('position', 'static');
 first.css('position', 'relative');
 first.css('top', '5px');
 
->>>>>>> design
 $('.get_task').submit(function ()
 {
     $('.get_task').css('position', 'static');
