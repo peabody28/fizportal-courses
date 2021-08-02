@@ -95,58 +95,20 @@ class Render
 
     public function render_mistake($task)
     {
-        $content = "";
-        $a_type_task = "<form method='POST' class='send_answer p-0 m-0 row container-fluid' onsubmit='send_mistake_answer();return false;'>
-                            <input type='hidden' name='submit' >
-                            <input type='hidden' name='task_id' value='$task[id]'>
-                            <input type='hidden' name='theme_id' value='$task[theme_id]'>
-                            <input type='hidden' name='code' value='send_mistake_answer'>
-                            <div class='col-12 m-0 p-0 d-flex justify-content-center container'>
-                                <div class='row m-0 p-0 col-12 col-md-5 row d-flex justify-content-between'>
-                                    <div class='col-1 container m-0 p-0 ch_b'><input  class='check-input' type='checkbox' name='$task[id]_a_answ1'  value='1' ><br><label class='form-check-label d-flex justify-content-center'>1</label></div>
-                                    <div class='col-1 container m-0 p-0 ch_b'><input  class='check-input' type='checkbox' name='$task[id]_a_answ2'  value='2' ><br><label class='form-check-label d-flex justify-content-center'>2</label></div>
-                                    <div class='col-1 container m-0 p-0 ch_b'><input  class='check-input' type='checkbox' name='$task[id]_a_answ3'  value='3' ><br><label class='form-check-label d-flex justify-content-center'>3</label></div>
-                                    <div class='col-1 container m-0 p-0 ch_b'><input  class='check-input' type='checkbox' name='$task[id]_a_answ4'  value='4' ><br><label class='form-check-label d-flex justify-content-center'>4</label></div>
-                                    <div class='col-1 container m-0 p-0 ch_b'><input  class='check-input' type='checkbox' name='$task[id]_a_answ5'  value='5' ><br><label class='form-check-label d-flex justify-content-center'>5</label></div>
-                                </div>
-                            </div>
-                            <div class='row m-0 mt-3 col-12 d-flex justify-content-center'><button class='btn send' type='submit'>Отправить</button></div>
-                        </form>";
-
-        $b_type_task = "<form class='send_answer' method='POST' onsubmit='send_mistake_answer();return false;'>
-                    <input type='hidden' name='submit' >
-                    <input type='hidden' name='task_id' value='$task[id]'>
-                    <input type='hidden' name='theme_id' value='$task[theme_id]'>
-                    <input type='hidden' name='code' value='send_mistake_answer'>
-                    <input type='text' class='row' name='$task[id]_b_answer'><br>
-                    <div class='row d-flex justify-content-center'><button class='btn send' type='submit'>Отправить</button></div>
-                </form>";
-
-        $image_block = $task["img_url"]?"<img src='$task[img_url]' alt=''>":"";
-        $task["text"] = str_replace("{{ img }}", "<br><div class='container-fluid row d-flex justify-content-center m-0 p-0 '>".$image_block."</div><br>", $task["text"]);
-        $content .=
-            "
-            <div class='row opis m-0 p-0 mb-3 d-flex justify-content-center container-fluid'>
-                <div class='col-8 m-0 p-0 text-break h5'>$task[text]</div>
-            </div>
-            <div class='container-fluid row m-0 mt-2 p-0 d-flex justify-content-center'>";
-
-
-        $content .= ($task["type"]=="A")?$a_type_task:$b_type_task;
-
-        $content .= "</div>";
-
-        return $content;
+        return $this->render_task($task, 1);
     }
 
-    public function render_task($task)
+    public function render_task($task, $is_mistake=false)
     {
+        $func = $is_mistake?"send_mistake_answer()":"send_answer()";
+        $code = $is_mistake?"send_mistake_answer":"send_answer";
+
         $content = "";
-        $a_type_task = "<form method='POST' class='send_answer p-0 m-0 row container-fluid' onsubmit='send_answer();return false;'>
+        $a_type_task = "<form method='POST' class='send_answer p-0 m-0 row container-fluid' onsubmit='$func;return false;'>
                             <input type='hidden' name='submit' >
                             <input type='hidden' name='task_id' value='$task[id]'>
                             <input type='hidden' name='theme_id' value='$task[theme_id]'>
-                            <input type='hidden' name='code' value='send_answer'>
+                            <input type='hidden' name='code' value='$code'>
                             <div class='col-12 m-0 p-0 d-flex justify-content-center container'>
                                 <div class='row m-0 p-0 col-12 col-md-5 row d-flex justify-content-between'>
                                     <div class='col-1 container m-0 p-0 ch_b'><input  class='check-input' type='checkbox' name='$task[id]_a_answ1'  value='1' ><br><label class='form-check-label d-flex justify-content-center'>1</label></div>
@@ -159,12 +121,12 @@ class Render
                             <div class='row m-0 mt-3 col-12 d-flex justify-content-center'><button class='btn send' type='submit'>Отправить</button></div>
                         </form>";
 
-        $b_type_task = "<form class='send_answer container-fluid d-flex justify-content-center' method='POST' onsubmit='send_answer();return false;'>
+        $b_type_task = "<form class='send_answer container-fluid d-flex justify-content-center m-0 p-0' method='POST' onsubmit='$func;return false;'>
                     <input type='hidden' name='submit' >
                     <input type='hidden' name='task_id' value='$task[id]'>
                     <input type='hidden' name='theme_id' value='$task[theme_id]'>
-                    <input type='hidden' name='code' value='send_answer'>
-                    <div class='row col-8'>
+                    <input type='hidden' name='code' value='$code'>
+                    <div class='row p-0 m-0 col-12'>
                         <input type='text' class='col-8' name='$task[id]_b_answer'>
                         <button class='btn send col-4 text-break' type='submit'>Отправить</button>
                     </div>
@@ -176,7 +138,7 @@ class Render
         $content .=
             "
             <div class='row opis m-0 p-0 mb-3 d-flex justify-content-center container-fluid'>
-                <div class='col-8 m-0 p-0 text-break h5'>$task[text]</div>
+                <div class='col-12 m-0 p-0 text-break fs-6'>$task[text]</div>
             </div>
             <div class='container-fluid row m-0 mt-2 p-0 d-flex justify-content-center'>";
 

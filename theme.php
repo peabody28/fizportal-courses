@@ -86,7 +86,8 @@ if ($tmp_theme)
                     {
                         // рендер первой задачи
                         $this_task = $tasks_list[0];
-                        $content .="<div id='task' class='p-0 m-0 mt-5 pt-5 d-flex justify-content-center align-items-center row container-fluid'><div id='tt' class='p-3 pt-5 m-0 ml-5 mr-5 row container-fluid d-flex justify-content-center'>";
+                        $content .="<div id='task' class='p-0 m-0 mt-5 pt-5 d-flex justify-content-center align-items-center row container-fluid'>
+                                        <div id='tt' class='p-4 pt-5 m-0 ml-md-5 mr-md-5 row container-fluid d-flex justify-content-center'>";
 
                         $tasks_block_constructor = new Tasks_block_constructor();
                         $response = $tasks_block_constructor->get_task_block($this_task["id"], ($_SESSION["rights"]=="admin"));
