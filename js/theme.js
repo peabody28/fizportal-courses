@@ -42,6 +42,8 @@ function send_answer()
                 {
                     if(response["code"]=="TIME")
                         $("#content").html("<h2>Время решения темы истекло, возвращайтесь позже</h2>")
+                    else if(response["code"]=="IN_MISTAKES")
+                        $("#message").html("Вы сможете решить эту задачу в работе над ошибками")
                     else
                     {
                         $("#"+response["task_id"]).css('background-color', '#d53e4f');

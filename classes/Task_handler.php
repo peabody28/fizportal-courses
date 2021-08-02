@@ -18,7 +18,9 @@ class Task_handler
         $task = $this->construct_task();
 
         $prof = new Professor();
-
+        $in_mistakes = $prof->check_in_mistakes_list($this->data["task_id"], $_SESSION["id"]);
+        if($in_mistakes)
+            return ["status" => "ERROR", "code"=>"IN_MISTAKES"];
         $response = $prof->check_time(["user_id"=>$_SESSION["id"], "theme_id"=>$this->data["theme_id"], "limit"=>$this->data["limit"]]);
         if($response["status"]===false)
             return ["status" => "ERROR", "code"=>"TIME"];
