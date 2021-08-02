@@ -36,7 +36,7 @@ if(isset($data["submit"]))
     else if ($data["code"]=="get_task")
     {
         $tasks_block_constructor = new Tasks_block_constructor();
-        $response = $tasks_block_constructor->get_task_block($data["task_id"], ($_SESSION["rights"]=="admin"));
+        $response = $tasks_block_constructor->get_task_block($data["task_id"], $data["next_task_id"], ($_SESSION["rights"]=="admin"));
         echo json_encode(["block"=>$response["block"]]);
     }
     else if ($data["code"]=="get_mistake")

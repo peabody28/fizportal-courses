@@ -33,7 +33,11 @@ class Render
         $content = "<div class='row container-fluid justify-content-start m-0 p-0 pl-3'>";
         $content .= "<a class='btn get_text_theme mr-1 mt-2' href='/theme?id=$theme[id]&text'></a>";
         // отображение квадратов задачи
-        foreach ($tasks_list as $task) {
+        $c= count($tasks_list);
+        for($i=0; $i<count($tasks_list); $i++)
+        {
+            $task = $tasks_list[$i];
+            $last = ($i==count($tasks_list)-1);
 
             if(!in_array(["user_id" => $_SESSION["id"], "task_id" => $task["id"]], $users_tasks))
             {
@@ -45,10 +49,19 @@ class Render
             else
                 $button = "<button class='btn' id='$task[id]'></button>";
 
+            if(!$last)
+            {
+                $nt_id = $tasks_list[$i+1]["id"];
+                $next_task = "<input type='hidden' name='next_task_id' value='$nt_id'>";
+            }
+            else
+                $next_task = "";
+
             $content .= "<form class='get_task mr-1 mt-2' method='POST'>
                             <input type='hidden' name='task_id' value='$task[id]'>
                             <input type='hidden' name='submit' value='true'>
                             <input type='hidden' name='code' value='get_task'>
+                            $next_task
                             $button
                          </form>";
         }
@@ -95,10 +108,10 @@ class Render
 
     public function render_mistake($task)
     {
-        return $this->render_task($task, 1);
+        return $this->render_task($task, null,1);
     }
 
-    public function render_task($task, $is_mistake=false)
+    public function render_task($task, $next_id, $is_mistake=false)
     {
         $func = $is_mistake?"send_mistake_answer()":"send_answer()";
         $code = $is_mistake?"send_mistake_answer":"send_answer";
@@ -144,7 +157,8 @@ class Render
 
 
         $content .= ($task["type"]=="A")?$a_type_task:$b_type_task;
-
+        if ($next_id)
+            $content .= "<button type='submit' class='btn next mt-3' onclick='get_next_task($next_id);return false;'>Слудующая задача</button>";
         $content .= "</div>";
 
         return $content;
