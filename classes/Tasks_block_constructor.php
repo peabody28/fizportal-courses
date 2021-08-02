@@ -25,8 +25,8 @@ class Tasks_block_constructor
                              </div>";
         }
         // материалы для задачи
-        $task_block .= "<div class='h2 d-flex justify-content-center col-12 mt-3' id='message'></div>";
-        $task_block .= "<div class='col-12 mt-5 d-flex justify-content-center'> <a href='/materials?task_id=$tmp_task[id]'>Материалы для задачи</a></div>";
+        $task_block .= "<div class='d-flex justify-content-center col-12 mt-3' id='message'></div>";
+        $task_block .= "<div class='col-12 d-flex justify-content-center'> <a href='/materials?task_id=$tmp_task[id]'>Материалы для задачи</a></div>";
         return ["block"=>$task_block];
 
     }
