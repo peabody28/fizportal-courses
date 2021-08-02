@@ -31,14 +31,14 @@ class Tasks_block_constructor
 
     }
 
-    public function get_mistake_block($id)
+    public function get_mistake_block($id, $next_id=null)
     {
         $tasks_table = new Tasks_table();
         $tmp_task = $tasks_table->read($id);
 
         $block = new Render();
 
-        $task_block = $block->render_mistake($tmp_task);
+        $task_block = $block->render_mistake($tmp_task, $next_id);
         // материалы для задачи
         $task_block .= "<div class='h2 d-flex justify-content-center col-12 mt-3' id='message'></div>";
         $task_block .= "<div class='col-12 mt-5 d-flex justify-content-center'> <a href='/materials?task_id=$tmp_task[id]'>Материалы для задачи</a></div>";

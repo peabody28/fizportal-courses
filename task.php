@@ -42,7 +42,7 @@ if(isset($data["submit"]))
     else if ($data["code"]=="get_mistake")
     {
         $tasks_block_constructor = new Tasks_block_constructor();
-        $response = $tasks_block_constructor->get_mistake_block($data["task_id"]);
+        $response = $tasks_block_constructor->get_mistake_block($data["task_id"], $data["next_task_id"]);
         echo json_encode(["block"=>$response["block"]]);
     }
     else if ($data["code"]=="get_supertest")
