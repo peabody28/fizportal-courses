@@ -73,7 +73,10 @@ if ($tmp_theme)
                 }
 
                 // кнопка "назад к темам"
-                $content .= "<br> <a class='btn ml-3' id='back_to_themes_btn' href='/course?id=$tmp_theme[course_id]'>Назад к темам</a>";
+                $content .= "<div class='row m-0 p-0 pl-3 mt-3'><a class='btn' id='back_to_themes_btn' href='/course?id=$tmp_theme[course_id]'>Назад к темам</a></div>";
+                // кнопка "Обнулить прогресс темы"
+                $content .= "<div class='row m-0 p-0 pl-3 mt-3'><button id='reset_theme' theme_id='$tmp_theme[id]' class='btn'>Обнулить прогресс темы</button></div>";
+                //
                 $content .="<div id='task' class='p-0 m-0 mt-5 pt-md-5 d-flex justify-content-center align-items-center row container-fluid'>
                                     <div id='tt' class='p-4 pt-5 m-0 ml-md-5 mr-md-5 row container-fluid d-flex justify-content-center'>";
                 if(count($tasks_list))

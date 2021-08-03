@@ -37,6 +37,9 @@ class Users_themes_time_table implements Table
 
     public function delete($obj)
     {
-        // TODO: Implement delete() method.
+        global $link;
+        $sql = sprintf("DELETE FROM users_themes_time WHERE user_id='%s' AND theme_id='%s'", $obj["user_id"], $obj["theme_id"]);
+        $result = mysqli_query($link, $sql);
+        return $result;
     }
 }

@@ -27,7 +27,7 @@ if (isset($_GET["theme_id"])) {
 
             $mistakes = [];
             foreach ($tasks_theme as $tt)
-                if(in_array(["task_id"=>$tt["id"]], $all_mistakes))
+                if(in_array(["user_id"=>$_SESSION["id"], "task_id"=>$tt["id"]], $all_mistakes))
                     $mistakes[] = $tt;
 
             if (count($mistakes))

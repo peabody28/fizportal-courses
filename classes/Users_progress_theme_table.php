@@ -38,7 +38,10 @@ class Users_progress_theme_table implements Table
 
     public function delete($obj)
     {
-        // TODO: Implement delete() method.
+        global $link;
+        $sql = sprintf("DELETE FROM users_progress_theme WHERE user_id='%s' AND theme_id='%s'", $obj["user_id"], $obj["theme_id"]);
+        $result = mysqli_query($link, $sql);
+        return $result;
     }
 
     public function add_point($target, $count=1)

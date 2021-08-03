@@ -211,3 +211,23 @@ if($('.in_process').length)
 
 if($('.blocked').length)
     inter()
+
+$('#reset_theme').click(
+
+    function ()
+    {
+        var theme_id = $(this).attr("theme_id")
+        $.ajax(
+            {
+                url: "/task.php",
+                type: "POST",
+                data: "submit=true&code=reset_theme&id="+theme_id,
+                success: function ()
+                {
+                    location.reload();
+                }
+            }
+        )
+        return false;
+    }
+)
