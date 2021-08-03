@@ -34,6 +34,9 @@ class Render
         $content .= "<button id='get_text_theme' class='btn mr-1 mt-2' theme_id='$theme[id]'></button>";
         // отображение квадратов задачи
 
+        $first_id = null;  // задача которая первой отобразится в теме (это должна быть доступная задача (не красная)))
+        $first_close_id = null;
+        $first_solved_id = null;
         for($i=0; $i<count($tasks_list); $i++)
         {
             $task = $tasks_list[$i];
@@ -44,10 +47,20 @@ class Render
                 if(in_array(["task_id" => $task["id"]], $users_mistakes))
                     $button = "<button class='btn red' id='$task[id]' disabled></button>";
                 else
+                {
+                    if($first_close_id === null)
+                        $first_close_id = $i;
                     $button = "<button class='btn close_btn' id='$task[id]'></button>";
+                }
+
             }
             else
+            {
+                if($first_solved_id === null)
+                    $first_solved_id = $i;
                 $button = "<button class='btn' id='$task[id]'></button>";
+            }
+
 
             if($last)
                 $next_task = "<input type='hidden' name='next_task_id' value='supertest'>";
@@ -65,6 +78,17 @@ class Render
                             $button
                          </form>";
         }
+        if ($first_close_id === null)
+        {
+            if ($first_solved_id === null)
+                $first_id = 0;
+            else
+                $first_id = $first_solved_id;
+        }
+        else
+            $first_id = $first_close_id;
+
+
 
         // отображение супертеста
         $disabled = "";
@@ -84,7 +108,7 @@ class Render
         if ($_SESSION["rights"]=="admin")
             $content .="<div class='row m-0 mt-3 p-0 pl-3'><a class='btn create add_task' href='/add_task?theme_id=$theme[id]'>Добавить задачу</a></div>";
 
-        return ["content"=>$content];
+        return ["content"=>$content, "first_id"=>$first_id];
 
     }
 
