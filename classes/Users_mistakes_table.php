@@ -25,7 +25,7 @@ class Users_mistakes_table implements Table
     public function read($user_id)
     {
         global $link;
-        $sql = sprintf("SELECT task_id FROM users_mistakes WHERE user_id='%s'", $user_id);
+        $sql = sprintf("SELECT * FROM users_mistakes WHERE user_id='%s'", $user_id);
         $result = mysqli_query($link, $sql);
         $row = mysqli_fetch_all($result, MYSQLI_ASSOC);
         return $row;

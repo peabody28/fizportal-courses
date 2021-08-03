@@ -44,7 +44,7 @@ class Render
 
             if(!in_array(["user_id" => $_SESSION["id"], "task_id" => $task["id"]], $users_tasks))
             {
-                if(in_array(["task_id" => $task["id"]], $users_mistakes))
+                if(in_array(["user_id" => $_SESSION["id"], "task_id" => $task["id"]], $users_mistakes))
                     $button = "<button class='btn red' id='$task[id]' disabled></button>";
                 else
                 {

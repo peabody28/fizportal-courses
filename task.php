@@ -57,6 +57,11 @@ if(isset($data["submit"]))
         $resp = $tasks_block_constructor->get_supertest_block($_SESSION["id"], $data["theme_id"], ($_SESSION["rights"]=="admin"), $data["supertest_id"]);
         echo json_encode(["block" => $resp["block"]]);
     }
+    else if($data["code"]=="reset_theme")
+    {
+        $resp = $task_handler->reset_theme();
+        echo json_encode($resp);
+    }
     else
         echo json_encode(["status"=>"wrong code"]);
 }

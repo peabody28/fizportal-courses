@@ -5,8 +5,11 @@ require_once __DIR__."/Users_progress_theme_table.php";
 require_once __DIR__."/Users_mistakes_table.php";
 require_once __DIR__."/Users_themes_table.php";
 require_once __DIR__."/Tasks_table.php";
+require_once __DIR__."/Themes_table.php";
 require_once __DIR__."/Tasks_answers_table.php";
 require_once __DIR__."/Themes_limits_table.php";
+require_once __DIR__."/Users_themes_time_table.php";
+session_start();
 
 
 class Task_handler
@@ -156,6 +159,42 @@ class Task_handler
             $task["user_answer"]=$this->data["$tmp_task[id]_b_answer"];
         }
         return $task;
+    }
+
+    public function reset_theme()
+    {
+        $theme_id = $this->data["id"];
+
+        $tasks_table = new Tasks_table();
+        $tasks_theme_list = $tasks_table->get_tasks_theme($theme_id);
+
+        $users_tasks_table = new Users_tasks_table();
+        $users_tasks = $users_tasks_table->read($_SESSION["id"]);
+
+        $users_mistakes_table = new Users_mistakes_table();
+        $users_mistakes = $users_mistakes_table->read($_SESSION["id"]);
+
+        foreach ($tasks_theme_list as $task)
+        {
+            // если задача в работе над ошибками - удаляю
+            $obj = ["user_id"=>$_SESSION["id"], "task_id"=>$task["id"]];
+            if(in_array($obj, $users_mistakes))
+                $users_mistakes_table->delete($obj);
+            // если задача в списке решенных - удаляю
+            else if(in_array($obj, $users_tasks))
+                $users_tasks_table->delete($obj);
+        }
+        // очищаю прогресс
+        $row = ["user_id"=>$_SESSION["id"], "theme_id"=>$theme_id];
+        $users_progress_theme_table = new Users_progress_theme_table();
+        $users_progress_theme_table->delete($row);
+
+        // обнуляю время
+        $users_themes_time_table = new Users_themes_time_table();
+        $users_themes_time_table->delete($row);
+
+
+        return ["status"=>"OK"];
     }
 
 }
