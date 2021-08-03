@@ -1,5 +1,6 @@
 <?php
 require_once __DIR__."/Tasks_table.php";
+require_once __DIR__."/Themes_table.php";
 require_once __DIR__."/Render.php";
 require_once __DIR__."/Users_progress_theme_table.php";
 require_once __DIR__."/Supertests_tasks_table.php";
@@ -9,6 +10,21 @@ require_once __DIR__."/Professor.php";
 
 class Tasks_block_constructor
 {
+    public function get_text_theme_block($id)
+    {
+        $themes_table = new Themes_table();
+        $tmp_theme = $themes_table->read($id);
+
+        $block = "<div id='task' class='p-0 m-0 mt-5 pt-md-5 d-flex justify-content-center align-items-center row container-fluid'>
+                                        <div id='tt' class='p-3 pt-5 m-0 ml-md-5 mr-md-5 row container-fluid d-flex justify-content-center'>
+                                            <div class='col-12 m-0 p-0 d-flex justify-content-center'>Описание темы</div>
+                                            <div class='col-12 m-0 p-0 d-flex justify-content-center'>$tmp_theme[text]</div>
+                                        </div>
+                               </div>";
+        return ["block"=>$block];
+
+    }
+
     public function get_task_block($id, $next_id=null, $is_admin=false)
     {
         $tasks_table = new Tasks_table();

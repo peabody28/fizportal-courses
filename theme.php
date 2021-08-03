@@ -76,25 +76,15 @@ if ($tmp_theme)
                 $content .= "<br> <a class='btn ml-3' id='back_to_themes_btn' href='/course?id=$tmp_theme[course_id]'>Назад к темам</a>";
                 if(count($tasks_list))
                 {
-                    if(isset($_GET["text"]))
-                        $content .="<div id='task' class='p-0 m-0 mt-5 pt-md-5 d-flex justify-content-center align-items-center row container-fluid'>
-                                        <div id='tt' class='p-3 pt-5 m-0 ml-md-5 mr-md-5 row container-fluid d-flex justify-content-center'>
-                                            <div class='col-12 m-0 p-0 d-flex justify-content-center'>Описание темы</div>
-                                            <div class='col-12 m-0 p-0 d-flex justify-content-center'>$tmp_theme[text]</div>
-                                        </div>
-                               </div>";
-                    else
-                    {
-                        // рендер первой задачи
-                        $this_task = $tasks_list[0];
-                        $content .="<div id='task' class='p-0 m-0 mt-5 pt-md-5 d-flex justify-content-center align-items-center row container-fluid'>
-                                        <div id='tt' class='p-4 pt-5 m-0 ml-md-5 mr-md-5 row container-fluid d-flex justify-content-center'>";
+                    // рендер первой задачи
+                    $this_task = $tasks_list[0];
+                    $content .="<div id='task' class='p-0 m-0 mt-5 pt-md-5 d-flex justify-content-center align-items-center row container-fluid'>
+                                    <div id='tt' class='p-4 pt-5 m-0 ml-md-5 mr-md-5 row container-fluid d-flex justify-content-center'>";
 
-                        $tasks_block_constructor = new Tasks_block_constructor();
-                        $response = $tasks_block_constructor->get_task_block($this_task["id"], $tasks_list[1]["id"], ($_SESSION["rights"]=="admin"));
-                        $content .= $response["block"];
-                        $content .= "</div></div><br>";
-                    }
+                    $tasks_block_constructor = new Tasks_block_constructor();
+                    $response = $tasks_block_constructor->get_task_block($this_task["id"], $tasks_list[1]["id"], ($_SESSION["rights"]=="admin"));
+                    $content .= $response["block"];
+                    $content .= "</div></div><br>";
                 }
                 else
                     $content .="<div id='task' class='p-0 m-0 mt-5 pt-md-5 d-flex justify-content-center align-items-center row container-fluid'>

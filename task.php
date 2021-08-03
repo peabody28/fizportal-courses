@@ -33,6 +33,12 @@ if(isset($data["submit"]))
         $resp = $task_handler->send_supertest_answer();
         echo json_encode($resp);
     }
+    else if($data["code"]=="get_text_theme")
+    {
+        $tasks_block_constructor = new Tasks_block_constructor();
+        $response = $tasks_block_constructor->get_text_theme_block($data["theme_id"]);
+        echo json_encode(["block"=>$response["block"]]);
+    }
     else if ($data["code"]=="get_task")
     {
         $tasks_block_constructor = new Tasks_block_constructor();

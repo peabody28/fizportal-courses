@@ -1,11 +1,12 @@
-var first = $('.get_text_theme').next()
-first.css('position', 'static');
+
+var first = $('.get_task:first')
 first.css('position', 'relative');
 first.css('top', '5px');
 
 $('.get_task').submit(function ()
 {
     $('.get_task').css('position', 'static');
+    $('#get_text_theme').css('position', 'static');
     $(this).css('position', 'relative');
     $(this).css('top', '5px');
     $.ajax(
@@ -24,6 +25,34 @@ $('.get_task').submit(function ()
     )
     return false;
 })
+
+$('#get_text_theme').click(
+
+    function ()
+    {
+        $('.get_task').css('position', 'static');
+        $(this).css('position', 'relative');
+        $(this).css('top', '5px');
+
+        var theme_id = $(this).attr("theme_id")
+        console.log(theme_id)
+        $.ajax(
+            {
+                url: "/task.php",
+                type: "POST",
+                data: "submit=true&code=get_text_theme&theme_id="+theme_id,
+                success: function (res)
+                {
+                    var task = JSON.parse(res)
+                    $("#tt").html(task["block"])
+                    $("#message").html("")
+                    MathJax.typeset() // обновление mathjax
+                }
+            }
+        )
+        return false;
+    }
+)
 
 function get_next_task(id)
 {
