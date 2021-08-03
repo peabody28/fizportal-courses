@@ -108,7 +108,7 @@ class Professor
     {
         $users_mistakes_table = new Users_mistakes_table();
         $mist_list = $users_mistakes_table->read($user_id);
-        return (in_array(["task_id"=>$task_id], $mist_list))?true:false;
+        return in_array(["user_id"=>$user_id, "task_id"=>$task_id], $mist_list);
 
     }
 

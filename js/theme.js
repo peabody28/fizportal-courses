@@ -91,7 +91,12 @@ function send_answer()
                     if(response["code"]=="TIME")
                         $("#content").html("<h2>Время решения темы истекло, возвращайтесь позже</h2>")
                     else if(response["code"]=="IN_MISTAKES")
+                    {
+                        $('#message').addClass("red_mess")
+                        $('#message').removeClass("green_mess")
                         $("#message").html("Вы сможете решить эту задачу в работе над ошибками")
+                    }
+
                     else
                     {
                         $('#message').addClass("red_mess")
@@ -117,7 +122,6 @@ function send_answer()
 
 function send_supertest_answers()
 {
-    console.log($('.send_supertest_answers').serialize())
     $.ajax(
         {
             url: "/task.php",
@@ -128,13 +132,19 @@ function send_supertest_answers()
                 var response = JSON.parse(res)
                 if (response["status"]=="OK")
                 {
-                    $("#message").html("Верно!")
+                    $('#message').addClass("green_mess")
+                    $('#message').removeClass("red_mess")
+                    $("#message").html("Верно")
                     // стопаю таймер
                     if (intervalId)
                         clearInterval(intervalId)
                 }
                 else
-                    $("#message").html("Неверный ответ!")
+                {
+                    $('#message').addClass("red_mess")
+                    $('#message').removeClass("green_mess")
+                    $("#message").html("Неверный ответ")
+                }
             }
         }
     )

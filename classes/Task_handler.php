@@ -38,7 +38,7 @@ class Task_handler
             $st = $users_tasks_table->create(["user_id"=>$_SESSION["id"], "task_id"=>$this->data["task_id"]]);
 
             $users_progress_theme_table = new Users_progress_theme_table();
-            if($st) // если решается впервые  добавляю балл
+            if($st) // если решается впервые добавляю балл
                 $users_progress_theme_table->add_point(["user_id"=>$_SESSION["id"], "theme_id"=>$this->data["theme_id"]]);
             $resp = $users_progress_theme_table->read(["user_id"=>$_SESSION["id"], "theme_id"=>$this->data["theme_id"]]);
             return ["status" => "OK", "task_id"=>$this->data["task_id"], "progress"=>$resp["progress"]?:null];
@@ -53,11 +53,8 @@ class Task_handler
                 // добавляю задачу в РО
                 $users_mistakes_table = new Users_mistakes_table();
                 $st = $users_mistakes_table->create(["user_id"=>$_SESSION["id"], "task_id"=>$this->data["task_id"]]);
-                // если $st==true то задачу первый раз решили неверно и я могу снять балл
-                $users_themes_table = new Users_themes_table();
-                $users_themes = $users_themes_table->read($_SESSION["id"]);
-
-                if($st && !in_array(["user_id"=>$_SESSION["id"], "theme_id"=>$this->data["theme_id"]], $users_themes)) // если тема не выполнена
+                // если $st==true то задачу впервые решили неверно и я могу снять балл
+                if ($st)
                 {
                     // Cнимаю балл за неверное решение
                     $users_progress_theme_table = new Users_progress_theme_table();
@@ -171,23 +168,35 @@ class Task_handler
         $users_tasks_table = new Users_tasks_table();
         $users_tasks = $users_tasks_table->read($_SESSION["id"]);
 
+        $users_themes_table = new Users_themes_table();
+        $users_themes = $users_themes_table->read($_SESSION["id"]);
+
         $users_mistakes_table = new Users_mistakes_table();
         $users_mistakes = $users_mistakes_table->read($_SESSION["id"]);
 
+        $row = ["user_id"=>$_SESSION["id"], "theme_id"=>$theme_id];
+        $progress = 0;
         foreach ($tasks_theme_list as $task)
         {
             // если задача в работе над ошибками - удаляю
             $obj = ["user_id"=>$_SESSION["id"], "task_id"=>$task["id"]];
             if(in_array($obj, $users_mistakes))
-                $users_mistakes_table->delete($obj);
+            {
+                if (!in_array($row, $users_themes))
+                    $users_mistakes_table->delete($obj);
+                else
+                    $progress--;
+            }
+
+
             // если задача в списке решенных - удаляю
             else if(in_array($obj, $users_tasks))
                 $users_tasks_table->delete($obj);
         }
         // очищаю прогресс
-        $row = ["user_id"=>$_SESSION["id"], "theme_id"=>$theme_id];
+        $row["progress"]=$progress;
         $users_progress_theme_table = new Users_progress_theme_table();
-        $users_progress_theme_table->delete($row);
+        $users_progress_theme_table->update($row, "set_point");
 
         // обнуляю время
         $users_themes_time_table = new Users_themes_time_table();
