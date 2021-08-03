@@ -1,5 +1,11 @@
 
-var first = $('.get_task:first')
+var first = $('.get_task button.close_btn:first').parent()
+
+if(!first.length)
+    first = $('.get_task button:not(.red):first').parent()
+if(!first.length)
+    first = $('.get_task:first')
+
 first.css('position', 'relative');
 first.css('top', '5px');
 
