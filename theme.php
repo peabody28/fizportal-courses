@@ -83,9 +83,13 @@ if ($tmp_theme)
                 {
                     // рендер первой задачи
                     $this_task = $tasks_list[$tasks_blocks["first_id"]];
+                    if($tasks_blocks["first_id"]+1 == count($tasks_list)-1)
+                        $next_id = "supertest";
+                    else
+                        $next_id = $tasks_list[$tasks_blocks["first_id"]+1]["id"];
 
                     $tasks_block_constructor = new Tasks_block_constructor();
-                    $response = $tasks_block_constructor->get_task_block($this_task["id"], $tasks_list[1]["id"], ($_SESSION["rights"]=="admin"));
+                    $response = $tasks_block_constructor->get_task_block($this_task["id"], $next_id, ($_SESSION["rights"]=="admin"));
                     $content .= $response["block"];
                 }
                 else
