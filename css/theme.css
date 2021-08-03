@@ -34,11 +34,6 @@
   height: auto;
   max-height: 300px;
 }
-@media (min-width: 576px) {
-  #task {
-    min-height: 800px;
-  }
-}
 #task #tt {
   background-color: #d9e6ef;
 }
