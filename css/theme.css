@@ -17,11 +17,6 @@
 .get_task .red {
   background-color: #d53e4f;
 }
-.get_text_theme {
-  height: 26px;
-  width: 26px;
-  background-color: #cd7857;
-}
 .del_task {
   background-color: #fc8f8f;
 }
@@ -88,5 +83,13 @@
 }
 .next {
   background-color: #adc6ee;
+}
+#to_supertest {
+  background-color: #a38ede;
+}
+#get_text_theme {
+  height: 26px;
+  width: 26px;
+  background-color: #cd7857;
 }
 /*# sourceMappingURL=theme.css.map */

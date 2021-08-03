@@ -1,5 +1,4 @@
 var first = $('.get_mistake:first')
-first.css('position', 'static');
 first.css('position', 'relative');
 first.css('top', '5px');
 

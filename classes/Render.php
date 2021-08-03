@@ -31,7 +31,7 @@ class Render
     public function render_tasks_theme($theme, $tasks_list, $users_tasks, $users_mistakes, $users_progress, $sptest)
     {
         $content = "<div class='row container-fluid justify-content-start m-0 p-0 pl-3'>";
-        $content .= "<a class='btn get_text_theme mr-1 mt-2' href='/theme?id=$theme[id]&text'></a>";
+        $content .= "<button id='get_text_theme' class='btn mr-1 mt-2' theme_id='$theme[id]'></button>";
         // отображение квадратов задачи
 
         for($i=0; $i<count($tasks_list); $i++)
@@ -49,13 +49,13 @@ class Render
             else
                 $button = "<button class='btn' id='$task[id]'></button>";
 
-            if(!$last)
+            if($last)
+                $next_task = "<input type='hidden' name='next_task_id' value='supertest'>";
+            else
             {
                 $nt_id = $tasks_list[$i+1]["id"];
                 $next_task = "<input type='hidden' name='next_task_id' value='$nt_id'>";
             }
-            else
-                $next_task = "";
 
             $content .= "<form class='get_task mr-1 mt-2' method='POST'>
                             <input type='hidden' name='task_id' value='$task[id]'>
@@ -172,7 +172,13 @@ class Render
 
         $content .= ($task["type"]=="A")?$a_type_task:$b_type_task;
         if ($next_id)
-            $content .= "<button type='submit' class='btn next mt-3' onclick='get_next_task($next_id);return false;'>Слудующая задача</button>";
+        {
+            if ($next_id=="supertest")
+                $content .= "<button type='submit' id='to_supertest' class='btn mt-3' onclick='$(\".supertest\").submit();return false;'>Перейти к тесту</button>";
+            else
+                $content .= "<button type='submit' class='btn next mt-3' onclick='get_next_task($next_id);return false;'>Слудующая задача</button>";
+        }
+
         $content .= "</div>";
 
         return $content;
