@@ -16,12 +16,7 @@ class Tasks_block_constructor
         $themes_table = new Themes_table();
         $tmp_theme = $themes_table->read($id);
 
-        $block = "<div id='task' class='p-0 m-0 mt-5 pt-md-5 d-flex justify-content-center align-items-center row container-fluid'>
-                                        <div id='tt' class='p-3 pt-5 m-0 ml-md-5 mr-md-5 row container-fluid d-flex justify-content-center'>
-                                            <div class='col-12 m-0 p-0 d-flex justify-content-center'>Описание темы</div>
-                                            <div class='col-12 m-0 p-0 text-break'>$tmp_theme[text]</div>
-                                        </div>
-                               </div>";
+        $block = "<div class='col-12 m-0 p-0 d-flex justify-content-center'>Описание темы</div><div class='col-12 m-0 p-0 text-break'>$tmp_theme[text]</div>";
         return ["block"=>$block];
 
     }

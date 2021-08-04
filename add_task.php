@@ -15,7 +15,7 @@ $data = $_POST;
 if(isset($data["submit"]))
 {
     $task = new Task();
-    $task->text = addslashes($data["task_text"]);
+    $task->text = $data["task_text"];
     $task->type = $data["type"];
     if($data["type"]=="B")
         $task->answer = $data["task_answer"];

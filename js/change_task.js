@@ -1,7 +1,3 @@
-// отключение mathjax
-MathJax.Hub.Config({
-    messageStyle: "none"
-});
 
 
 $("#A_radio").click(function (){
@@ -28,6 +24,7 @@ $("input[type = 'radio']").click(function(){
 
 
 $("#change_text_task").submit(function (){
+    console.log("here")
     $.ajax(
         {
             url: "/change_task.php",

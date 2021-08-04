@@ -124,8 +124,7 @@ else
 
                     }
                     else
-                        $content .="<div class='col-12 m-0 p-0 d-flex justify-content-center'>Описание темы</div>
-                                <div class='col-12 m-0 p-0 text-break'>$tmp_theme[text]</div>";
+                        $content .= "<script type='text/javascript'>$(document).ready(function() { $('#get_text_theme').click(); });</script>";
 
                     $content .= "</div>"; // закрыл #tt
 

@@ -8,7 +8,7 @@ class Themes_table implements Table
     public function create($theme)
     {
         global $link;
-        $sql = sprintf("INSERT INTO themes(title, text, complexity, course_id) VALUES ('%s', '%s', '%s', '%s')", $theme->title, $theme->text, $theme->complexity, $theme->course_id);
+        $sql = sprintf("INSERT INTO themes(title, text, complexity, course_id) VALUES ('%s', '%s', '%s', '%s')", addslashes($theme->title), addslashes($theme->text), $theme->complexity, $theme->course_id);
         $result = mysqli_query($link, $sql);
         $theme->id = mysqli_insert_id($link);
         return $theme->id ? true: false;
@@ -24,7 +24,7 @@ class Themes_table implements Table
     public function update($theme, $column)
     {
         global $link;
-        $sql = sprintf("UPDATE themes SET %s='%s' WHERE id = '%s'", $column, $theme->$column, $theme->id);
+        $sql = sprintf("UPDATE themes SET %s='%s' WHERE id = '%s'", $column, addslashes($theme->$column), $theme->id);
         $result = mysqli_query($link, $sql);
         return $result;
     }
