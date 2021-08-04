@@ -2,6 +2,7 @@
 require_once __DIR__."/auth.php";
 require_once __DIR__."/classes/Themes_table.php";
 require_once __DIR__."/classes/Themes_limits_table.php";
+require_once __DIR__."/classes/Themes_points_limit_table.php";
 require_once __DIR__."/classes/Tasks_table.php";
 require_once __DIR__."/classes/Users_tasks_table.php";
 require_once __DIR__."/classes/Users_mistakes_table.php";
@@ -18,10 +19,10 @@ session_start();
 if(isset($_POST["submit"]))
 {
     $data = $_POST;
-    $themes_limits_table = new Themes_limits_table();
+    $themes_points_limit_table = new Themes_points_limit_table();
 
     if($data["code"]=="change_limit_of_points")
-        $themes_limits_table->update(["theme_id"=>$data["id"], "time_limit"=>$data["limit_of_points"]], "time_limit");
+        $themes_points_limit_table->update(["theme_id"=>$data["id"], "points_limit"=>$data["limit_of_points"]], "points_limit");
     echo json_encode(["status"=>"OK"]);
 }
 else

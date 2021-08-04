@@ -72,14 +72,9 @@ $('#change_limit_of_points').submit(
                 {
                     var resp = JSON.parse(res)
                     if(resp["status"]=="OK")
-                    {
-                        console.log("here")
                         alert("Готово")
-                    }
                     else
-                    {
-
-                    }
+                        alert("Error")
                 }
             }
         )

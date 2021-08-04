@@ -20,7 +20,7 @@ class Render
     {
         $content = "<div class='row theme $class m-0 p-0 mb-3 ml-2 mr-2 pl-2 pt-1'>
                         <a class='text-start text-break col-12 h2 m-0 p-0' href='/theme?id=$theme[id]'>$theme[title]</a>
-                        <span class='col-12 m-0 p-0'>progress:&nbsp;&nbsp;$progress/10</span>
+                        <span class='col-12 m-0 p-0'>progress:&nbsp;&nbsp;$progress/$theme[points_limit]</span>
                     </div><br>";
         if($is_admin)
             $content.= "<div class='row m-0 p-0 mb-3 ml-2 mr-2'><a class='btn izm' href='/change_theme?id=$theme[id]'>Изменить</a></div>";
