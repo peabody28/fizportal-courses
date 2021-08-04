@@ -50,7 +50,8 @@ $page->argv = ['title'=>"acc",
     "name"=>"<h2>$_SESSION[name]</h2>",
     "content"=>$content,
     "disabled_$file"=>"disabled",
-    "js"=>"/js/acc.js"
+    "js"=>"/js/acc.js",
+    "mathjax"=>file_get_contents("templates/mathjax.html")
 ] ;
 
 echo $page->render_temp();

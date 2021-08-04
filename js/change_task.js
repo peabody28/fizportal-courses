@@ -1,3 +1,9 @@
+// отключение mathjax
+MathJax.Hub.Config({
+    messageStyle: "none"
+});
+
+
 $("#A_radio").click(function (){
     $("#a_type").show();
     $("#b_type").hide()

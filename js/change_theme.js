@@ -1,3 +1,7 @@
+// отключение mathjax
+MathJax.Hub.Config({
+    messageStyle: "none"
+});
 
 
 $("form").submit(function ()

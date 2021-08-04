@@ -112,7 +112,7 @@ else if (isset($_GET["task_id"]))
         "name"=>"<h2>$_SESSION[name]</h2>",
         "content"=>$content,
         "js"=>"/js/materials.js"
-    ] ;
+    ];
 
     echo $page->render_temp();
 
