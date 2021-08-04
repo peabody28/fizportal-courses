@@ -16,7 +16,7 @@ session_start();
 
 
 
-if(isset($_POST["submit"]))
+if(isset($_POST["submit"]) && $_POST["code"] != "back_to_theme")
 {
     $data = $_POST;
     $themes_points_limit_table = new Themes_points_limit_table();
@@ -35,7 +35,13 @@ if(isset($_POST["submit"]))
 }
 else
 {
-    $data = $_GET;
+    if(isset($_POST["submit"]) && $_POST["code"] == "back_to_theme")
+    {
+        $data=$_POST;
+        $this_task_id=$data["task_id"];
+    }
+    else
+        $data = $_GET;
 
     $themes_table = new Themes_table();
     $tmp_theme = $themes_table->read($data["id"]);
@@ -102,7 +108,22 @@ else
                     if(count($tasks_list))
                     {
                         // рендер первой задачи
+                        if(isset($this_task_id))
+                        {
+                            if($this_task_id=="supertest")
+                                goto render_supertest;
+                            else
+                            {
+                                for($i=0; $i<count($tasks_list); $i++)
+                                {
+                                    if($tasks_list[$i]["id"]==$this_task_id)
+                                        $tasks_blocks["first_id"]=$i;
+                                }
+                            }
+
+                        }
                         $this_task = $tasks_list[$tasks_blocks["first_id"]];
+
                         if($tasks_blocks["first_id"]+1 == count($tasks_list)-1)
                             $next_id = "supertest";
                         else
@@ -116,7 +137,21 @@ else
                         $content .="<div class='col-12 m-0 p-0 d-flex justify-content-center'>Описание темы</div>
                                 <div class='col-12 m-0 p-0 text-break'>$tmp_theme[text]</div>";
 
-                    $content .= "</div>"; // зкарыл #tt
+                    render_supertest:
+                    if(isset($this_task_id))
+                    {
+                        if ($this_task_id=="supertest")
+                        {
+                            $content .= "<script type='text/javascript'>
+                                            $(document).ready(function() 
+                                            {
+                                                $('.supertest').submit(); 
+                                            });
+                                        </script>";
+                            // рендер супертеста
+                        }
+                    }
+                    $content .= "</div>"; // закрыл #tt
 
                     // кнопка "назад к темам" и "Обнулить прогресс темы"
                     $content .= "<div class='row col-12 m-0 p-0 pl-md-5 pr-md-5 mt-3 d-flex justify-content-between'>

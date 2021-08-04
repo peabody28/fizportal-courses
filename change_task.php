@@ -101,9 +101,16 @@ if (isset($data["submit"])) {
     $tasks_table = new Tasks_table();
     $tmp_task = $tasks_table->read($_GET["id"]);
 
+    $back_id = $tmp_task["id"]; // ID задачи куда возвращаться
+    if(isset($_GET["from_supertest"]))
+    {
+        $back_id = "supertest";
+        $tmp_task["theme_id"]=$_GET["theme_id"];
+    }
+
     $forms = new Render();
     $forms->temp = "change_task_forms.html";
-    $forms->argv = ["task_id"=>$tmp_task["id"], "task_text"=>$tmp_task["text"], "task_answer"=>$tmp_task["answer"], "task_complexity"=>$tmp_task["complexity"], "theme_id" => $tmp_task["theme_id"]];
+    $forms->argv = ["task_id"=>$tmp_task["id"], "task_text"=>$tmp_task["text"], "task_answer"=>$tmp_task["answer"], "task_complexity"=>$tmp_task["complexity"], "theme_id" => $tmp_task["theme_id"], "back_id"=>$back_id];
 
 
     $content = $forms->render_temp();
