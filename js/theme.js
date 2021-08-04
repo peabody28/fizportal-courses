@@ -41,7 +41,6 @@ $('#get_text_theme').click(
         $(this).css('top', '5px');
 
         var theme_id = $(this).attr("theme_id")
-        console.log(theme_id)
         $.ajax(
             {
                 url: "/task.php",
@@ -59,6 +58,35 @@ $('#get_text_theme').click(
         return false;
     }
 )
+
+$('#change_limit_of_points').submit(
+
+    function ()
+    {
+        $.ajax(
+            {
+                url: "/theme.php",
+                type: "POST",
+                data: $(this).serialize(),
+                success: function (res)
+                {
+                    var resp = JSON.parse(res)
+                    if(resp["status"]=="OK")
+                    {
+                        console.log("here")
+                        alert("Готово")
+                    }
+                    else
+                    {
+
+                    }
+                }
+            }
+        )
+        return false;
+    }
+)
+
 
 function get_next_task(id)
 {
