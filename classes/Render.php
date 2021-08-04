@@ -92,7 +92,7 @@ class Render
 
         // отображение супертеста
         $disabled = "";
-        if((int)$users_progress["progress"]<(int)$theme["limits_of_points"] && $_SESSION["rights"]!="admin")
+        if((int)$users_progress["progress"]<(int)$theme["points_limit"] && $_SESSION["rights"]!="admin")
             $disabled="disabled";
 
         $content .= "<form class='get_task mr-1 mt-2 supertest' method='POST'>
@@ -100,7 +100,7 @@ class Render
                             <input type='hidden' name='theme_id' value='$theme[id]'>
                             <input type='hidden' name='submit' value='true'>
                             <input type='hidden' name='code' value='get_supertest'>
-                            <button class='btn supertest' $disabled></button>
+                            <button class='btn supertest_btn' $disabled></button>
                          </form>";
 
         $content .= "</div>" ; // закрыл блок с квадратами задач

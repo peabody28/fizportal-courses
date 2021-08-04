@@ -18,7 +18,7 @@
 .get_task .close_btn {
   background-color: grey;
 }
-.get_task .supertest {
+.get_task .supertest_btn {
   height: 26px;
   width: 26px;
   background-color: #592ce0;

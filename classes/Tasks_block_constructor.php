@@ -66,7 +66,7 @@ class Tasks_block_constructor
     {
         $themes_points_limit_table = new Themes_points_limit_table();
         $resp = $themes_points_limit_table->read($theme_id);
-        $limits_of_points = $resp["points_limit"];
+        $limits_of_points = $resp["points_limit"]?:10; // если лимит не установен, принимаем его за 10 баллов
 
         $users_progress_theme_table = new Users_progress_theme_table();
         $users_progress = $users_progress_theme_table->read(["user_id"=>$user_id, "theme_id"=>$theme_id]);

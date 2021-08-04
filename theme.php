@@ -60,9 +60,9 @@ else
                     $users_mistakes_table = new Users_mistakes_table();
                     $users_mistakes = $users_mistakes_table->read($_SESSION["id"]);
                     // лимит задач темы
-                    $themes_limits_table = new Themes_limits_table();
-                    $resp = $themes_limits_table->read($tmp_theme["id"]);
-                    $tmp_theme["limits_of_points"] = $resp["time_limit"];
+                    $themes_points_limit_table = new Themes_points_limit_table();
+                    $resp = $themes_points_limit_table->read($tmp_theme["id"]);
+                    $tmp_theme["points_limit"] = $resp["points_limit"]?:10;  // если лимит не установен, принимаем его за 10 баллов
                     // прогресс
                     $users_progress_theme_table = new Users_progress_theme_table();
                     $users_progress = $users_progress_theme_table->read(["user_id"=>$_SESSION["id"], "theme_id"=>$tmp_theme["id"]]);

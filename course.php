@@ -52,7 +52,7 @@ if ($course["id"])
 
             $themes_points_limit_table = new Themes_points_limit_table();
             $resp = $themes_points_limit_table->read($theme["id"]);
-            $theme["points_limit"] = $resp["points_limit"]?:10;
+            $theme["points_limit"] = $resp["points_limit"]?:10; // если лимит не установен, принимаем его за 10 баллов
 
             $users_progress_theme_table = new Users_progress_theme_table();
             $progress = $users_progress_theme_table->read(["user_id"=>$_SESSION["id"], "theme_id"=>$theme["id"]]);
