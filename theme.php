@@ -105,52 +105,28 @@ else
 
                     $content .="<div id='task' class='p-0 m-0 mt-5 d-flex justify-content-center align-items-center row container-fluid'>
                                     <div id='tt' class='p-4 pt-5 m-0 ml-md-5 mr-md-5 row container-fluid d-flex justify-content-center'>";
+
                     if(count($tasks_list))
                     {
                         // рендер первой задачи
                         if(isset($this_task_id))
                         {
                             if($this_task_id=="supertest")
-                                goto render_supertest;
+                                $content .= "<script type='text/javascript'>$(document).ready(function() { $('.supertest').submit(); });</script>";
                             else
-                            {
-                                for($i=0; $i<count($tasks_list); $i++)
-                                {
-                                    if($tasks_list[$i]["id"]==$this_task_id)
-                                        $tasks_blocks["first_id"]=$i;
-                                }
-                            }
-
+                                $content .= "<script type='text/javascript'>$(document).ready(function() { $('#$this_task_id').parent().submit(); });</script>";
                         }
-                        $this_task = $tasks_list[$tasks_blocks["first_id"]];
-
-                        if($tasks_blocks["first_id"]+1 == count($tasks_list)-1)
-                            $next_id = "supertest";
                         else
-                            $next_id = $tasks_list[$tasks_blocks["first_id"]+1]["id"];
+                        {
+                            $this_task = $tasks_list[$tasks_blocks["first_id"]];
+                            $content .= "<script type='text/javascript'>$(document).ready(function() { $('#$this_task[id]').parent().submit(); });</script>";
+                        }
 
-                        $tasks_block_constructor = new Tasks_block_constructor();
-                        $response = $tasks_block_constructor->get_task_block($this_task["id"], $next_id, ($_SESSION["rights"]=="admin"));
-                        $content .= $response["block"];
                     }
                     else
                         $content .="<div class='col-12 m-0 p-0 d-flex justify-content-center'>Описание темы</div>
                                 <div class='col-12 m-0 p-0 text-break'>$tmp_theme[text]</div>";
 
-                    render_supertest:
-                    if(isset($this_task_id))
-                    {
-                        if ($this_task_id=="supertest")
-                        {
-                            $content .= "<script type='text/javascript'>
-                                            $(document).ready(function() 
-                                            {
-                                                $('.supertest').submit(); 
-                                            });
-                                        </script>";
-                            // рендер супертеста
-                        }
-                    }
                     $content .= "</div>"; // закрыл #tt
 
                     // кнопка "назад к темам" и "Обнулить прогресс темы"
