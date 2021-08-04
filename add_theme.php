@@ -3,6 +3,7 @@ require_once __DIR__."/auth.php";
 require_once __DIR__."/auth_root.php";
 require_once __DIR__."/classes/Theme.php";
 require_once __DIR__."/classes/Themes_table.php";
+require_once __DIR__."/classes/Themes_points_limit_table.php";
 require_once __DIR__."/classes/Supertests_table.php";
 require_once __DIR__."/classes/Render.php";
 session_start();
@@ -24,6 +25,10 @@ if(isset($data["submit"]))
     {
         $supertest_table = new Supertests_table();
         $supertest_table->create($theme->id);
+
+        $points_limit = $data["theme_points_limit"] ?? 10;
+        $themes_points_limit_table = new Themes_points_limit_table();
+        $themes_points_limit_table->create(["theme_id"=>$theme->id, "points_limit"=>$points_limit]);
     }
     echo json_encode(["course_id"=>$data["course_id"]]);
 }

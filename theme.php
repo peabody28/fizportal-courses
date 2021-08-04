@@ -20,10 +20,18 @@ if(isset($_POST["submit"]))
 {
     $data = $_POST;
     $themes_points_limit_table = new Themes_points_limit_table();
-
+    $resp = null;
     if($data["code"]=="change_limit_of_points")
-        $themes_points_limit_table->update(["theme_id"=>$data["id"], "points_limit"=>$data["limit_of_points"]], "points_limit");
-    echo json_encode(["status"=>"OK"]);
+    {
+        if ($data["limit_of_points"])
+        {
+            $themes_points_limit_table->update(["theme_id"=>$data["id"], "points_limit"=>$data["limit_of_points"]], "points_limit");
+            $resp = ["status"=>"OK"];
+        }
+        else
+            $resp = ["status"=>"error"];
+    }
+    echo json_encode($resp);
 }
 else
 {

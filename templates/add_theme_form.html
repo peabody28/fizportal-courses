@@ -1,17 +1,14 @@
 <div class="container-fluid">
-    <p>
     <form id="add_theme" method="POST">
         <label class="row col-12 justify-content-center h2">Добавление темы</label>
-        <textarea id="editor1"  name="theme_title" placeholder="Название"></textarea>
-        <br>
-        <textarea id="editor2"  name="theme_text" placeholder="Описание"></textarea>
-        <br>
-        <input type="text" name="theme_complexity" placeholder="Сложность">
-    <br>
-    <br>
+        <div class="mt-4"><textarea id="editor1"  name="theme_title" class="col-12" placeholder="Название"></textarea></div>
+        <div class="mt-4"><textarea id="editor2" class="mt-4" class="col-12 mt-4" name="theme_text" placeholder="Описание"></textarea></div>
+
+        <div class="m-0 p-0 col-12"><input type="text" class="mt-4" name="theme_complexity" placeholder="Сложность"></div>
+        <div class="m-0 p-0 col-12"><input type="text" class="mt-4 col-4" name="theme_points_limit" placeholder="Порог баллов для прохождения"></div>
+
         <input type="hidden" name="course_id" value="{{ course_id }}">
         <input type="hidden" name="submit">
-        <input id="cr_bt" class="btn create" type="submit" value="Добавить тему">
+        <div class="m-0 p-0 col-12"><input id="cr_bt" class="btn create mt-4" type="submit" value="Добавить тему"></div>
     </form>
-    <p>
 </div>

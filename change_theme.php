@@ -5,6 +5,7 @@ require_once __DIR__."/classes/Theme.php";
 require_once __DIR__."/classes/Themes_table.php";
 require_once __DIR__."/classes/Tasks_table.php";
 require_once __DIR__."/classes/Themes_limits_table.php";
+require_once __DIR__."/classes/Themes_points_limit_table.php";
 require_once __DIR__."/classes/Render.php";
 session_start();
 
@@ -49,6 +50,12 @@ if(isset($data["submit"]))
         $themes_limits_table->update(["theme_id"=>$data["theme_id"], "time_limit"=>$data["new_theme_time_limit"]], "time_limit");
         echo json_encode(["status"=>"OK", "message"=>"Лимит изменен"]);
     }
+    else if($data["code"]=="change_points_limit")
+    {
+        $themes_points_limit_table = new Themes_points_limit_table();
+        $themes_points_limit_table->update(["theme_id"=>$data["theme_id"], "points_limit"=>$data["new_theme_points_limit"]], "points_limit");
+        echo json_encode(["status"=>"OK", "message"=>"Порог баллов изменен"]);
+    }
 
 }
 else
@@ -63,11 +70,20 @@ else
     $theme->text = $tmp_theme["text"];
     $theme->complexity = $tmp_theme["complexity"];
     $theme->course_id = $tmp_theme["course_id"];
+    // беру лимит баллов
+    $themes_points_limit_table = new Themes_points_limit_table();
+    $resp = $themes_points_limit_table->read($theme->id);
+    $limits_of_points = $resp["points_limit"]?:10; // если лимит не установен, принимаем его за 10 баллов
+    // беру лимит времени
+    $themes_limits_table = new Themes_limits_table();
+    $answ = $themes_limits_table->read($theme->id);
+    $time_limit = $answ?$answ["time_limit"]:0;
+    $time_limit.=" мин";
 
     $content = "";
     $forms = new Render();
     $forms->temp = "change_theme_forms.html";
-    $forms->argv = ["theme_id"=>$theme->id, "theme_title"=>strip_tags($theme->title), "theme_text"=>strip_tags($theme->text), "theme_complexity"=>$theme->complexity];
+    $forms->argv = ["theme_id"=>$theme->id, "theme_title"=>strip_tags($theme->title), "theme_text"=>strip_tags($theme->text), "theme_complexity"=>$theme->complexity, "points_limit"=>$limits_of_points, "time_limit"=>$time_limit];
     $content.=$forms->render_temp();
     $content.="<br><br><h2>Задачи темы</h2>";
 

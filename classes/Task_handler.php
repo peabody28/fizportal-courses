@@ -8,6 +8,7 @@ require_once __DIR__."/Tasks_table.php";
 require_once __DIR__."/Themes_table.php";
 require_once __DIR__."/Tasks_answers_table.php";
 require_once __DIR__."/Themes_limits_table.php";
+require_once __DIR__."/Themes_points_limit_table.php";
 require_once __DIR__."/Users_themes_time_table.php";
 session_start();
 
@@ -41,7 +42,12 @@ class Task_handler
             if($st) // если решается впервые добавляю балл
                 $users_progress_theme_table->add_point(["user_id"=>$_SESSION["id"], "theme_id"=>$this->data["theme_id"]], $task["complexity"]);
             $resp = $users_progress_theme_table->read(["user_id"=>$_SESSION["id"], "theme_id"=>$this->data["theme_id"]]);
-            return ["status" => "OK", "task_id"=>$this->data["task_id"], "progress"=>$resp["progress"]?:null];
+
+            $themes_points_limit_table = new Themes_points_limit_table();
+            $resp2 = $themes_points_limit_table->read($this->data["theme_id"]);
+            $limits_of_points = $resp2["points_limit"]?:10; // если лимит не установен, принимаем его за 10 баллов
+
+            return ["status" => "OK", "task_id"=>$this->data["task_id"], "points_limit"=>(int)$limits_of_points, "progress"=>(int)$resp["progress"]?:null];
         }
         else
         {
