@@ -37,6 +37,9 @@
 #task #tt {
   background-color: #d9e6ef;
 }
+#task #tt #b_answer_inp {
+  width: 100%;
+}
 #task #tt #message {
   min-height: 50px;
 }

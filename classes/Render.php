@@ -176,9 +176,9 @@ class Render
                     <input type='hidden' name='task_id' value='$task[id]'>
                     <input type='hidden' name='theme_id' value='$task[theme_id]'>
                     <input type='hidden' name='code' value='$code'>
-                    <div class='row p-0 m-0 col-12'>
-                        <input type='text' class='col-8' name='$task[id]_b_answer'>
-                        <button class='btn send col-4 text-break' type='submit'>Отправить</button>
+                    <div class='row p-0 m-0 col-12 d-flex justify-content-center'>
+                        <div class='m-0 p-0 mr-md-2 col-12 col-md-5 col-lg-4 d-flex align-items-center'><input type='text' id='b_answer_inp' name='$task[id]_b_answer'></div>
+                        <button class='btn send col-12 col-md-3 text-break mt-2 mt-md-0' type='submit'>Отправить</button>
                     </div>
                     
                 </form>";
