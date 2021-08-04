@@ -1,4 +1,12 @@
 .create {
   background-color: #48ad9e;
 }
+.ch_b input {
+  width: 100%;
+  height: 50%;
+  box-sizing: border-box;
+}
+.ch_b label {
+  width: 100%;
+}
 /*# sourceMappingURL=add_task.css.map */

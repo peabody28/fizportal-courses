@@ -39,7 +39,7 @@ class Task_handler
 
             $users_progress_theme_table = new Users_progress_theme_table();
             if($st) // если решается впервые добавляю балл
-                $users_progress_theme_table->add_point(["user_id"=>$_SESSION["id"], "theme_id"=>$this->data["theme_id"]]);
+                $users_progress_theme_table->add_point(["user_id"=>$_SESSION["id"], "theme_id"=>$this->data["theme_id"]], $task["complexity"]);
             $resp = $users_progress_theme_table->read(["user_id"=>$_SESSION["id"], "theme_id"=>$this->data["theme_id"]]);
             return ["status" => "OK", "task_id"=>$this->data["task_id"], "progress"=>$resp["progress"]?:null];
         }
@@ -58,7 +58,7 @@ class Task_handler
                 {
                     // Cнимаю балл за неверное решение
                     $users_progress_theme_table = new Users_progress_theme_table();
-                    $users_progress_theme_table->delete_point(["user_id"=>$_SESSION["id"], "theme_id"=>$this->data["theme_id"]]);
+                    $users_progress_theme_table->delete_point(["user_id"=>$_SESSION["id"], "theme_id"=>$this->data["theme_id"]], $task["complexity"]);
                 }
                 $resp["task_id"] = $this->data["task_id"];
             }
@@ -80,7 +80,7 @@ class Task_handler
             $users_tasks_table->create(["user_id"=>$_SESSION["id"], "task_id"=>$this->data["task_id"]]);
             // добавляю балл НУЖНО ЛИ? ТЕМА И ТАК ВЫПОЛНЕНА НА ЭТОМ ЭТАПЕ
             $users_progress_theme_table = new Users_progress_theme_table();
-            $users_progress_theme_table->add_point(["user_id"=>$_SESSION["id"], "theme_id"=>$this->data["theme_id"]], 2);
+            $users_progress_theme_table->add_point(["user_id"=>$_SESSION["id"], "theme_id"=>$this->data["theme_id"]], (int)$task["complexity"]*2);
             // удаляю из РО
             $users_mistakes_table = new Users_mistakes_table();
             $users_mistakes_table->delete(["user_id"=>$_SESSION["id"], "task_id"=>$this->data["task_id"]]);
@@ -139,7 +139,7 @@ class Task_handler
         $tasks_table = new Tasks_table();
         $tmp_task = $tasks_table->read($id);
 
-        $task = ["id"=>$tmp_task["id"], "type"=>$tmp_task["type"]];
+        $task = ["id"=>$tmp_task["id"], "type"=>$tmp_task["type"], "complexity"=>$tmp_task["complexity"]];
         if($tmp_task["type"]=="A")
         {
             $tasks_answers_table = new Tasks_answers_table();

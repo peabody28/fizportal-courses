@@ -162,12 +162,12 @@ class Professor
         $users_themes_time->update($row, "time");
     }
 
-    public function check_access_supertest($users_progress, $is_admin=false)
+    public function check_access_supertest($limits_of_points, $users_progress, $is_admin=false)
     {
-        if((int)$users_progress["progress"]<10 && !$is_admin)
+        if((int)$users_progress["progress"]<(int)$limits_of_points && !$is_admin)
         {
             $progress = $users_progress["progress"]?:"0";
-            return ["status"=>false ,"error" => "Вы решили мало задач ваш балл ".$progress."/10"];
+            return ["status"=>false ,"error" => "Вы решили мало задач ваш балл ".$progress."/".$limits_of_points];
         }
         return ["status"=>true];
     }

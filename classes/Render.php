@@ -92,7 +92,7 @@ class Render
 
         // отображение супертеста
         $disabled = "";
-        if((int)$users_progress["progress"]<10 && $_SESSION["rights"]!="admin")
+        if((int)$users_progress["progress"]<(int)$theme["limits_of_points"] && $_SESSION["rights"]!="admin")
             $disabled="disabled";
 
         $content .= "<form class='get_task mr-1 mt-2 supertest' method='POST'>
@@ -106,7 +106,21 @@ class Render
         $content .= "</div>" ; // закрыл блок с квадратами задач
         // кнопка "добавить задачу"
         if ($_SESSION["rights"]=="admin")
-            $content .="<div class='row m-0 mt-3 p-0 pl-3'><a class='btn create add_task' href='/add_task?theme_id=$theme[id]'>Добавить задачу</a></div>";
+        {
+            $content .="<div class='row m-0 mt-3 p-0 pl-3'><a class='btn' id='add_task' href='/add_task?theme_id=$theme[id]'>Добавить задачу</a></div>";
+            $content .="<div class='row col-12 m-0 mt-3 p-0 pl-3'>
+                            <form method='POST' class='m-0 p-0 col-12' id='change_limit_of_points'>
+                                <input type='hidden' name='submit'>
+                                <input type='hidden' name='code' value='change_limit_of_points'>
+                                <input type='hidden' name='id' value='$theme[id]'>
+                                <div class='row col-12 m-0 p-0 d-flex justify-content-start'>
+                                    <button type='submit' class='btn col-12 col-md-3 mr-md-3'>Изменит границу баллов</button>
+                                    <input type='text' name='limit_of_points' class='col-12 col-md-4'>
+                                </div> 
+                            </form>
+                        </div>";
+        }
+
 
         return ["content"=>$content, "first_id"=>$first_id];
 
