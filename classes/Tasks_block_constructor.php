@@ -102,13 +102,13 @@ class Tasks_block_constructor
                     $supertests_block .= "<div class='col-12 mt-3 d-flex justify-content-center'><a class='btn chg_task_btn' href='/change_task?id=$task[id]&from_supertest=true&theme_id=$theme_id'>Изменить задачу</a></div>";
                     $supertests_block .= " <div class='col-12 mt-3 d-flex justify-content-center'>
                                                 <button class='btn del_task' onclick='del_task($task[id]);return false;'>Удалить эту задачу</button>
-                                           </div><br><br>";
+                                           </div>";
                 }
             }
         }
         $supertests_block .= "<hr><div class='m-0 col-12 mt-5 d-flex justify-content-center'><button class='btn send' type='submit'>Отправить</button></div>";
         $supertests_block .= "<div class='col-12 mt-3 d-flex justify-content-center h2' id='message'></div>";
-        $supertests_block .= "</form><br>";
+        $supertests_block .= "</form>";
         return ["block"=>$supertests_block];
     }
 }

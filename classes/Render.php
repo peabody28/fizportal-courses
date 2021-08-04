@@ -227,23 +227,21 @@ class Render
         $a_type_task = "
                         <div class='col-12 m-0 p-0 d-flex justify-content-center container'>
                                 <div class='row m-0 p-0 col-12 col-md-5 row d-flex justify-content-between'>
-                                    <div class='col-1 container m-0 p-0 ch_b'><input  class='check-input' type='checkbox' name='$task[id]_a_answ1'  value='1' ><br><label class='form-check-label d-flex justify-content-center'>1</label></div>
-                                    <div class='col-1 container m-0 p-0 ch_b'><input  class='check-input' type='checkbox' name='$task[id]_a_answ2'  value='2' ><br><label class='form-check-label d-flex justify-content-center'>2</label></div>
-                                    <div class='col-1 container m-0 p-0 ch_b'><input  class='check-input' type='checkbox' name='$task[id]_a_answ3'  value='3' ><br><label class='form-check-label d-flex justify-content-center'>3</label></div>
-                                    <div class='col-1 container m-0 p-0 ch_b'><input  class='check-input' type='checkbox' name='$task[id]_a_answ4'  value='4' ><br><label class='form-check-label d-flex justify-content-center'>4</label></div>
-                                    <div class='col-1 container m-0 p-0 ch_b'><input  class='check-input' type='checkbox' name='$task[id]_a_answ5'  value='5' ><br><label class='form-check-label d-flex justify-content-center'>5</label></div>
+                                    <div class='col-1 container m-0 p-0 ch_b'><input  class='check-input' type='checkbox' name='$task[id]_a_answ1'  value='1' ><label class='form-check-label mt-3 d-flex justify-content-center'>1</label></div>
+                                    <div class='col-1 container m-0 p-0 ch_b'><input  class='check-input' type='checkbox' name='$task[id]_a_answ2'  value='2' ><label class='form-check-label mt-3 d-flex justify-content-center'>2</label></div>
+                                    <div class='col-1 container m-0 p-0 ch_b'><input  class='check-input' type='checkbox' name='$task[id]_a_answ3'  value='3' ><label class='form-check-label mt-3 d-flex justify-content-center'>3</label></div>
+                                    <div class='col-1 container m-0 p-0 ch_b'><input  class='check-input' type='checkbox' name='$task[id]_a_answ4'  value='4' ><label class='form-check-label mt-3 d-flex justify-content-center'>4</label></div>
+                                    <div class='col-1 container m-0 p-0 ch_b'><input  class='check-input' type='checkbox' name='$task[id]_a_answ5'  value='5' ><label class='form-check-label mt-3 d-flex justify-content-center'>5</label></div>
                                 </div>
                             </div>";
 
-        $b_type_task = "<input type='text' class='row' name='$task[id]_b_answer'><br>";
+        $b_type_task = "<input type='text' class='row' name='$task[id]_b_answer'>";
 
         $content .=
-            "<div class='opis m-0 p-0 d-flex justify-content-center'>
-                <div class='col-8'>$task[text]</div>
-            </div>
-            <br>
-            <br>
-            <div class='container-fluid row m-0 p-0 d-flex justify-content-center'>";
+            "<div class='opis m-0 p-0 mt-5 d-flex justify-content-center'>
+                <div class='col-12 m-0 p-0 text-break'>$task[text]</div>
+            </div> 
+            <div class='container-fluid row m-0 p-0 mt-5 d-flex justify-content-center'>";
 
         if($task["type"]=="A") {
             $content .=  $a_type_task;
@@ -252,7 +250,7 @@ class Render
         else
             $content .= $b_type_task;
 
-        $content.="</div><br><br>";
+        $content.="</div>";
         return $content;
     }
 
