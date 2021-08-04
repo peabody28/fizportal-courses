@@ -7,6 +7,9 @@
 #change_limit_of_points button {
   background-color: #cd7857;
 }
+.adaptive_input {
+  width: 100%;
+}
 .get_task .btn {
   height: 26px;
   width: 26px;
@@ -42,9 +45,6 @@
 }
 #task #tt {
   background-color: #d9e6ef;
-}
-#task #tt #b_answer_inp {
-  width: 100%;
 }
 #task #tt #message {
   min-height: 50px;

@@ -115,7 +115,7 @@ class Render
                                 <input type='hidden' name='id' value='$theme[id]'>
                                 <div class='row col-12 m-0 p-0 d-flex justify-content-start'>
                                     <button type='submit' class='btn col-12 col-md-3 mr-md-3'>Изменит границу баллов</button>
-                                    <input type='text' name='limit_of_points' class='col-12 col-md-4'>
+                                    <div class='m-0 p-0 mr-md-2 col-12 col-md-6 col-lg-4 d-flex align-items-center mt-2 mt-md-0'><input type='text' name='limit_of_points' class='adaptive_input'></div>
                                 </div> 
                             </form>
                         </div>";
@@ -191,7 +191,7 @@ class Render
                     <input type='hidden' name='theme_id' value='$task[theme_id]'>
                     <input type='hidden' name='code' value='$code'>
                     <div class='row p-0 m-0 col-12 d-flex justify-content-center'>
-                        <div class='m-0 p-0 mr-md-2 col-12 col-md-5 col-lg-4 d-flex align-items-center'><input type='text' id='b_answer_inp' name='$task[id]_b_answer'></div>
+                        <div class='m-0 p-0 mr-md-2 col-12 col-md-5 col-lg-4 d-flex align-items-center'><input type='text' class='adaptive_input' name='$task[id]_b_answer'></div>
                         <button class='btn send col-12 col-md-3 text-break mt-2 mt-md-0' type='submit'>Отправить</button>
                     </div>
                     
