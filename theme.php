@@ -69,15 +69,10 @@ if ($tmp_theme)
                         $min_null = "0";
                     if((int)($response["sec"]/10)==0)
                         $sec_null = "0";
-                    $content .= "<br><div class='row m-0 p-0 ml-3 h2 $class'><div id='hours'>$hours_null$response[hours]</div>:<div id='min'>$min_null$response[min]</div>:<div id='sec'>$sec_null$response[sec]</div></div>";
+                    $content .= "<div id='clock' class='row m-0 p-0 pr-md-5 mt-4 h2 d-flex justify-content-end $class'><div id='hours'>$hours_null$response[hours]</div>:<div id='min'>$min_null$response[min]</div>:<div id='sec'>$sec_null$response[sec]</div></div>";
                 }
 
-                // кнопка "назад к темам"
-                $content .= "<div class='row m-0 p-0 pl-3 mt-3'><a class='btn' id='back_to_themes_btn' href='/course?id=$tmp_theme[course_id]'>Назад к темам</a></div>";
-                // кнопка "Обнулить прогресс темы"
-                $content .= "<div class='row m-0 p-0 pl-3 mt-3'><button id='reset_theme' theme_id='$tmp_theme[id]' class='btn'>Обнулить прогресс темы</button></div>";
-                //
-                $content .="<div id='task' class='p-0 m-0 mt-5 pt-md-5 d-flex justify-content-center align-items-center row container-fluid'>
+                $content .="<div id='task' class='p-0 m-0 mt-5 d-flex justify-content-center align-items-center row container-fluid'>
                                     <div id='tt' class='p-4 pt-5 m-0 ml-md-5 mr-md-5 row container-fluid d-flex justify-content-center'>";
                 if(count($tasks_list))
                 {
@@ -93,13 +88,17 @@ if ($tmp_theme)
                     $content .= $response["block"];
                 }
                 else
-                    $content .="<div id='task' class='p-0 m-0 mt-5 pt-md-5 d-flex justify-content-center align-items-center row container-fluid'>
-                                        <div id='tt' class='p-3 pt-5 m-0 ml-md-5 mr-md-5 row container-fluid d-flex justify-content-center'>
-                                            <div class='col-12 m-0 p-0 d-flex justify-content-center'>Описание темы</div>
-                                            <div class='col-12 m-0 p-0 text-break'>$tmp_theme[text]</div>
-                                        </div>
-                               </div>";
-                $content .= "</div></div><br>";
+                    $content .="<div class='col-12 m-0 p-0 d-flex justify-content-center'>Описание темы</div>
+                                <div class='col-12 m-0 p-0 text-break'>$tmp_theme[text]</div>";
+
+                $content .= "</div>"; // зкарыл #tt
+
+                // кнопка "назад к темам" и "Обнулить прогресс темы"
+                $content .= "<div class='row col-12 m-0 p-0 pl-md-5 pr-md-5 mt-3 d-flex justify-content-between'>
+                                <a class='btn col-12 col-md-3' id='back_to_themes_btn' href='/course?id=$tmp_theme[course_id]'>Назад к темам</a>
+                                <button id='reset_theme' theme_id='$tmp_theme[id]' class='btn col-12 col-md-4 mt-3 mt-md-0'>Обнулить прогресс темы</button>
+                             </div>";
+                $content .= "</div>"; // зкарыл #task
             }
             else
             {
