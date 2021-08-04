@@ -1,6 +1,15 @@
 #back_to_themes_btn {
   background-color: #d5a03e;
 }
+#add_task {
+  background-color: #738ee8;
+}
+#change_limit_of_points button {
+  background-color: #cd7857;
+}
+.adaptive_input {
+  width: 100%;
+}
 .get_task .btn {
   height: 26px;
   width: 26px;

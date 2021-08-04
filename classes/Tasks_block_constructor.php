@@ -1,6 +1,7 @@
 <?php
 require_once __DIR__."/Tasks_table.php";
 require_once __DIR__."/Themes_table.php";
+require_once __DIR__."/Themes_limits_table.php";
 require_once __DIR__."/Render.php";
 require_once __DIR__."/Users_progress_theme_table.php";
 require_once __DIR__."/Supertests_tasks_table.php";
@@ -63,11 +64,15 @@ class Tasks_block_constructor
 
     public function get_supertest_block($user_id, $theme_id, $is_admin=false, $sptest_id)
     {
+        $themes_limits_table = new Themes_limits_table();
+        $resp = $themes_limits_table->read($theme_id);
+        $limits_of_points = $resp["time_limit"];
+
         $users_progress_theme_table = new Users_progress_theme_table();
         $users_progress = $users_progress_theme_table->read(["user_id"=>$user_id, "theme_id"=>$theme_id]);
 
         $professor = new Professor();
-        $resp = $professor->check_access_supertest($users_progress, $is_admin);
+        $resp = $professor->check_access_supertest($limits_of_points, $users_progress, $is_admin);
         if(!$resp["status"])
             return ["block"=>$resp["error"]];
 

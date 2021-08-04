@@ -92,7 +92,7 @@ class Render
 
         // отображение супертеста
         $disabled = "";
-        if((int)$users_progress["progress"]<10 && $_SESSION["rights"]!="admin")
+        if((int)$users_progress["progress"]<(int)$theme["limits_of_points"] && $_SESSION["rights"]!="admin")
             $disabled="disabled";
 
         $content .= "<form class='get_task mr-1 mt-2 supertest' method='POST'>
@@ -106,7 +106,21 @@ class Render
         $content .= "</div>" ; // закрыл блок с квадратами задач
         // кнопка "добавить задачу"
         if ($_SESSION["rights"]=="admin")
-            $content .="<div class='row m-0 mt-3 p-0 pl-3'><a class='btn create add_task' href='/add_task?theme_id=$theme[id]'>Добавить задачу</a></div>";
+        {
+            $content .="<div class='row m-0 mt-3 p-0 pl-3'><a class='btn' id='add_task' href='/add_task?theme_id=$theme[id]'>Добавить задачу</a></div>";
+            $content .="<div class='row col-12 m-0 mt-3 p-0 pl-3'>
+                            <form method='POST' class='m-0 p-0 col-12' id='change_limit_of_points'>
+                                <input type='hidden' name='submit'>
+                                <input type='hidden' name='code' value='change_limit_of_points'>
+                                <input type='hidden' name='id' value='$theme[id]'>
+                                <div class='row col-12 m-0 p-0 d-flex justify-content-start'>
+                                    <button type='submit' class='btn col-12 col-md-3 mr-md-3'>Изменит границу баллов</button>
+                                    <div class='m-0 p-0 mr-md-2 col-12 col-md-6 col-lg-4 d-flex align-items-center mt-2 mt-md-0'><input type='text' name='limit_of_points' class='adaptive_input'></div>
+                                </div> 
+                            </form>
+                        </div>";
+        }
+
 
         return ["content"=>$content, "first_id"=>$first_id];
 
@@ -176,9 +190,9 @@ class Render
                     <input type='hidden' name='task_id' value='$task[id]'>
                     <input type='hidden' name='theme_id' value='$task[theme_id]'>
                     <input type='hidden' name='code' value='$code'>
-                    <div class='row p-0 m-0 col-12'>
-                        <input type='text' class='col-8' name='$task[id]_b_answer'>
-                        <button class='btn send col-4 text-break' type='submit'>Отправить</button>
+                    <div class='row p-0 m-0 col-12 d-flex justify-content-center'>
+                        <div class='m-0 p-0 mr-md-2 col-12 col-md-5 col-lg-4 d-flex align-items-center'><input type='text' class='adaptive_input' name='$task[id]_b_answer'></div>
+                        <button class='btn send col-12 col-md-3 text-break mt-2 mt-md-0' type='submit'>Отправить</button>
                     </div>
                     
                 </form>";

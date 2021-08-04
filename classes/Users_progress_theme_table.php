@@ -48,25 +48,25 @@ class Users_progress_theme_table implements Table
     {
         $row = $this->read($target);
         if(!$row){
-            $target["progress"]='1';
+            $target["progress"]=(string)$count;
             $this->create($target);
         }
         else
         {
-            $target["progress"]=(string)((int)$row["progress"]+$count);
+            $target["progress"]=(string)((int)$row["progress"]+(int)$count);
             $this->update($target, "set_point");
         }
     }
-    public function delete_point($target)
+    public function delete_point($target, $count=1)
     {
         $row = $this->read($target);
         if(!$row){
-            $target["progress"]='-1';
+            $target["progress"]=(string)($count*(-1));
             $this->create($target);
         }
         else
         {
-            $target["progress"]=(string)((int)$row["progress"]-1);
+            $target["progress"]=(string)((int)$row["progress"]-(int)$count);
             $this->update($target, "set_point");
         }
     }
