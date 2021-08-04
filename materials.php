@@ -75,7 +75,13 @@ else if (isset($_GET["task_id"]))
 
         // встроить видео по ссылке
     }
-    $content .= "<br><br><a class='btn btn-primary' href='/theme?id=$tmp_task[theme_id]'>Вернуться к теме</a><br><br><br>";
+    $content .= "<form action='/theme.php' method='POST'>
+                    <input type='hidden' name='submit'>
+                    <input type='hidden' name='code' value='back_to_theme'>
+                    <input type='hidden' name='id' value='$tmp_task[theme_id]'>
+                    <input type='hidden' name='task_id' value='$tmp_task[id]'>
+                    <button class='btn' id='back_to_theme_btn'>Вернуться к теме</button>
+                </form>";
 
     $urls = $tasks_materials_table->read($_GET["task_id"]);
     foreach ($urls as $item) {
@@ -106,7 +112,7 @@ else if (isset($_GET["task_id"]))
         "name"=>"<h2>$_SESSION[name]</h2>",
         "content"=>$content,
         "js"=>"/js/materials.js"
-    ] ;
+    ];
 
     echo $page->render_temp();
 

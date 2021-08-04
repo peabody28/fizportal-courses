@@ -52,7 +52,8 @@ if (isset($_GET["theme_id"])) {
                     'css' => "/css/mistakes.css",
                     "name" => "<h2>$_SESSION[name]</h2>",
                     "content" => $content,
-                    "js" => "/js/mistakes.js"
+                    "js" => "/js/mistakes.js",
+                    "mathjax"=>file_get_contents("templates/mathjax.html")
                 ];
                 echo $page->render_temp();
             }

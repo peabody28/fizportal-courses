@@ -213,7 +213,7 @@ class Render
             if ($next_id=="supertest")
                 $content .= "<button type='submit' id='to_supertest' class='btn mt-3' onclick='$(\".supertest\").submit();return false;'>Перейти к тесту</button>";
             else
-                $content .= "<button type='submit' class='btn next mt-3' onclick='get_next_task($next_id);return false;'>Слудующая задача</button>";
+                $content .= "<button type='submit' class='btn next mt-3' onclick='get_next_task($next_id);return false;'>Следующая задача</button>";
         }
 
         $content .= "</div>";

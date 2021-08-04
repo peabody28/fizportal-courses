@@ -100,4 +100,10 @@
 
 <div id="message"></div>
 
-<br><br><a class='btn btn-primary' href='/theme?id={{ theme_id }}'>Вернуться к теме</a><br><br><br>
+<form action='/theme.php' method='POST'>
+    <input type='hidden' name='submit'>
+    <input type='hidden' name='code' value='back_to_theme'>
+    <input type='hidden' name='id' value='{{ theme_id }}'>
+    <input type='hidden' name='task_id' value='{{ back_id }}'>
+    <button class='btn' id='back_to_theme_btn'>Вернуться к теме</button>
+</form>

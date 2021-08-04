@@ -79,7 +79,8 @@ $page->argv = ['title'=>"$course[name]",
     'css'=>"/css/course.css",
     "name"=>"<h2>$_SESSION[name]</h2>",
     "content"=>$content,
-    "js"=>"/js/course.js"] ;
+    "js"=>"/js/course.js",
+    "mathjax"=>file_get_contents("templates/mathjax.html")] ;
 
 echo $page->render_temp();
 

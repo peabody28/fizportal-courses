@@ -1,10 +1,6 @@
-
-var first = $('.get_task button.close_btn:first').parent()
-
-if(!first.length)
-    first = $('.get_task button:not(.red):first').parent()
-if(!first.length)
-    first = $('.get_task:first')
+$('.supertest').submit()
+var task_id = $('.send_answer input[name = "task_id"]').attr("value")
+var first = $('#'+task_id).parent()
 
 first.css('position', 'relative');
 first.css('top', '5px');

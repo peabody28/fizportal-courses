@@ -16,7 +16,7 @@ session_start();
 
 
 
-if(isset($_POST["submit"]))
+if(isset($_POST["submit"]) && $_POST["code"] != "back_to_theme")
 {
     $data = $_POST;
     $themes_points_limit_table = new Themes_points_limit_table();
@@ -35,7 +35,13 @@ if(isset($_POST["submit"]))
 }
 else
 {
-    $data = $_GET;
+    if(isset($_POST["submit"]) && $_POST["code"] == "back_to_theme")
+    {
+        $data=$_POST;
+        $this_task_id=$data["task_id"];
+    }
+    else
+        $data = $_GET;
 
     $themes_table = new Themes_table();
     $tmp_theme = $themes_table->read($data["id"]);
@@ -99,24 +105,29 @@ else
 
                     $content .="<div id='task' class='p-0 m-0 mt-5 d-flex justify-content-center align-items-center row container-fluid'>
                                     <div id='tt' class='p-4 pt-5 m-0 ml-md-5 mr-md-5 row container-fluid d-flex justify-content-center'>";
+
                     if(count($tasks_list))
                     {
                         // рендер первой задачи
-                        $this_task = $tasks_list[$tasks_blocks["first_id"]];
-                        if($tasks_blocks["first_id"]+1 == count($tasks_list)-1)
-                            $next_id = "supertest";
+                        if(isset($this_task_id))
+                        {
+                            if($this_task_id=="supertest")
+                                $content .= "<script type='text/javascript'>$(document).ready(function() { $('.supertest').submit(); });</script>";
+                            else
+                                $content .= "<script type='text/javascript'>$(document).ready(function() { $('#$this_task_id').parent().submit(); });</script>";
+                        }
                         else
-                            $next_id = $tasks_list[$tasks_blocks["first_id"]+1]["id"];
+                        {
+                            $this_task = $tasks_list[$tasks_blocks["first_id"]];
+                            $content .= "<script type='text/javascript'>$(document).ready(function() { $('#$this_task[id]').parent().submit(); });</script>";
+                        }
 
-                        $tasks_block_constructor = new Tasks_block_constructor();
-                        $response = $tasks_block_constructor->get_task_block($this_task["id"], $next_id, ($_SESSION["rights"]=="admin"));
-                        $content .= $response["block"];
                     }
                     else
                         $content .="<div class='col-12 m-0 p-0 d-flex justify-content-center'>Описание темы</div>
                                 <div class='col-12 m-0 p-0 text-break'>$tmp_theme[text]</div>";
 
-                    $content .= "</div>"; // зкарыл #tt
+                    $content .= "</div>"; // закрыл #tt
 
                     // кнопка "назад к темам" и "Обнулить прогресс темы"
                     $content .= "<div class='row col-12 m-0 p-0 pl-md-5 pr-md-5 mt-3 d-flex justify-content-between'>
@@ -160,7 +171,8 @@ else
         'css'=>"/css/theme.css",
         "name"=>"<h2>$_SESSION[name]</h2>",
         "content"=>$content,
-        "js"=>"/js/theme.js"] ;
+        "js"=>"/js/theme.js",
+        "mathjax"=>file_get_contents("templates/mathjax.html")] ;
 
     echo $page->render_temp();
 
