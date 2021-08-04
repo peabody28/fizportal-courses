@@ -44,7 +44,7 @@ class Render
 
             if(!in_array(["user_id" => $_SESSION["id"], "task_id" => $task["id"]], $users_tasks))
             {
-                if(in_array(["task_id" => $task["id"]], $users_mistakes))
+                if(in_array(["user_id" => $_SESSION["id"], "task_id" => $task["id"]], $users_mistakes))
                     $button = "<button class='btn red' id='$task[id]' disabled></button>";
                 else
                 {
@@ -103,11 +103,10 @@ class Render
                             <button class='btn supertest' $disabled></button>
                          </form>";
 
+        $content .= "</div>" ; // закрыл блок с квадратами задач
         // кнопка "добавить задачу"
         if ($_SESSION["rights"]=="admin")
-            $content .="<a class='btn ml-3 create add_task' href='/add_task?theme_id=$theme[id]'>Добавить задачу</a>";
-
-        $content .= "</div>" ; // закрыл блок с квадратами задач
+            $content .="<div class='row m-0 mt-3 p-0 pl-3'><a class='btn create add_task' href='/add_task?theme_id=$theme[id]'>Добавить задачу</a></div>";
 
         return ["content"=>$content, "first_id"=>$first_id];
 

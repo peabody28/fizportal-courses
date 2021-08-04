@@ -84,7 +84,7 @@ class Tasks_block_constructor
         if ($supertests_tasks_rows)
         {
             $supertests_block .=
-                "<form class='send_answer col-12' method='POST' onsubmit='send_answer();return false;'>
+                "<form class='col-12 send_supertest_answers'  method='POST' onsubmit='send_supertest_answers();return false;'>
                                     <input type='hidden' name='submit'>
                                     <input type='hidden' name='code' value='send_supertest_answers'>
                                     <input type='hidden' name='theme_id' value='$theme_id'>";

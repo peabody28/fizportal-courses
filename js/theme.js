@@ -90,6 +90,13 @@ function send_answer()
                 {
                     if(response["code"]=="TIME")
                         $("#content").html("<h2>Время решения темы истекло, возвращайтесь позже</h2>")
+                    else if(response["code"]=="IN_MISTAKES")
+                    {
+                        $('#message').addClass("red_mess")
+                        $('#message').removeClass("green_mess")
+                        $("#message").html("Вы сможете решить эту задачу в работе над ошибками")
+                    }
+
                     else
                     {
                         $('#message').addClass("red_mess")
@@ -100,6 +107,7 @@ function send_answer()
                     }
 
                 }
+
                 if($('.lock').length)
                 {
                     $('.lock').toggleClass('lock').toggleClass('in_process');
@@ -112,28 +120,36 @@ function send_answer()
     return false;
 }
 
-$('#send_supertest_answers').submit(function ()
+function send_supertest_answers()
 {
     $.ajax(
         {
             url: "/task.php",
             type: "POST",
-            data: $('#send_supertest_answers').serialize(),
+            data: $('.send_supertest_answers').serialize(),
             success: function (res)
             {
                 var response = JSON.parse(res)
                 if (response["status"]=="OK")
                 {
-                    $("#message").html("Верно!")
-                    $(".supertest").css('background-color', '#50C878');
+                    $('#message').addClass("green_mess")
+                    $('#message').removeClass("red_mess")
+                    $("#message").html("Верно")
+                    // стопаю таймер
+                    if (intervalId)
+                        clearInterval(intervalId)
                 }
                 else
-                    $("#message").html("Неверный ответ!")
+                {
+                    $('#message').addClass("red_mess")
+                    $('#message').removeClass("green_mess")
+                    $("#message").html("Неверный ответ")
+                }
             }
         }
     )
     return false;
-})
+}
 
 function del_task(id)
 {
@@ -158,7 +174,7 @@ function inter() {
     var Minutes = $('#min').text(), int;
     var Hours = $('#hours').text(), int;
 
-    int = setInterval(function () { // запускаем интервал
+    intervalId = setInterval(function () { // запускаем интервал
         if (Seconds > 0)
         {
             Seconds--; // вычитаем 1
@@ -205,3 +221,23 @@ if($('.in_process').length)
 
 if($('.blocked').length)
     inter()
+
+$('#reset_theme').click(
+
+    function ()
+    {
+        var theme_id = $(this).attr("theme_id")
+        $.ajax(
+            {
+                url: "/task.php",
+                type: "POST",
+                data: "submit=true&code=reset_theme&id="+theme_id,
+                success: function ()
+                {
+                    location.reload();
+                }
+            }
+        )
+        return false;
+    }
+)

@@ -5,8 +5,11 @@ require_once __DIR__."/Users_progress_theme_table.php";
 require_once __DIR__."/Users_mistakes_table.php";
 require_once __DIR__."/Users_themes_table.php";
 require_once __DIR__."/Tasks_table.php";
+require_once __DIR__."/Themes_table.php";
 require_once __DIR__."/Tasks_answers_table.php";
 require_once __DIR__."/Themes_limits_table.php";
+require_once __DIR__."/Users_themes_time_table.php";
+session_start();
 
 
 class Task_handler
@@ -18,7 +21,9 @@ class Task_handler
         $task = $this->construct_task();
 
         $prof = new Professor();
-
+        $in_mistakes = $prof->check_in_mistakes_list($this->data["task_id"], $_SESSION["id"]);
+        if($in_mistakes)
+            return ["status" => "ERROR", "code"=>"IN_MISTAKES"];
         $response = $prof->check_time(["user_id"=>$_SESSION["id"], "theme_id"=>$this->data["theme_id"], "limit"=>$this->data["limit"]]);
         if($response["status"]===false)
             return ["status" => "ERROR", "code"=>"TIME"];
@@ -33,7 +38,7 @@ class Task_handler
             $st = $users_tasks_table->create(["user_id"=>$_SESSION["id"], "task_id"=>$this->data["task_id"]]);
 
             $users_progress_theme_table = new Users_progress_theme_table();
-            if($st) // если решается впервые  добавляю балл
+            if($st) // если решается впервые добавляю балл
                 $users_progress_theme_table->add_point(["user_id"=>$_SESSION["id"], "theme_id"=>$this->data["theme_id"]]);
             $resp = $users_progress_theme_table->read(["user_id"=>$_SESSION["id"], "theme_id"=>$this->data["theme_id"]]);
             return ["status" => "OK", "task_id"=>$this->data["task_id"], "progress"=>$resp["progress"]?:null];
@@ -48,11 +53,8 @@ class Task_handler
                 // добавляю задачу в РО
                 $users_mistakes_table = new Users_mistakes_table();
                 $st = $users_mistakes_table->create(["user_id"=>$_SESSION["id"], "task_id"=>$this->data["task_id"]]);
-                // если $st==true то задачу первый раз решили неверно и я могу снять балл
-                $users_themes_table = new Users_themes_table();
-                $users_themes = $users_themes_table->read($_SESSION["id"]);
-
-                if($st && !in_array(["user_id"=>$_SESSION["id"], "theme_id"=>$this->data["theme_id"]], $users_themes)) // если тема не выполнена
+                // если $st==true то задачу впервые решили неверно и я могу снять балл
+                if ($st)
                 {
                     // Cнимаю балл за неверное решение
                     $users_progress_theme_table = new Users_progress_theme_table();
@@ -154,6 +156,54 @@ class Task_handler
             $task["user_answer"]=$this->data["$tmp_task[id]_b_answer"];
         }
         return $task;
+    }
+
+    public function reset_theme()
+    {
+        $theme_id = $this->data["id"];
+
+        $tasks_table = new Tasks_table();
+        $tasks_theme_list = $tasks_table->get_tasks_theme($theme_id);
+
+        $users_tasks_table = new Users_tasks_table();
+        $users_tasks = $users_tasks_table->read($_SESSION["id"]);
+
+        $users_themes_table = new Users_themes_table();
+        $users_themes = $users_themes_table->read($_SESSION["id"]);
+
+        $users_mistakes_table = new Users_mistakes_table();
+        $users_mistakes = $users_mistakes_table->read($_SESSION["id"]);
+
+        $row = ["user_id"=>$_SESSION["id"], "theme_id"=>$theme_id];
+        $progress = 0;
+        foreach ($tasks_theme_list as $task)
+        {
+            // если задача в работе над ошибками - удаляю
+            $obj = ["user_id"=>$_SESSION["id"], "task_id"=>$task["id"]];
+            if(in_array($obj, $users_mistakes))
+            {
+                if (!in_array($row, $users_themes))
+                    $users_mistakes_table->delete($obj);
+                else
+                    $progress--;
+            }
+
+
+            // если задача в списке решенных - удаляю
+            else if(in_array($obj, $users_tasks))
+                $users_tasks_table->delete($obj);
+        }
+        // очищаю прогресс
+        $row["progress"]=$progress;
+        $users_progress_theme_table = new Users_progress_theme_table();
+        $users_progress_theme_table->update($row, "set_point");
+
+        // обнуляю время
+        $users_themes_time_table = new Users_themes_time_table();
+        $users_themes_time_table->delete($row);
+
+
+        return ["status"=>"OK"];
     }
 
 }

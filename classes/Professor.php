@@ -4,7 +4,7 @@ require_once __DIR__."/Users_themes_table.php";
 require_once __DIR__."/Themes_table.php";
 require_once __DIR__."/Users_mistakes_table.php";
 require_once __DIR__."/Tasks_table.php";
-require_once __DIR__ . "/Users_themes_time_table.php";
+require_once __DIR__."/Users_themes_time_table.php";
 require_once __DIR__."/Themes_limits_table.php";
 
 class Professor
@@ -101,6 +101,14 @@ class Professor
             return true;
         else
             return false;
+
+    }
+
+    public function check_in_mistakes_list($task_id, $user_id)
+    {
+        $users_mistakes_table = new Users_mistakes_table();
+        $mist_list = $users_mistakes_table->read($user_id);
+        return in_array(["user_id"=>$user_id, "task_id"=>$task_id], $mist_list);
 
     }
 

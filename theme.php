@@ -73,16 +73,23 @@ if ($tmp_theme)
                 }
 
                 // кнопка "назад к темам"
-                $content .= "<br> <a class='btn ml-3' id='back_to_themes_btn' href='/course?id=$tmp_theme[course_id]'>Назад к темам</a>";
+                $content .= "<div class='row m-0 p-0 pl-3 mt-3'><a class='btn' id='back_to_themes_btn' href='/course?id=$tmp_theme[course_id]'>Назад к темам</a></div>";
+                // кнопка "Обнулить прогресс темы"
+                $content .= "<div class='row m-0 p-0 pl-3 mt-3'><button id='reset_theme' theme_id='$tmp_theme[id]' class='btn'>Обнулить прогресс темы</button></div>";
+                //
                 $content .="<div id='task' class='p-0 m-0 mt-5 pt-md-5 d-flex justify-content-center align-items-center row container-fluid'>
                                     <div id='tt' class='p-4 pt-5 m-0 ml-md-5 mr-md-5 row container-fluid d-flex justify-content-center'>";
                 if(count($tasks_list))
                 {
                     // рендер первой задачи
                     $this_task = $tasks_list[$tasks_blocks["first_id"]];
+                    if($tasks_blocks["first_id"]+1 == count($tasks_list)-1)
+                        $next_id = "supertest";
+                    else
+                        $next_id = $tasks_list[$tasks_blocks["first_id"]+1]["id"];
 
                     $tasks_block_constructor = new Tasks_block_constructor();
-                    $response = $tasks_block_constructor->get_task_block($this_task["id"], $tasks_list[1]["id"], ($_SESSION["rights"]=="admin"));
+                    $response = $tasks_block_constructor->get_task_block($this_task["id"], $next_id, ($_SESSION["rights"]=="admin"));
                     $content .= $response["block"];
                 }
                 else
