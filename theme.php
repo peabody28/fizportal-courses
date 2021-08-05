@@ -24,6 +24,14 @@ if(isset($_POST["submit"]) && $_POST["code"] != "back_to_theme")
         else
             $resp = ["status"=>"error"];
     }
+    else if($data["code"]=="reset_theme")
+    {
+        $user = new User($_SESSION["id"]);
+        $theme = new Theme($data["id"]);
+
+        $professor = new Professor();
+        $resp = $professor->reset_theme($user, $theme);
+    }
     echo json_encode($resp);
 }
 else
@@ -55,7 +63,7 @@ else
             if($theme_status == "open" || $theme_status == "solved" || $user->rights=="admin")
             {
                 // прошло ли время блокировки темы?
-                $response = $professor->check_time(["user_id"=>$user->id, "theme_id"=>$theme->id]);
+                $response = $professor->check_time($user, $theme);
 
                 if($response["status"] !== false) // true or "update"
                 {
@@ -65,7 +73,7 @@ else
                     $sptest = new Supertest($theme->id);
                     // рендер блоков задач и супертеста
                     $render = new Render();
-                    $tasks_blocks = $render->render_tasks_theme($theme, $tasks_list, $user, $sptest);//TODO
+                    $tasks_blocks = $render->render_tasks_theme($theme, $tasks_list, $user, $sptest);
                     $content = $tasks_blocks["content"];
                     // время
                     if(isset($response["sec"]))
@@ -99,7 +107,7 @@ else
                         else
                         {
                             $this_task = $tasks_list[$tasks_blocks["first_id"]];
-                            $content .= "<script type='text/javascript'>$(document).ready(function() { $('#$this_task[id]').parent().submit(); });</script>";
+                            $content .= "<script type='text/javascript'>$(document).ready(function() { $('#$this_task->id').parent().submit(); });</script>";
                         }
 
                     }

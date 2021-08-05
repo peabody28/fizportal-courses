@@ -48,8 +48,7 @@ if ($course->id)
 
             $theme->get_points_limit();
 
-
-            $progress = $user->get_progress_theme($theme->id);
+            $progress = $professor->get_progress_theme($user, $theme);
             $progress = $progress?:"0";
 
             $render = new Render();

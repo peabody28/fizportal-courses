@@ -1,4 +1,6 @@
 <?php
+require_once __DIR__."/Professor_tasks.php";
+require_once __DIR__."/Professor_mistakes.php";
 require_once __DIR__."/../vendor/autoload.php";
 session_start();
 
@@ -31,13 +33,15 @@ class Render
     public function render_tasks_theme($theme, $tasks_list, $user, $sptest)
     {
         // сделанные пользователем задачи
-        $users_tasks = $user->get_tasks();
+        $prof_tasks = new Professor_tasks();
+        $users_tasks = $prof_tasks->get_tasks($user);
         //РО
-        $users_mistakes = $user->get_mistakes();
+        $prof_mist = new Professor_mistakes();
+        $users_mistakes = $prof_mist->get_mistakes($user);
         // лимит задач темы
         $theme->get_points_limit();
         // прогресс
-        $users_progress = $user->get_progress_theme($theme->id);
+        $users_progress = $prof_tasks->get_progress_theme($user, $theme);
 
         $content = "<div class='row container-fluid justify-content-start m-0 p-0 pl-3'>";
         $content .= "<button id='get_text_theme' class='btn mr-1 mt-2' theme_id='$theme->id'></button>";
@@ -51,15 +55,15 @@ class Render
             $task = $tasks_list[$i];
             $last = ($i==count($tasks_list)-1);
 
-            if(!in_array(["user_id" => $user->id, "task_id" => $task["id"]], $users_tasks))
+            if(!in_array(["user_id" => $user->id, "task_id" => $task->id], $users_tasks))
             {
-                if(in_array(["user_id" => $user->id, "task_id" => $task["id"]], $users_mistakes))
-                    $button = "<button class='btn red' id='$task[id]' disabled></button>";
+                if(in_array(["user_id" => $user->id, "task_id" => $task->id], $users_mistakes))
+                    $button = "<button class='btn red' id='$task->id' disabled></button>";
                 else
                 {
                     if($first_close_id === null)
                         $first_close_id = $i;
-                    $button = "<button class='btn close_btn' id='$task[id]'></button>";
+                    $button = "<button class='btn close_btn' id='$task->id'></button>";
                 }
 
             }
@@ -67,7 +71,7 @@ class Render
             {
                 if($first_solved_id === null)
                     $first_solved_id = $i;
-                $button = "<button class='btn' id='$task[id]'></button>";
+                $button = "<button class='btn' id='$task->id'></button>";
             }
 
 
@@ -75,12 +79,12 @@ class Render
                 $next_task = "<input type='hidden' name='next_task_id' value='supertest'>";
             else
             {
-                $nt_id = $tasks_list[$i+1]["id"];
+                $nt_id = $tasks_list[$i+1]->id;
                 $next_task = "<input type='hidden' name='next_task_id' value='$nt_id'>";
             }
 
             $content .= "<form class='get_task mr-1 mt-2' method='POST'>
-                            <input type='hidden' name='task_id' value='$task[id]'>
+                            <input type='hidden' name='task_id' value='$task->id'>
                             <input type='hidden' name='submit' value='true'>
                             <input type='hidden' name='code' value='get_task'>
                             $next_task
@@ -101,7 +105,7 @@ class Render
 
         // отображение супертеста
         $disabled = "";
-        if((int)$users_progress["progress"]<(int)$theme->points_limit && $user->rights!="admin")
+        if($users_progress<$theme->points_limit && $user->rights!="admin")
             $disabled="disabled";
 
         $content .= "<form class='get_task mr-1 mt-2 supertest' method='POST'>
@@ -179,16 +183,16 @@ class Render
         $content = "";
         $a_type_task = "<form method='POST' class='$code p-0 m-0 row container-fluid' onsubmit='$func;return false;'>
                             <input type='hidden' name='submit' >
-                            <input type='hidden' name='task_id' value='$task[id]'>
-                            <input type='hidden' name='theme_id' value='$task[theme_id]'>
+                            <input type='hidden' name='task_id' value='$task->id'>
+                            <input type='hidden' name='theme_id' value='$task->theme_id'>
                             <input type='hidden' name='code' value='$code'>
                             <div class='col-12 m-0 p-0 d-flex justify-content-center container'>
                                 <div class='row m-0 p-0 col-12 col-md-5 row d-flex justify-content-between'>
-                                    <div class='col-1 container m-0 p-0 ch_b'><input  class='check-input' type='checkbox' name='$task[id]_a_answ1'  value='1' ><br><label class='form-check-label d-flex justify-content-center'>1</label></div>
-                                    <div class='col-1 container m-0 p-0 ch_b'><input  class='check-input' type='checkbox' name='$task[id]_a_answ2'  value='2' ><br><label class='form-check-label d-flex justify-content-center'>2</label></div>
-                                    <div class='col-1 container m-0 p-0 ch_b'><input  class='check-input' type='checkbox' name='$task[id]_a_answ3'  value='3' ><br><label class='form-check-label d-flex justify-content-center'>3</label></div>
-                                    <div class='col-1 container m-0 p-0 ch_b'><input  class='check-input' type='checkbox' name='$task[id]_a_answ4'  value='4' ><br><label class='form-check-label d-flex justify-content-center'>4</label></div>
-                                    <div class='col-1 container m-0 p-0 ch_b'><input  class='check-input' type='checkbox' name='$task[id]_a_answ5'  value='5' ><br><label class='form-check-label d-flex justify-content-center'>5</label></div>
+                                    <div class='col-1 container m-0 p-0 ch_b'><input  class='check-input' type='checkbox' name='".$task->id."_a_answ1'  value='1' ><br><label class='form-check-label d-flex justify-content-center'>1</label></div>
+                                    <div class='col-1 container m-0 p-0 ch_b'><input  class='check-input' type='checkbox' name='".$task->id."_a_answ2'  value='2' ><br><label class='form-check-label d-flex justify-content-center'>2</label></div>
+                                    <div class='col-1 container m-0 p-0 ch_b'><input  class='check-input' type='checkbox' name='".$task->id."_a_answ3'  value='3' ><br><label class='form-check-label d-flex justify-content-center'>3</label></div>
+                                    <div class='col-1 container m-0 p-0 ch_b'><input  class='check-input' type='checkbox' name='".$task->id."_a_answ4'  value='4' ><br><label class='form-check-label d-flex justify-content-center'>4</label></div>
+                                    <div class='col-1 container m-0 p-0 ch_b'><input  class='check-input' type='checkbox' name='".$task->id."_a_answ5'  value='5' ><br><label class='form-check-label d-flex justify-content-center'>5</label></div>
                                 </div>
                             </div>
                             <div class='row m-0 mt-3 col-12 d-flex justify-content-center'><button class='btn send' type='submit'>Отправить</button></div>
@@ -196,27 +200,27 @@ class Render
 
         $b_type_task = "<form class='$code container-fluid d-flex justify-content-center m-0 p-0' method='POST' onsubmit='$func;return false;'>
                     <input type='hidden' name='submit' >
-                    <input type='hidden' name='task_id' value='$task[id]'>
-                    <input type='hidden' name='theme_id' value='$task[theme_id]'>
+                    <input type='hidden' name='task_id' value='$task->id'>
+                    <input type='hidden' name='theme_id' value='$task->theme_id'>
                     <input type='hidden' name='code' value='$code'>
                     <div class='row p-0 m-0 col-12 d-flex justify-content-center'>
-                        <div class='m-0 p-0 mr-md-2 col-12 col-md-5 col-lg-4 d-flex align-items-center'><input type='text' class='adaptive_input' name='$task[id]_b_answer'></div>
+                        <div class='m-0 p-0 mr-md-2 col-12 col-md-5 col-lg-4 d-flex align-items-center'><input type='text' class='adaptive_input' name='".$task->id."_b_answer'></div>
                         <button class='btn send col-12 col-md-3 text-break mt-2 mt-md-0' type='submit'>Отправить</button>
                     </div>
                     
                 </form>";
 
-        $image_block = $task["img_url"]?"<img src='$task[img_url]' alt=''>":"";
-        $task["text"] = str_replace("{{ img }}", "<br><div class='container-fluid row d-flex justify-content-center m-0 p-0 '>".$image_block."</div><br>", $task["text"]);
+        $image_block = $task->img_url?"<img src='$task->img_url' alt=''>":"";
+        $task->text = str_replace("{{ img }}", "<br><div class='container-fluid row d-flex justify-content-center m-0 p-0 '>".$image_block."</div><br>", $task->text);
         $content .=
             "
             <div class='row opis m-0 p-0 mb-3 d-flex justify-content-center container-fluid'>
-                <div class='col-12 m-0 p-0 text-break'>$task[text]</div>
+                <div class='col-12 m-0 p-0 text-break'>$task->text</div>
             </div>
             <div class='container-fluid row m-0 mt-2 p-0 d-flex justify-content-center'>";
 
 
-        $content .= ($task["type"]=="A")?$a_type_task:$b_type_task;
+        $content .= ($task->type=="A")?$a_type_task:$b_type_task;
         if ($next_id)
         {
             if ($next_id=="supertest")

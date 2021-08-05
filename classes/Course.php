@@ -1,11 +1,12 @@
 <?php
+require_once __DIR__ . "/Theme.php";
 require_once __DIR__ . "/Courses_table.php";
 require_once __DIR__ . "/Themes_table.php";
 
 
 class Course
 {
-    public $id, $title, $text, $complexity=0, $price=null, $img_url=null;
+    public $id, $title, $text, $complexity=0, $price=null, $img_url=null, $themes=null;
 
     public function __construct($id=null)
     {
@@ -23,10 +24,25 @@ class Course
 
     }
 
+    public function get_themes()
+    {
+       $themes_table = new Themes_table();
+       $themes_list = $themes_table->get_courses_themes($this->id);
+       foreach ($themes_list as $item)
+       {
+           $theme = new Theme($item["id"], $item);
+           $this->themes[] = $theme;
+       }
+       return $this->themes;
+    }
+
     public function get_themes_ids()
     {
-        $themes_table = new Themes_table();
-        $themes_ids_list = $themes_table->get_courses_themes($this->id);
-        return $themes_ids_list;
+        $list = [];
+        if(!$this->themes)
+            $this->get_themes();
+        foreach ($this->themes as $theme)
+            $list[] = $theme->id;
+        return $list;
     }
 }

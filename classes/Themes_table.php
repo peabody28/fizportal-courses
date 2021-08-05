@@ -38,11 +38,9 @@ class Themes_table implements Table
     public function get_courses_themes($id)
     {
         global $link;
-        $sql = sprintf("SELECT id FROM themes WHERE course_id='%s'", $id);
+        $sql = sprintf("SELECT * FROM themes WHERE course_id='%s'", $id);
         $result = mysqli_query($link, $sql);
-        $answ = mysqli_fetch_all($result, MYSQLI_ASSOC);
-        foreach ($answ as $val)
-            $themes_ids_list[] = (int)$val["id"];
-        return $themes_ids_list;
+        $themes = mysqli_fetch_all($result, MYSQLI_ASSOC);
+        return $themes;
     }
 }

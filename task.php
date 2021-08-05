@@ -1,11 +1,17 @@
 <?php
-require_once __DIR__."/classes/Render.php";
+require_once __DIR__."/classes/User.php";
 require_once __DIR__."/classes/Tasks_table.php";
+
+require_once __DIR__."/classes/Task_handler.php";
+require_once __DIR__."/classes/Mistake_handler.php";
+require_once __DIR__."/classes/Supertest_handler.php";
+
 require_once __DIR__."/classes/Supertests_tasks_table.php";
 require_once __DIR__."/classes/Users_progress_theme_table.php";
 require_once __DIR__."/classes/Professor.php";
-require_once __DIR__."/classes/Task_handler.php";
+
 require_once __DIR__."/classes/Tasks_block_constructor.php";
+require_once __DIR__."/classes/Render.php";
 session_start();
 
 
@@ -15,22 +21,30 @@ $tasks_table = new Tasks_table();
 
 if(isset($data["submit"]))
 {
-    $task_handler = new Task_handler();
-    $task_handler->data = $data;
 
     if ($data["code"]=="send_answer")
     {
+        $task_handler = new Task_handler();
+        $task_handler->data = $data;
+
+        $user = new User($_SESSION["id"]);
+        $task_handler->data["user"]=$user;
+
         $resp = $task_handler->send_answer();
         echo json_encode($resp);
     }
     else if($data["code"]=="send_mistake_answer")
     {
-        $resp = $task_handler->send_mistake_answer();
+        $mistakes_handler = new Mistake_handler();
+        $mistakes_handler->data = $data;
+        $resp = $mistakes_handler->send_answer();
         echo json_encode($resp);
     }
     else if($data["code"]=="send_supertest_answers")
     {
-        $resp = $task_handler->send_supertest_answer();
+        $supertest_handler = new Supertest_handler();
+        $supertest_handler->data = $data;
+        $resp = $supertest_handler->send_answer();
         echo json_encode($resp);
     }
     else if($data["code"]=="get_text_theme")
@@ -56,11 +70,6 @@ if(isset($data["submit"]))
         $tasks_block_constructor = new Tasks_block_constructor();
         $resp = $tasks_block_constructor->get_supertest_block($_SESSION["id"], $data["theme_id"], ($_SESSION["rights"]=="admin"), $data["supertest_id"]);
         echo json_encode(["block" => $resp["block"]]);
-    }
-    else if($data["code"]=="reset_theme")
-    {
-        $resp = $task_handler->reset_theme();
-        echo json_encode($resp);
     }
     else
         echo json_encode(["status"=>"wrong code"]);

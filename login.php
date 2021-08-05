@@ -22,13 +22,7 @@ if (isset($data["submit"]))
             if($user_data["password"] == md5(md5($data["password"])))
             {
                 // дополняю обьект данными из БД
-                $user = new User();
-                $user->name = $user_data["name"];
-                $user->email = $user_data["email"];
-                $user->id = $user_data["id"];
-                $user->password = $data["password"];
-                $user->rights = $user_data["rights"];
-                $user->hash = $user_data["hash"];
+                $user = new User($user_data["id"]);
 
                 // создаю сессию
                 $session = new User_session();
