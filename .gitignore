@@ -4,3 +4,4 @@ composer.lock
 db.php
 db_connect.php
 media/*
+/unit_tests/

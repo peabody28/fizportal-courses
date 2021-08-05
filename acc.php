@@ -1,7 +1,10 @@
 <?php
 require_once __DIR__."/auth.php";
+require_once __DIR__."/classes/User.php";
+require_once __DIR__."/classes/Theme.php";
 require_once __DIR__."/classes/Render.php";
 require_once __DIR__."/classes/Professor.php";
+require_once __DIR__."/classes/Professor_mistakes.php";
 require_once __DIR__."/classes/Users_themes_table.php";
 require_once __DIR__."/classes/Users_mistakes_table.php";
 require_once __DIR__."/classes/Tasks_table.php";
@@ -14,29 +17,30 @@ $content .= "<div class='row w-100 p-0 m-0 justify-content-start'><a id='exit' c
 //if($_SESSION["rights"]=="admin")
    // $content.= "<div class='row w-100 p-2 m-0 justify-content-start'><a class='btn adm_btn' href='/admin_page'>Админка</a></div>";
 
-$users_themes_table = new Users_themes_table();
-$users_themes = $users_themes_table->read($_SESSION["id"]);
-
+$user = new User($_SESSION["id"]);
 $professor = new Professor();
+$users_themes = $professor->get_themes($user);
+
+
+$prof_mist = new Professor_mistakes();
 foreach ($users_themes as $item) {
-    if($professor->mistakes_status($item["theme_id"]))
+    if($prof_mist->mistakes_status($item->theme_id))
     {
         // список всех ошибок пользователя
-        $users_mistakes_table = new Users_mistakes_table();
-        $all_mistakes = $users_mistakes_table->read($_SESSION["id"]);
+        $all_mistakes = $prof_mist->get_mistakes($user);
         // список задач данной темы
-        $tasks_table = new Tasks_table();
-        $tasks_theme = $tasks_table->get_tasks_theme($item["theme_id"]);
+        $theme = new Theme($item["theme_id"]);
+        $tasks_theme = $theme->get_tasks();
 
         $mistakes = []; // ошибки пользователя в данной теме
         foreach ($tasks_theme as $tt)
         {
-            if(in_array(["user_id"=>$_SESSION["id"], "task_id"=>$tt["id"]], $all_mistakes))
+            if(in_array(["user_id"=>$user->id, "task_id"=>$tt->id], $all_mistakes))
                 $mistakes[] = $tt;
         }
 
         if(count($mistakes)) // если в теме есть ошибки
-            $content .= "<a class='btn ro' href='/mistakes?theme_id=$item[theme_id]'>Работа над ошибками для темы $item[theme_id]</a><br>";
+            $content .= "<a class='btn ro' href='/mistakes?theme_id=$item->theme_id'>Работа над ошибками для темы $item->theme_id</a><br>";
     }
 
 }
@@ -47,7 +51,7 @@ $page = new Render();
 $page->temp = 'main.html';
 $page->argv = ['title'=>"acc",
     'css'=>"/css/acc.css",
-    "name"=>"<h2>$_SESSION[name]</h2>",
+    "name"=>"<h2>$user->name</h2>",
     "content"=>$content,
     "disabled_$file"=>"disabled",
     "js"=>"/js/acc.js",

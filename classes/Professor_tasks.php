@@ -1,4 +1,7 @@
 <?php
+require_once __DIR__."/Professor.php";
+require_once __DIR__."/Users_tasks_table.php";//
+
 
 class Professor_tasks extends Professor
 {

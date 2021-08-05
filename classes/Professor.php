@@ -1,5 +1,6 @@
 <?php
 require_once __DIR__."/Course.php";
+require_once __DIR__."/Theme.php";
 require_once __DIR__."/Professor_mistakes.php";
 
 require_once __DIR__."/Tasks_answers_table.php";
@@ -37,9 +38,16 @@ class Professor
 
     public function get_themes($user)
     {
+        $themes = [];
         $users_themes_table = new Users_themes_table();
         $users_themes_list = $users_themes_table->read($user->id);
-        return $users_themes_list;
+        foreach ($users_themes_list as $item)
+        {
+            $theme = new Theme($item["theme_id"]);
+            $themes[]=$theme;
+        }
+
+        return $themes;
     }
     public function get_progress_theme($user, $theme)
     {

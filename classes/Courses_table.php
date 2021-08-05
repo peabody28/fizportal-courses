@@ -27,12 +27,13 @@ class Courses_table implements Table
         $result = mysqli_query($link, $sql);
         return $result;
     }
+
     public function delete($id)
     {
         global $link;
         $sql = sprintf("DELETE FROM courses WHERE id = '%s'", $id);
         $result = mysqli_query($link, $sql);
-        return $result;
+        return $link->affected_rows?true:false;
     }
     public function get_courses_list():array
     {
