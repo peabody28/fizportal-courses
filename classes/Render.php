@@ -19,19 +19,28 @@ class Render
     public function render_theme($theme, $class, $progress, $is_admin=false)
     {
         $content = "<div class='row theme $class m-0 p-0 mb-3 ml-2 mr-2 pl-2 pt-1'>
-                        <a class='text-start text-break col-12 h2 m-0 p-0' href='/theme?id=$theme[id]'>$theme[title]</a>
-                        <span class='col-12 m-0 p-0'>progress:&nbsp;&nbsp;$progress/$theme[points_limit]</span>
+                        <a class='text-start text-break col-12 h2 m-0 p-0' href='/theme?id=$theme->id'>$theme->title</a>
+                        <span class='col-12 m-0 p-0'>progress:&nbsp;&nbsp;$progress/$theme->points_limit</span>
                     </div><br>";
         if($is_admin)
-            $content.= "<div class='row m-0 p-0 mb-3 ml-2 mr-2'><a class='btn izm' href='/change_theme?id=$theme[id]'>Изменить</a></div>";
+            $content.= "<div class='row m-0 p-0 mb-3 ml-2 mr-2'><a class='btn izm' href='/change_theme?id=$theme->id'>Изменить</a></div>";
 
         return ["block"=>$content];
     }
 
-    public function render_tasks_theme($theme, $tasks_list, $users_tasks, $users_mistakes, $users_progress, $sptest)
+    public function render_tasks_theme($theme, $tasks_list, $user, $sptest)
     {
+        // сделанные пользователем задачи
+        $users_tasks = $user->get_tasks();
+        //РО
+        $users_mistakes = $user->get_mistakes();
+        // лимит задач темы
+        $theme->get_points_limit();
+        // прогресс
+        $users_progress = $user->get_progress_theme($theme->id);
+
         $content = "<div class='row container-fluid justify-content-start m-0 p-0 pl-3'>";
-        $content .= "<button id='get_text_theme' class='btn mr-1 mt-2' theme_id='$theme[id]'></button>";
+        $content .= "<button id='get_text_theme' class='btn mr-1 mt-2' theme_id='$theme->id'></button>";
         // отображение квадратов задачи
 
         $first_id = null;  // задача которая первой отобразится в теме (это должна быть доступная задача (не красная)))
@@ -42,9 +51,9 @@ class Render
             $task = $tasks_list[$i];
             $last = ($i==count($tasks_list)-1);
 
-            if(!in_array(["user_id" => $_SESSION["id"], "task_id" => $task["id"]], $users_tasks))
+            if(!in_array(["user_id" => $user->id, "task_id" => $task["id"]], $users_tasks))
             {
-                if(in_array(["user_id" => $_SESSION["id"], "task_id" => $task["id"]], $users_mistakes))
+                if(in_array(["user_id" => $user->id, "task_id" => $task["id"]], $users_mistakes))
                     $button = "<button class='btn red' id='$task[id]' disabled></button>";
                 else
                 {
@@ -92,12 +101,12 @@ class Render
 
         // отображение супертеста
         $disabled = "";
-        if((int)$users_progress["progress"]<(int)$theme["points_limit"] && $_SESSION["rights"]!="admin")
+        if((int)$users_progress["progress"]<(int)$theme->points_limit && $user->rights!="admin")
             $disabled="disabled";
 
         $content .= "<form class='get_task mr-1 mt-2 supertest' method='POST'>
-                            <input type='hidden' name='supertest_id' value='$sptest[id]'>
-                            <input type='hidden' name='theme_id' value='$theme[id]'>
+                            <input type='hidden' name='supertest_id' value='$sptest->id'>
+                            <input type='hidden' name='theme_id' value='$theme->id'>
                             <input type='hidden' name='submit' value='true'>
                             <input type='hidden' name='code' value='get_supertest'>
                             <button class='btn supertest_btn' $disabled></button>
@@ -105,14 +114,14 @@ class Render
 
         $content .= "</div>" ; // закрыл блок с квадратами задач
         // кнопка "добавить задачу"
-        if ($_SESSION["rights"]=="admin")
+        if ($user->rights == "admin")
         {
-            $content .="<div class='row m-0 mt-3 p-0 pl-3'><a class='btn' id='add_task' href='/add_task?theme_id=$theme[id]'>Добавить задачу</a></div>";
+            $content .="<div class='row m-0 mt-3 p-0 pl-3'><a class='btn' id='add_task' href='/add_task?theme_id=$theme->id'>Добавить задачу</a></div>";
             $content .="<div class='row col-12 m-0 mt-3 p-0 pl-3'>
                             <form method='POST' class='m-0 p-0 col-12' id='change_limit_of_points'>
                                 <input type='hidden' name='submit'>
                                 <input type='hidden' name='code' value='change_limit_of_points'>
-                                <input type='hidden' name='id' value='$theme[id]'>
+                                <input type='hidden' name='id' value='$theme->id'>
                                 <div class='row col-12 m-0 p-0 d-flex justify-content-start'>
                                     <button type='submit' class='btn col-12 col-md-3 mr-md-3'>Изменит границу баллов</button>
                                     <div class='m-0 p-0 mr-md-2 col-12 col-md-6 col-lg-4 d-flex align-items-center mt-2 mt-md-0'><input type='text' name='limit_of_points' class='adaptive_input'></div>
