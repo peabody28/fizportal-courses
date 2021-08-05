@@ -12,6 +12,7 @@ class Courses_table implements Table
         $course->id = mysqli_insert_id($link);
         return $course->id ? true: false;
     }
+
     public function read($id)
     {
         global $link;
@@ -20,6 +21,7 @@ class Courses_table implements Table
         $course_data = mysqli_fetch_array($result, MYSQLI_ASSOC);
         return $course_data;
     }
+
     public function update($course, $column)
     {
         global $link;
@@ -35,6 +37,7 @@ class Courses_table implements Table
         $result = mysqli_query($link, $sql);
         return $link->affected_rows?true:false;
     }
+
     public function get_courses_list():array
     {
         global $link;

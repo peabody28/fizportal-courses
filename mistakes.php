@@ -1,11 +1,13 @@
 <?php
 require_once __DIR__ . "/auth.php";
+require_once __DIR__ . "/classes/User.php";
+require_once __DIR__ . "/classes/Theme.php";
 require_once __DIR__ . "/classes/Render.php";
 require_once __DIR__ . "/classes/Themes_table.php";
 require_once __DIR__ . "/classes/Users_mistakes_table.php";
 require_once __DIR__ . "/classes/Tasks_table.php";
-require_once __DIR__ . "/classes/Tasks_block_constructor.php";
-require_once __DIR__ . "/classes/Professor.php";
+require_once __DIR__ . "/classes/Mistake_block_constructor.php";
+require_once __DIR__ . "/classes/Professor_mistakes.php";
 session_start();
 
 
@@ -14,21 +16,27 @@ if (isset($_GET["theme_id"])) {
     $themes_table = new Themes_table();
     if($themes_table->read($_GET["theme_id"]))
     {
-        $professor = new Professor();
+        $prof_mist = new Professor_mistakes();
         // можно ли пользователю решать эту РО?
-        if($professor->mistakes_status($_GET["theme_id"]))
+        if($prof_mist->mistakes_status($_GET["theme_id"]))
         {
             // нахожу ошибки пользователя для этой темы
-            $users_mistakes_table = new Users_mistakes_table();
-            $all_mistakes = $users_mistakes_table->read($_SESSION["id"]);
+            $user = new User($_SESSION["id"]);
+            $all_mistakes = $prof_mist->get_mistakes($user);
+            $all_mistakes_ids = [];
+            foreach ($all_mistakes as $m)
+                $all_mistakes_ids[] = $m->id;
 
-            $tasks_table = new Tasks_table();
-            $tasks_theme = $tasks_table->get_tasks_theme($_GET["theme_id"]);
+            $theme = new Theme($_GET["theme_id"]);
+            $tasks_theme = $theme->get_tasks();
 
             $mistakes = [];
             foreach ($tasks_theme as $tt)
-                if(in_array(["user_id"=>$_SESSION["id"], "task_id"=>$tt["id"]], $all_mistakes))
+            {
+                if(in_array($tt->id, $all_mistakes_ids))
                     $mistakes[] = $tt;
+            }
+
 
             if (count($mistakes))
             {
@@ -41,8 +49,8 @@ if (isset($_GET["theme_id"])) {
 
                 $this_task = $mistakes[0];
 
-                $tasks_block_constructor = new Tasks_block_constructor();
-                $response = $tasks_block_constructor->get_mistake_block($this_task["id"], $mistakes[1]["id"]);
+                $mistakes_block_constructor = new Mistake_block_constructor();
+                $response = $mistakes_block_constructor->get_mistake_block($this_task->id, $mistakes[1]->id);
                 $content .= $response["block"];
                 $content.=" </div></div>";
 
@@ -50,7 +58,7 @@ if (isset($_GET["theme_id"])) {
                 $page->temp = 'main.html';
                 $page->argv = ['title' => "mistakes",
                     'css' => "/css/mistakes.css",
-                    "name" => "<h2>$_SESSION[name]</h2>",
+                    "name" => "<h2>$user->name</h2>",
                     "content" => $content,
                     "js" => "/js/mistakes.js",
                     "mathjax"=>file_get_contents("templates/mathjax.html")

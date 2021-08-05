@@ -1,14 +1,21 @@
 <?php
-require_once __DIR__."/Users_courses_table.php";
+require_once __DIR__."/Professor.php";
 
 class Manager
 {
-    public function check_course($user_id, $course_id)
+    public function check_course($user, $course_id)
     {
-        $users_courses_table = new Users_courses_table();
-        $users_courses = $users_courses_table->read($user_id);
-        if (in_array(["user_id" => $user_id, "course_id" => $course_id], $users_courses) || $_SESSION["rights"] == "admin")
+        $prof = new Professor();
+        $users_courses = $prof->get_courses($user);
+
+        if($user->rights == "admin")
             return ["status"=>true];
+
+        foreach ($users_courses as $item)
+        {
+                if ($course_id == $item->id)
+                    return ["status"=>true];
+        }
         return ["status"=>false, "error"=>"Вы не купили этот курс"];
     }
 }

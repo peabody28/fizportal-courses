@@ -8,6 +8,7 @@ require_once __DIR__."/Users_themes_table.php";
 require_once __DIR__."/Themes_table.php";
 require_once __DIR__."/Tasks_table.php";
 require_once __DIR__."/Users_tasks_table.php";
+require_once __DIR__."/Users_courses_table.php";
 require_once __DIR__."/Users_themes_time_table.php";
 require_once __DIR__."/Themes_limits_table.php";
 require_once __DIR__."/Users_progress_theme_table.php";
@@ -15,7 +16,7 @@ require_once __DIR__."/Users_progress_theme_table.php";
 
 class Professor
 {
-    protected function check_task($task)
+    public function check_task($task)
     {
         $status = true;
 
@@ -34,6 +35,19 @@ class Professor
             $status = ($task->answer == $task->users_answer);
 
         return $status;
+    }
+
+    public function get_courses($user)
+    {
+        $list = [];
+        $users_courses_table = new Users_courses_table();
+        $users_courses = $users_courses_table->read($user->id);
+        foreach ($users_courses as $item)
+        {
+            $course = new Course($item["course_id"]);
+            $list[] = $course;
+        }
+        return $list;
     }
 
     public function get_themes($user)
@@ -63,19 +77,23 @@ class Professor
     }
     public function theme_status($user, $theme)
     {
-        // список тем курса
+        // список id тем курса
         $course = new Course($theme->course_id);
         $themes_ids = $course->get_themes_ids();
         // список тем решенных пользователем
         $users_themes_list = $this->get_themes($user);
 
-        if (in_array(["user_id" => $user->id, "theme_id" => $theme->id], $users_themes_list))
+        $users_themes_ids_list = [];
+        foreach ($users_themes_list as $th)
+            $users_themes_ids_list[] = $th->id;
+
+        if(in_array($theme->id, $users_themes_ids_list))
             return "solved";
-        else if ($theme->id==$themes_ids[0]) // первая тема курса
+        else if ($theme->id == $themes_ids[0]) // первая тема курса
             return "open";
-        else if ($theme->id==$themes_ids[1])// вторая тема курса
+        else if ($theme->id == $themes_ids[1])// вторая тема курса
         {
-            if (in_array(["user_id" => $user->id, "theme_id" => $themes_ids[0]], $users_themes_list))
+            if (in_array($themes_ids[0], $users_themes_ids_list))
                 return "open";
             else
                 return "close";
@@ -83,7 +101,7 @@ class Professor
         else // >=3
         {
             $pred_id = array_search($theme->id, $themes_ids)-1;
-            if (in_array(["user_id" => $user->id, "theme_id" => $themes_ids[$pred_id]], $users_themes_list)) // предыдущая решена?
+            if (in_array($themes_ids[$pred_id], $users_themes_ids_list)) // предыдущая решена?
             {
                 $theme = new Theme($themes_ids[$pred_id-1]);
                 $tasks_ids = $theme->get_tasks_ids();

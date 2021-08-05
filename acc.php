@@ -24,23 +24,27 @@ $users_themes = $professor->get_themes($user);
 
 $prof_mist = new Professor_mistakes();
 foreach ($users_themes as $item) {
-    if($prof_mist->mistakes_status($item->theme_id))
+    if($prof_mist->mistakes_status($item->id))
     {
         // список всех ошибок пользователя
         $all_mistakes = $prof_mist->get_mistakes($user);
+        $all_mistakes_ids = [];
+        foreach ($all_mistakes as $m)
+            $all_mistakes_ids[] = $m->id;
+
         // список задач данной темы
-        $theme = new Theme($item["theme_id"]);
+        $theme = new Theme($item->id);
         $tasks_theme = $theme->get_tasks();
 
         $mistakes = []; // ошибки пользователя в данной теме
         foreach ($tasks_theme as $tt)
         {
-            if(in_array(["user_id"=>$user->id, "task_id"=>$tt->id], $all_mistakes))
+            if(in_array($tt->id, $all_mistakes_ids))
                 $mistakes[] = $tt;
         }
 
         if(count($mistakes)) // если в теме есть ошибки
-            $content .= "<a class='btn ro' href='/mistakes?theme_id=$item->theme_id'>Работа над ошибками для темы $item->theme_id</a><br>";
+            $content .= "<a class='btn ro' href='/mistakes?theme_id=$item->id'>Работа над ошибками для темы $item->id</a><br>";
     }
 
 }

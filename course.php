@@ -19,9 +19,9 @@ if ($course->id)
     // проверяю, есть ли курс у пользователя
     $user = new User($_SESSION["id"]);
     $manager = new Manager();
-    $status = $manager->check_course($user->id, $course->id);
+    $resp = $manager->check_course($user, $course->id);
 
-    if($status || $user->rights == "admin")
+    if($resp["status"] || $user->rights == "admin")
     {
         $content = "<div class='row container-fluid justify-content-center m-0 p-0'><h2>Темы</h2></div>";
         if($user->rights == "admin")
@@ -30,10 +30,9 @@ if ($course->id)
         // беру id тем курса
         $themes_ids = $course->get_themes_ids();
         // отображаю
+        $professor = new Professor();
         foreach ($themes_ids as $id) {
             $theme = new Theme($id);
-
-            $professor = new Professor();
             $theme_status = $professor->theme_status($user, $theme);
 
             if ($theme_status=="solved")

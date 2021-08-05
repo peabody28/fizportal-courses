@@ -1,4 +1,5 @@
 <?php
+require_once __DIR__."/Task.php";
 require_once __DIR__."/Professor.php";
 require_once __DIR__."/Users_mistakes_table.php";
 
@@ -7,9 +8,15 @@ class Professor_mistakes extends Professor
 
     public function get_mistakes($user)
     {
+        $list = [];
         $users_mistakes_table = new Users_mistakes_table();
         $users_mistakes = $users_mistakes_table->read($user->id);
-        return $users_mistakes;
+        foreach ($users_mistakes as $item)
+        {
+            $task = new Task($item["task_id"]);
+            $list[] = $task;
+        }
+        return $list;
     }
 
     public function add_to_mistakes($user, $task)
@@ -54,6 +61,27 @@ class Professor_mistakes extends Professor
         else
             return false;
 
+    }
+
+    public function add_task_to_users_tasks($user, $task)
+    {
+        //добавление задачи в список решенных
+        $users_tasks_table = new Users_tasks_table();
+        $status = $users_tasks_table->create(["user_id"=>$user->id, "task_id"=>$task->id]);
+        return $status;
+    }
+
+    public function delete_task_from_users_tasks($user, $task)
+    {
+        $users_tasks_table = new Users_tasks_table();
+        $status = $users_tasks_table->delete(["user_id"=>$user->id, "task_id"=>$task->id]);
+        return $status;
+    }
+
+    public function add_point($user, $task)
+    {
+        $users_progress_theme_table = new Users_progress_theme_table();
+        $users_progress_theme_table->add_point(["user_id"=>$user->id, "theme_id"=>$task->theme_id], (int)($task->complexity)*2);
     }
 
 }

@@ -150,18 +150,18 @@ class Render
 
             if(!$last)
             {
-                $nt_id = $mistakes[$i+1]["id"];
+                $nt_id = $mistakes[$i+1]->id;
                 $next_task = "<input type='hidden' name='next_task_id' value='$nt_id'>";
             }
             else
                 $next_task = "";
 
             $content .= "<form class='get_mistake mr-1' method='POST'>
-                            <input type='hidden' name='task_id' value='$task[id]'>
+                            <input type='hidden' name='task_id' value='$task->id'>
                             <input type='hidden' name='submit' value='true'>
                             <input type='hidden' name='code' value='get_mistake'>
                             $next_task
-                            <button class='btn close_btn' id='$task[id]'></button>
+                            <button class='btn close_btn' id='$task->id'></button>
                          </form>";
         }
 

@@ -54,7 +54,7 @@ else
     {
         // проверка покупки курса
         $manager = new Manager();
-        $resp = $manager->check_course($user->id, $theme->course_id);
+        $resp = $manager->check_course($user, $theme->course_id);
 
         if ($resp["status"] || $user->rights=="admin") {
 

@@ -1,24 +1,27 @@
 <?php
+require_once __DIR__."/Task.php";
+require_once __DIR__."/Professor.php";
+require_once __DIR__."/Users_mistakes_table.php";
+
 
 class Mistake_handler extends Task_handler
 {
     public function send_answer()
     {
         $task = $this->construct_task();
+        $user = &$this->data["user"];
 
         $prof = new Professor();
         $status = $prof->check_task($task);
         if($status)
         {
             // добавляю задачу в список решенных пользователем
-            $users_tasks_table = new Users_tasks_table();
-            $users_tasks_table->create(["user_id"=>$_SESSION["id"], "task_id"=>$this->data["task_id"]]);
-            // добавляю балл НУЖНО ЛИ? ТЕМА И ТАК ВЫПОЛНЕНА НА ЭТОМ ЭТАПЕ
-            $users_progress_theme_table = new Users_progress_theme_table();
-            $users_progress_theme_table->add_point(["user_id"=>$_SESSION["id"], "theme_id"=>$this->data["theme_id"]], (int)$task["complexity"]*2);
+            $prof_mist = new Professor_mistakes();
+            $prof_mist->add_task_to_users_tasks($user, $task);
+            // добавляю балл в тему
+            $prof_mist->add_point($user, $task);
             // удаляю из РО
-            $users_mistakes_table = new Users_mistakes_table();
-            $users_mistakes_table->delete(["user_id"=>$_SESSION["id"], "task_id"=>$this->data["task_id"]]);
+            $prof_mist->delete_from_mistakes($user, $task);
 
             return ["status" => "OK", "task_id"=>$this->data["task_id"]];
         }
