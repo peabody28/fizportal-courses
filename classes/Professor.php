@@ -165,11 +165,16 @@ class Professor
 
     public function check_time($user, $theme)
     {
+        if ($user->rights == "admin")
+            return ["status"=>true, "theme_is_solved"=>true];
 
         $users_themes_list = $this->get_themes($user);
+        foreach($users_themes_list as $th)
+        {
+            if($theme->id == $th->id) // пользователь уже сделал тему
+                return ["status"=>true, "theme_is_solved"=>true];
+        }
 
-        if(in_array(["user_id"=>$user->id, "theme_id"=>$theme->id], $users_themes_list) || $user->rights == "admin") // пользователь уже сделал тему
-            return ["status"=>true, "theme_is_solved"=>true];
         // узнаю лимит выполнения темы
         $theme->get_time_limit();
         if(!$theme->time_limit)
