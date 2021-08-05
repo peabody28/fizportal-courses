@@ -115,12 +115,13 @@ class Professor
                 if (!in_array(["user_id"=>$user->id, "theme_id"=>$theme->id], $users_themes))
                     $prof_mist->delete_from_mistakes($user, $task);
                 else
-                    $progress--;
+                    $progress -= $task->complexity;
             }
             // если задача в списке решенных - удаляю
             else if(in_array($obj, $users_tasks))
                 $prof_tasks->delete_task_from_users_tasks($user, $task);
         }
+        // обновляю прогресс
         $this->set_progress_theme($user, $theme, $progress);
         // обнуляю время
         $this->delete_theme_begin_time($user, $theme);
@@ -134,6 +135,7 @@ class Professor
         $time = (int)$resp["time"];
         return $time;
     }
+
 
     public function check_time($user, $theme)
     {
@@ -186,7 +188,6 @@ class Professor
         $users_themes_time_table = new Users_themes_time_table();
         $users_themes_time_table->delete(["user_id"=>$user->id, "theme_id"=>$theme->id]);
     }
-
 
     public function check_access_supertest($limits_of_points, $users_progress, $is_admin=false)
     {

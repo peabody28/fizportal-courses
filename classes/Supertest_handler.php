@@ -1,4 +1,7 @@
 <?php
+require_once __DIR__."/Professor.php";//
+require_once __DIR__."/Users_themes_table.php";//
+
 
 class Supertest_handler extends Task_handler
 {
@@ -25,10 +28,10 @@ class Supertest_handler extends Task_handler
 
         // проверка
         $status = true;
-        $prof = new Professor();
+        $prof_task = new Professor_tasks();
         foreach ($tasks as $item)
         {
-            $status = $prof->check_task($item);
+            $status = $prof_task->check_task($item);
             if(!$status)
                 break;
         }

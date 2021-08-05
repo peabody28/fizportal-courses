@@ -6,6 +6,8 @@ require_once __DIR__."/classes/Supertest.php";
 require_once __DIR__."/classes/Professor.php";
 require_once __DIR__."/classes/Manager.php";
 require_once __DIR__."/classes/Render.php";
+require_once __DIR__."/classes/Themes_points_limit_table.php";
+
 session_start();
 
 
