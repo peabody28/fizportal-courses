@@ -6,6 +6,8 @@ require_once __DIR__."/Professor.php";
 require_once __DIR__."/Professor_tasks.php";
 require_once __DIR__."/Professor_mistakes.php";
 
+require_once __DIR__."/Timer.php";
+
 require_once __DIR__."/Users_tasks_table.php";
 require_once __DIR__."/Users_progress_theme_table.php";
 require_once __DIR__."/Users_mistakes_table.php";
@@ -37,13 +39,14 @@ class Task_handler
             return ["status" => "ERROR", "code"=>"IN_MISTAKES"];
 
         // Проверяю время
-        $prof = new Professor_tasks();
-        $response = $prof->check_time($user, $theme);
+        $timer = new Timer();
+        $response = $timer->check_time($user, $theme);
         if($response["status"]===false)
             return ["status" => "ERROR", "code"=>"TIME"];
         else if ($response["status"]==="update")
-            $prof->set_theme_begin_time($user, $theme);
+            $timer->set_theme_begin_time($user, $theme);
 
+        $prof = new Professor_tasks();
         $status = $prof->check_task($task);
         if($status)
         {
@@ -77,18 +80,21 @@ class Task_handler
     {
 
         $this->task = new Task($this->data["task_id"]);
+        $task = &$this->task;
 
-        if($this->task->type == "A")
+        if($task->type == "A")
         {
-            $this->task->get_answer();
+            $task->get_A_answer();
 
-            $this->task->users_answer = [];
+            $task->users_answer = [];
             for($i=1; $i<=5; $i++)
-                if (isset($this->data[$this->task->id."_a_answ$i"]))
-                    $this->task->users_answer[] = $i;
+            {
+                if (isset($this->data[$task->id."_a_answ$i"]))
+                    $task->users_answer[] = $i;
+            }
         }
         else
-            $this->task->users_answer = $this->data[$this->task->id."_b_answer"];
-        return $this->task;
+            $task->users_answer = $this->data[$task->id."_b_answer"];
+        return $task;
     }
 }

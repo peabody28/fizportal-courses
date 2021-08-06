@@ -19,7 +19,7 @@ class Task
             }
             $this->id = $tmp_task["id"];
             $this->text = $tmp_task["text"];
-            $this->answer = $tmp_task["answer"]?:null; // todo answer_construct
+            $this->answer = $tmp_task["answer"]?:null;
             $this->complexity = $tmp_task["complexity"];
             $this->theme_id = $tmp_task["theme_id"];
             $this->type = $tmp_task["type"];
@@ -27,9 +27,12 @@ class Task
         }
     }
 
-    public function get_answer()
+    public function get_A_answer()
     {
         $tasks_answers_table = new Tasks_answers_table();
-        $this->answer = $tasks_answers_table->read($this->id);
+        $resp = $tasks_answers_table->read($this->id);
+        foreach ($resp as $item)
+            $this->answer[] = $item["answer"];
+
     }
 }

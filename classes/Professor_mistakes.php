@@ -63,23 +63,9 @@ class Professor_mistakes extends Professor
 
     }
 
-    public function add_task_to_users_tasks($user, $task)
-    {
-        //добавление задачи в список решенных
-        $users_tasks_table = new Users_tasks_table();
-        $status = $users_tasks_table->create(["user_id"=>$user->id, "task_id"=>$task->id]);
-        return $status;
-    }
-
-    public function delete_task_from_users_tasks($user, $task)
-    {
-        $users_tasks_table = new Users_tasks_table();
-        $status = $users_tasks_table->delete(["user_id"=>$user->id, "task_id"=>$task->id]);
-        return $status;
-    }
-
     public function add_point($user, $task)
     {
+        // переопределяю чтоб начислялось х2 баллов
         $users_progress_theme_table = new Users_progress_theme_table();
         $users_progress_theme_table->add_point(["user_id"=>$user->id, "theme_id"=>$task->theme_id], (int)($task->complexity)*2);
     }

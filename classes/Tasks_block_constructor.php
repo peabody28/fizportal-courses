@@ -1,4 +1,5 @@
 <?php
+require_once __DIR__."/Theme.php";
 require_once __DIR__."/Task.php";
 require_once __DIR__."/Tasks_table.php";
 require_once __DIR__."/Themes_table.php";
@@ -14,10 +15,8 @@ class Tasks_block_constructor
 {
     public function get_text_theme_block($id)
     {
-        $themes_table = new Themes_table();
-        $tmp_theme = $themes_table->read($id);
-
-        $block = "<div class='col-12 m-0 p-0 d-flex justify-content-center'>Описание темы</div><div class='col-12 m-0 p-0 text-break'>$tmp_theme[text]</div>";
+        $theme = new Theme($id);
+        $block = "<div class='col-12 m-0 p-0 d-flex justify-content-center'>Описание темы</div><div class='col-12 m-0 p-0 text-break'>$theme->text</div>";
         return ["block"=>$block];
 
     }

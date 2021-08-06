@@ -17,14 +17,6 @@ class Professor_tasks extends Professor
         return $users_tasks;
     }
 
-    public function add_task_to_users_tasks($user, $task)
-    {
-        //добавление задачи в список решенных
-        $users_tasks_table = new Users_tasks_table();
-        $status = $users_tasks_table->create(["user_id"=>$user->id, "task_id"=>$task->id]);
-        return $status;
-    }
-
     public function delete_task_from_users_tasks($user, $task)
     {
         $users_tasks_table = new Users_tasks_table();

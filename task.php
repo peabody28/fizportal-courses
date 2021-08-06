@@ -44,6 +44,8 @@ if(isset($data["submit"]))
     {
         $supertest_handler = new Supertest_handler();
         $supertest_handler->data = $data;
+
+        $supertest_handler->data["user"] = new User($_SESSION["id"]);
         $resp = $supertest_handler->send_answer();
         echo json_encode($resp);
     }

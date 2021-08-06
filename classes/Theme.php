@@ -9,7 +9,7 @@ require_once __DIR__ . "/Themes_limits_table.php";
 
 class Theme
 {
-    public $id, $title, $complexity=0, $points_limit=10, $time_limit=null, $tasks=null;
+    public $id, $title, $text, $complexity=0, $course_id, $points_limit=10, $time_limit=null, $tasks=null;
 
     public function __construct($id=null, $tmp_theme=null)
     {
@@ -22,6 +22,7 @@ class Theme
             }
             $this->id = $tmp_theme["id"];
             $this->title = $tmp_theme["title"];
+            $this->text = $tmp_theme["text"];
             $this->complexity = $tmp_theme["complexity"];
             $this->course_id = $tmp_theme["course_id"];
         }

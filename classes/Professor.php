@@ -1,6 +1,7 @@
 <?php
 require_once __DIR__."/Course.php";
 require_once __DIR__."/Theme.php";
+require_once __DIR__."/Timer.php";
 require_once __DIR__."/Professor_mistakes.php";
 
 require_once __DIR__."/Tasks_answers_table.php";
@@ -23,8 +24,8 @@ class Professor
         if ($task->type == "A") {
             for($i=1; $i<=5;$i++)
             {
-                if( (!in_array(["task_id"=>$task->id, "answer"=>$i], $task->answer) && in_array($i, $task->users_answer) ) ||
-                    (in_array(["task_id"=>$task->id, "answer"=>$i], $task->answer) && !in_array($i, $task->users_answer)) )
+                if( (!in_array($i, $task->answer) && in_array($i, $task->users_answer) ) ||
+                    (in_array($i, $task->answer) && !in_array($i, $task->users_answer)) )
                 {
                     $status=false;
                     break;
@@ -37,17 +38,17 @@ class Professor
         return $status;
     }
 
-    public function get_courses($user)
+    public function add_theme_to_users_themes($user, $theme)
     {
-        $list = [];
-        $users_courses_table = new Users_courses_table();
-        $users_courses = $users_courses_table->read($user->id);
-        foreach ($users_courses as $item)
-        {
-            $course = new Course($item["course_id"]);
-            $list[] = $course;
-        }
-        return $list;
+        $users_themes_table = new Users_themes_table();
+        $users_themes_table->create(["user_id"=>$user->id, "theme_id"=>$theme->id]);
+    }
+    public function add_task_to_users_tasks($user, $task)
+    {
+        //добавление задачи в список решенных
+        $users_tasks_table = new Users_tasks_table();
+        $status = $users_tasks_table->create(["user_id"=>$user->id, "task_id"=>$task->id]);
+        return $status;
     }
 
     public function get_themes($user)
@@ -150,75 +151,12 @@ class Professor
         // обновляю прогресс
         $this->set_progress_theme($user, $theme, $progress);
         // обнуляю время
-        $this->delete_theme_begin_time($user, $theme);
+        $timer = new Timer();
+        $timer->delete_theme_begin_time($user, $theme);
 
         return ["status"=>"OK"];
     }
-    public function get_theme_begin_time($user, $theme)
-    {
-        $users_themes_time = new Users_themes_time_table();
-        $resp = $users_themes_time->read(["user_id"=>$user->id, "theme_id"=>$theme->id]);
-        $time = (int)$resp["time"];
-        return $time;
-    }
 
-
-    public function check_time($user, $theme)
-    {
-        if ($user->rights == "admin")
-            return ["status"=>true, "theme_is_solved"=>true];
-
-        $users_themes_list = $this->get_themes($user);
-        foreach($users_themes_list as $th)
-        {
-            if($theme->id == $th->id) // пользователь уже сделал тему
-                return ["status"=>true, "theme_is_solved"=>true];
-        }
-
-        // узнаю лимит выполнения темы
-        $theme->get_time_limit();
-        if(!$theme->time_limit)
-            return ["status"=>true];
-
-        $time = $this->get_theme_begin_time($user, $theme);
-        if ($time)
-        {
-            $real_time = time();
-            $delta = $real_time - (int)$time;
-
-            if($delta <= $theme->time_limit*60) // если разница во времени меньше времени на тему(30м) - пропускаем
-            {
-                $hours = (int)(($theme->time_limit*60-$delta)/3600);
-                $min = (int)(($theme->time_limit*60-$delta)/60)-$hours*60;
-                $sec = ($theme->time_limit*60-$delta)-$hours*3600-$min*60;
-                return ["status"=>true, "theme_is_solved"=>false, "hours"=>$hours, "min"=>$min, "sec"=>$sec];
-            }
-            else if($delta > $theme->time_limit*60 && $delta < $theme->time_limit*60*2+$theme->time_limit*60) // если разница во времени больше времени на тему и меньше штрафа+время на тему (5ч+30м) - запрет на решение
-            {
-                $hours = (int)(($theme->time_limit*2*60+$theme->time_limit*60 - $delta)/3600);
-                $min = (int)(($theme->time_limit*2*60+$theme->time_limit*60 - $delta)/60) - $hours*60;
-                $sec = (int)(($theme->time_limit*2*60+$theme->time_limit*60 - $delta)) - $hours*3600 - $min*60;
-                return ["status"=>false, "theme_is_solved"=>false, "hours"=>$hours, "min"=>$min, "sec"=>$sec];
-            }
-
-            else // если разница во времени больше штрафа+время на тему - пропускаем и записываем новое время в таблицу
-                return ["status"=>"update", "theme_is_solved"=>false, "hours"=>(int)($theme->time_limit/60), "min"=>$theme->time_limit-((int)($theme->time_limit/60))*60, "sec"=>0];
-        }
-        else
-            return ["status"=>"update", "theme_is_solved"=>false, "hours"=>(int)($theme->time_limit/60), "min"=>$theme->time_limit-((int)($theme->time_limit/60))*60, "sec"=>0];
-    }
-    public function set_theme_begin_time($user, $theme)
-    {
-        $row = ["user_id"=>$user->id, "theme_id"=>$theme->id];
-        $users_themes_time = new Users_themes_time_table();
-        $row["time"]=time();
-        $users_themes_time->update($row, "time");
-    }
-    public function delete_theme_begin_time($user, $theme)
-    {
-        $users_themes_time_table = new Users_themes_time_table();
-        $users_themes_time_table->delete(["user_id"=>$user->id, "theme_id"=>$theme->id]);
-    }
 
     public function check_access_supertest($limits_of_points, $users_progress, $is_admin=false)
     {

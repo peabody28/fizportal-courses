@@ -5,6 +5,7 @@ require_once __DIR__."/classes/Theme.php";
 require_once __DIR__."/classes/Supertest.php";
 require_once __DIR__."/classes/Professor.php";
 require_once __DIR__."/classes/Manager.php";
+require_once __DIR__."/classes/Timer.php";
 require_once __DIR__."/classes/Render.php";
 require_once __DIR__."/classes/Themes_points_limit_table.php";
 
@@ -65,7 +66,8 @@ else
             if($theme_status == "open" || $theme_status == "solved" || $user->rights=="admin")
             {
                 // прошло ли время блокировки темы?
-                $response = $professor->check_time($user, $theme);
+                $timer = new Timer();
+                $response = $timer->check_time($user, $theme);
 
                 if($response["status"] !== false) // true or "update"
                 {
@@ -78,19 +80,12 @@ else
                     $tasks_blocks = $render->render_tasks_theme($theme, $tasks_list, $user, $sptest);
                     $content = $tasks_blocks["content"];
                     // время
+
                     if(isset($response["sec"]))
                     {
                         $class = ($response["status"]===true)?"in_process":"lock";
-                        $hours_null = "";
-                        $min_null = "";
-                        $sec_null = "";
-                        if((int)($response["hours"]/10)==0)
-                            $hours_null = "0";
-                        if((int)($response["min"]/10)==0)
-                            $min_null = "0";
-                        if((int)($response["sec"]/10)==0)
-                            $sec_null = "0";
-                        $content .= "<div id='clock' class='row m-0 p-0 pr-md-5 mt-4 h2 d-flex justify-content-end $class'><div id='hours'>$hours_null$response[hours]</div>:<div id='min'>$min_null$response[min]</div>:<div id='sec'>$sec_null$response[sec]</div></div>";
+                        $time_str = $timer->seconds_normalizations($response["sec"]);
+                        $content .= "<div id='clock' class='row m-0 p-0 pr-md-5 mt-4 h2 d-flex justify-content-end $class'>$time_str</div>";
                     }
 
                     $content .="<div id='task' class='p-0 m-0 mt-5 d-flex justify-content-center align-items-center row container-fluid'>
@@ -120,25 +115,17 @@ else
 
                     // кнопка "назад к темам" и "Обнулить прогресс темы"
                     $content .= "<div class='row col-12 m-0 p-0 pl-md-5 pr-md-5 mt-3 d-flex justify-content-between'>
-                                <a class='btn col-12 col-md-3' id='back_to_themes_btn' href='/course?id=$theme->course_id'>Назад к темам</a>
-                                <button id='reset_theme' theme_id='$theme->id' class='btn col-12 col-md-4 mt-3 mt-md-0'>Обнулить прогресс темы</button>
-                             </div>";
+                                    <a class='btn col-12 col-md-3' id='back_to_themes_btn' href='/course?id=$theme->course_id'>Назад к темам</a>
+                                    <button id='reset_theme' theme_id='$theme->id' class='btn col-12 col-md-4 mt-3 mt-md-0'>Обнулить прогресс темы</button>
+                                 </div>";
+
                     $content .= "</div>"; // зкарыл #task
                 }
                 else
                 {
                     $content = "<h2>Время решения темы истекло, возвращайтесь через</h2>";
-
-                    $hours_null = "";
-                    $min_null = "";
-                    $sec_null = "";
-                    if((int)($response["hours"]/10)==0)
-                        $hours_null = "0";
-                    if((int)($response["min"]/10)==0)
-                        $min_null = "0";
-                    if((int)($response["sec"]/10)==0)
-                        $sec_null = "0";
-                    $content .= "<br><div class='row m-0 p-0 h2 blocked'><div id='hours'>$hours_null$response[hours]</div>:<div id='min'>$min_null$response[min]</div>:<div id='sec'>$sec_null$response[sec]</div></div>";
+                    $time_str = $timer->seconds_normalizations($response["sec"]);
+                    $content .= "<div id='clock' class='row m-0 p-0 pr-md-5 mt-4 h2 d-flex justify-content-end blocked'>$time_str</div>";
                 }
 
             }

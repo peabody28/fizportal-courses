@@ -240,25 +240,25 @@ class Render
         $a_type_task = "
                         <div class='col-12 m-0 p-0 d-flex justify-content-center container'>
                                 <div class='row m-0 p-0 col-12 col-md-5 row d-flex justify-content-between'>
-                                    <div class='col-1 container m-0 p-0 ch_b'><input  class='check-input' type='checkbox' name='$task[id]_a_answ1'  value='1' ><label class='form-check-label mt-3 d-flex justify-content-center'>1</label></div>
-                                    <div class='col-1 container m-0 p-0 ch_b'><input  class='check-input' type='checkbox' name='$task[id]_a_answ2'  value='2' ><label class='form-check-label mt-3 d-flex justify-content-center'>2</label></div>
-                                    <div class='col-1 container m-0 p-0 ch_b'><input  class='check-input' type='checkbox' name='$task[id]_a_answ3'  value='3' ><label class='form-check-label mt-3 d-flex justify-content-center'>3</label></div>
-                                    <div class='col-1 container m-0 p-0 ch_b'><input  class='check-input' type='checkbox' name='$task[id]_a_answ4'  value='4' ><label class='form-check-label mt-3 d-flex justify-content-center'>4</label></div>
-                                    <div class='col-1 container m-0 p-0 ch_b'><input  class='check-input' type='checkbox' name='$task[id]_a_answ5'  value='5' ><label class='form-check-label mt-3 d-flex justify-content-center'>5</label></div>
+                                    <div class='col-1 container m-0 p-0 ch_b'><input  class='check-input' type='checkbox' name='".$task->id."_a_answ1'  value='1' ><label class='form-check-label mt-3 d-flex justify-content-center'>1</label></div>
+                                    <div class='col-1 container m-0 p-0 ch_b'><input  class='check-input' type='checkbox' name='".$task->id."_a_answ2'  value='2' ><label class='form-check-label mt-3 d-flex justify-content-center'>2</label></div>
+                                    <div class='col-1 container m-0 p-0 ch_b'><input  class='check-input' type='checkbox' name='".$task->id."_a_answ3'  value='3' ><label class='form-check-label mt-3 d-flex justify-content-center'>3</label></div>
+                                    <div class='col-1 container m-0 p-0 ch_b'><input  class='check-input' type='checkbox' name='".$task->id."_a_answ4'  value='4' ><label class='form-check-label mt-3 d-flex justify-content-center'>4</label></div>
+                                    <div class='col-1 container m-0 p-0 ch_b'><input  class='check-input' type='checkbox' name='".$task->id."_a_answ5'  value='5' ><label class='form-check-label mt-3 d-flex justify-content-center'>5</label></div>
                                 </div>
                             </div>";
 
-        $b_type_task = "<input type='text' class='row' name='$task[id]_b_answer'>";
+        $b_type_task = "<input type='text' class='row' name='".$task->id."_b_answer'>";
 
         $content .=
             "<div class='opis m-0 p-0 mt-5 d-flex justify-content-center'>
-                <div class='col-12 m-0 p-0 text-break'>$task[text]</div>
+                <div class='col-12 m-0 p-0 text-break'>$task->text</div>
             </div> 
             <div class='container-fluid row m-0 p-0 mt-5 d-flex justify-content-center'>";
 
-        if($task["type"]=="A") {
+        if($task->type=="A") {
             $content .=  $a_type_task;
-            $content .= "<input type='hidden' name='$task[id]_a_answ'>";
+            $content .= "<input type='hidden' name='".$task->id."_a_answ'>"; // TODO зачем это?
         }
         else
             $content .= $b_type_task;
@@ -272,18 +272,18 @@ class Render
         if($status=="admin")
         {
             $this->temp = "course_block_adm.html";
-            $this->argv = ["title" => $course["title"], "text" => $course["text"], "id" => $course["id"], "img_url"=>$course["img_url"]];
+            $this->argv = ["title" => $course->title, "text" => $course->text, "id" => $course->id, "img_url"=>$course->img_url];
             return $this->render_temp();
         }
         else if($status=="open")
         {
             $this->temp = "course_block.html";
-            $this->argv = ["title" => $course["title"], "text" => $course["text"], "id" => $course["id"], "img_url"=>$course["img_url"]];
+            $this->argv = ["title" => $course->title, "text" => $course->text, "id" => $course->id, "img_url"=>$course->img_url];
             return $this->render_temp();
         }
         else {
             $this->temp = "close_course_block.html";
-            $this->argv = ["title" => $course["title"], "text" => $course["text"], "id" => $course["id"], "price"=>$course["price"], "img_url"=>$course["img_url"]];
+            $this->argv = ["title" => $course->title, "text" => $course->text, "id" => $course->id, "price"=>$course->price, "img_url"=>$course->img_url];
             return $this->render_temp();
         }
     }

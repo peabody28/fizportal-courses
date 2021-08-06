@@ -1,12 +1,17 @@
 <?php
-require_once __DIR__."/Professor.php";//
-require_once __DIR__."/Users_themes_table.php";//
+require_once __DIR__."/Theme.php";
+require_once __DIR__."/Professor.php";
+require_once __DIR__."/Users_themes_table.php";
 
 
 class Supertest_handler extends Task_handler
 {
     public function send_answer()
     {
+        $user = &$this->data["user"];
+        $theme = new Theme($this->data["theme_id"]);
+
+        // выделяю задачи и ответы из строки запроса
         $str = "";
         foreach ($this->data as $key => $val)
         {
@@ -37,8 +42,7 @@ class Supertest_handler extends Task_handler
         }
         if ($status)
         {
-            $users_themes_table = new Users_themes_table();
-            $users_themes_table->create(["user_id"=>$_SESSION["id"], "theme_id"=>$this->data["theme_id"]]);
+            $prof_task->add_theme_to_users_themes($user, $theme);
             return ["status"=>"OK"];
         }
         else

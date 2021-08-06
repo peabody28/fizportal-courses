@@ -34,7 +34,6 @@ class Tasks_materials_table implements Table
 
     public function delete($obj)
     {
-        // TODO: Implement delete() method.
     }
     public function add_file($materials)
     {
