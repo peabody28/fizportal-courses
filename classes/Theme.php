@@ -54,7 +54,7 @@ class Theme
     {
         $themes_points_limit_table = new Themes_points_limit_table();
         $resp = $themes_points_limit_table->read($this->id);
-        $this->points_limit = (int)($resp["points_limit"]?:10);  // если лимит не установен, принимаем его за 10 баллов
+        $this->points_limit = (int)(isset($resp["points_limit"]) ?? 10);  // если лимит не установен, принимаем его за 10 баллов
     }
 
     public function get_time_limit()
@@ -70,5 +70,19 @@ class Theme
         $task_number_in_theme = array_search($task->id, $themes_tasks_ids);
         $next_task_id = $themes_tasks_ids[$task_number_in_theme+1];
         return $next_task_id ?? null;
+    }
+
+    public function get_html($data)
+    {
+        $render = new Render();
+        $theme_block = $render->render_theme($this, $data["class"], $data["progress"], $data["is_admin"]);
+        return $theme_block["block"];
+    }
+
+    public function get_text_html()
+    {
+        $block = "<div class='col-12 m-0 p-0 d-flex justify-content-center'>Описание темы</div><div class='col-12 m-0 p-0 text-break'>$this->text</div>";
+        return ["block"=>$block];
+
     }
 }

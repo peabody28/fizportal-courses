@@ -2,6 +2,7 @@
 
 require_once __DIR__."/Course.php";
 require_once __DIR__."/Task.php";
+require_once __DIR__."/Mistake.php";
 require_once __DIR__."/Professor.php";
 require_once __DIR__."/Users_mistakes_table.php";
 require_once __DIR__."/Users_progress_theme_table.php";
@@ -18,7 +19,7 @@ class Professor_mistakes extends Professor
         $users_mistakes = $users_mistakes_table->read($user->id);
         foreach ($users_mistakes as $item)
         {
-            $task = new Task($item["task_id"]);
+            $task = new Mistake($item["task_id"]);
             $list[] = $task;
         }
         return $list;

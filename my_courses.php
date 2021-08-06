@@ -18,10 +18,7 @@ $users_courses = $manager->get_users_courses($user);
 $content = "<div class='row container-fluid justify-content-center m-0 mb-3 p-0'><h1>Мои курсы</h1></div><br>";
 
 foreach ($users_courses as $course)
-{
-    $render = new Render();
-    $content .= $render->render_course($course, "open");
-}
+    $content .= $course->get_html(["status"=>"open"]);
 
 // чтоб сделать кнопку неактивной
 $file = basename(__FILE__, ".php");

@@ -55,13 +55,15 @@ else
     {
         // проверка покупки курса
         $manager = new Manager();
-        $resp = $manager->check_course($user, $theme->course_id);
+        $resp = $manager->check_access_to_course($user, $theme->course_id);
 
-        if ($resp["status"] || $user->rights=="admin") {
+        if ($resp["status"])
+        {
 
             // проверка доступа к теме
             $professor = new Professor();
-            $theme_status = $professor->theme_status($user, $theme);
+            $resp = $professor->theme_status($user, $theme);
+            $theme_status = $resp["status"];
 
             if($theme_status == "open" || $theme_status == "solved" || $user->rights=="admin")
             {
@@ -79,8 +81,8 @@ else
                     $render = new Render();
                     $tasks_blocks = $render->render_tasks_theme($theme, $tasks_list, $user, $sptest);
                     $content = $tasks_blocks["content"];
-                    // время
 
+                    // отображаю время
                     if(isset($response["sec"]))
                     {
                         $class = ($response["status"]===true)?"in_process":"lock";
@@ -96,7 +98,7 @@ else
                         // рендер первой задачи
                         if(isset($this_task_id))
                         {
-                            // TODO возможно ненормально реализоввать это так (вместо рендера задач - js)?
+                            // TODO возможно ненормально реализоввать js вместо рендера задач ?
                             if($this_task_id=="supertest")
                                 $content .= "<script type='text/javascript'>$(document).ready(function() { $('.supertest').submit(); });</script>";
                             else
@@ -130,11 +132,11 @@ else
                 }
 
             }
-            else
+            else // theme is close
                 $content = "<div class='row container-fluid justify-content-start m-0 p-0 pl-3'>Вы пока не можете решать эту тему</div>";
         }
         else
-            $content = $resp["error"];
+            $content = $resp["message"];
     }
     else
         header("Location: /my_courses.php");

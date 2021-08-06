@@ -5,8 +5,10 @@ require_once __DIR__ . "/Render.php";
 
 class Mistake extends Task
 {
-    public function get_html($is_admin=false)
+    public function get_html($data)
     {
+        $is_admin = $data["is_admin"];
+
         $block = new Render();
 
         $task_block = $block->render_mistake($this);

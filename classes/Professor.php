@@ -69,7 +69,7 @@ class Professor
     {
         $users_progress_theme_table = new Users_progress_theme_table();
         $users_progress = $users_progress_theme_table->read(["user_id"=>$user->id, "theme_id"=>$theme->id]);
-        return (int)$users_progress["progress"];
+        return (int)(isset($users_progress["progress"]) ?? 0);
     }
     public function set_progress_theme($user, $theme, $progress)
     {
@@ -127,44 +127,45 @@ class Professor
             $users_themes_ids_list[] = $th->id;
 
         if(in_array($theme->id, $users_themes_ids_list))
-            return "solved";
+            return ["status"=>"solved"]; // тема в списке решенных
         else if ($theme->id == $themes_ids[0]) // первая тема курса
-            return "open";
+            return ["status"=>"open"];
         else if ($theme->id == $themes_ids[1])// вторая тема курса
         {
-            if (in_array($themes_ids[0], $users_themes_ids_list))
-                return "open";
+            if (in_array($themes_ids[0], $users_themes_ids_list)) // если первая решена - открываю вторую
+                return ["status"=>"open"];
             else
-                return "close";
+                return ["status"=>"close", "message"=>"Вы не решили первую тему"];
         }
         else // >=3
         {
             $pred_id = array_search($theme->id, $themes_ids)-1;
             if (in_array($themes_ids[$pred_id], $users_themes_ids_list)) // предыдущая решена?
             {
-                $theme = new Theme($themes_ids[$pred_id-1]);
-                $tasks_ids = $theme->get_tasks_ids();
+                // проверяю РО темы с индексом -2 относительно данной
+                $tmp_theme = new Theme($themes_ids[$pred_id-1]);
+                $tasks_ids = $tmp_theme->get_tasks_ids();
                 $prof_mist = new Professor_mistakes();
                 $mistakes = $prof_mist->get_mistakes($user);
                 foreach ($mistakes as $mistake)
                 {
-                    if (in_array($mistake["task_id"], $tasks_ids))
-                        return "close";
+                    if (in_array($mistake->id, $tasks_ids))
+                        return ["status"=>"close", "message"=>"Вы не сделали работу над ошибками одной из предыдущих тем, зайдите в Личный кабинет"];
                 }
-                return "open";
+                return ["status"=>"open"];
             }
             else
-                return "close";
+                return ["status"=>"close", "message"=>"Вы не решили предыдущую тему"];
         }
 
     }
-    public function check_access_supertest($limits_of_points, $users_progress, $is_admin=false)
+    public function check_access_supertest($user, $theme)
     {
-        if((int)$users_progress["progress"]<(int)$limits_of_points && !$is_admin)
-        {
-            $progress = $users_progress["progress"]?:"0";
-            return ["status"=>false ,"error" => "Вы решили мало задач ваш балл ".$progress."/".$limits_of_points];
-        }
+        $users_progress = $this->get_progress_theme($user, $theme);
+        $theme->get_points_limit();
+
+        if($users_progress < $theme->points_limit && !($user->rights == "admin"))
+            return ["status"=>false ,"error" => "Вы решили мало задач ваш балл ".$users_progress."/".$theme->points_limit];
         return ["status"=>true];
     }
 

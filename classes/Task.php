@@ -37,10 +37,11 @@ class Task
 
     }
 
-    public function get_html($is_admin=false) //TODO получать ли задачу тут (get_html in Task)?
+    public function get_html($data)
     {
-        $block = new Render();
+        $is_admin = $data["is_admin"];
 
+        $block = new Render();
         $task_block = $block->render_task($this, 0);
         if ($is_admin)
         {

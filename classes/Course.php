@@ -2,6 +2,7 @@
 require_once __DIR__ . "/Theme.php";
 require_once __DIR__ . "/Courses_table.php";
 require_once __DIR__ . "/Themes_table.php";
+require_once __DIR__ . "/Render.php";
 
 
 class Course
@@ -44,5 +45,11 @@ class Course
         foreach ($this->themes as $theme)
             $list[] = $theme->id;
         return $list;
+    }
+
+    public function get_html($data)
+    {
+        $render = new Render();
+        return $render->render_course($this, $data["status"]);
     }
 }

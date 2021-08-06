@@ -126,21 +126,11 @@ class Render
         for($i=0; $i<count($mistakes); $i++)
         {
             $task = $mistakes[$i];
-            $last = ($i==count($mistakes)-1);
-
-            if(!$last)
-            {
-                $nt_id = $mistakes[$i+1]->id;
-                $next_task = "<input type='hidden' name='next_task_id' value='$nt_id'>";
-            }
-            else
-                $next_task = "";
 
             $content .= "<form class='get_mistake mr-1' method='POST'>
                             <input type='hidden' name='task_id' value='$task->id'>
                             <input type='hidden' name='submit' value='true'>
-                            <input type='hidden' name='code' value='get_mistake'>
-                            $next_task
+                            <input type='hidden' name='code' value='get_mistake'>                
                             <button class='btn close_btn' id='$task->id'></button>
                          </form>";
         }
@@ -219,7 +209,7 @@ class Render
         return $content;
     }
 
-    public function render_supertest_task($task)
+    public function render_supertest_task($task, $is_admin)
     {
         $content = "";
         $a_type_task = "
@@ -249,6 +239,14 @@ class Render
             $content .= $b_type_task;
 
         $content.="</div>";
+
+        if ($is_admin)
+        {
+            $content .= "<div class='col-12 mt-3 d-flex justify-content-center'><a class='btn chg_task_btn' href='/change_task?id=$task->id&from_supertest=true&theme_id=$task->theme_id'>Изменить задачу</a></div>";
+            $content .= " <div class='col-12 mt-3 d-flex justify-content-center'>
+                                                <button class='btn del_task' onclick='del_task($task->id);return false;'>Удалить эту задачу</button>
+                                           </div>";
+        }
         return $content;
     }
 

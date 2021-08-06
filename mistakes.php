@@ -6,12 +6,12 @@ require_once __DIR__ . "/classes/Render.php";
 require_once __DIR__ . "/classes/Themes_table.php";
 require_once __DIR__ . "/classes/Users_mistakes_table.php";
 require_once __DIR__ . "/classes/Tasks_table.php";
-require_once __DIR__ . "/classes/Mistake_block_constructor.php";
 require_once __DIR__ . "/classes/Professor_mistakes.php";
 session_start();
 
 
-if (isset($_GET["theme_id"])) {
+if (isset($_GET["theme_id"]))
+{
 
     $theme = new Theme($_GET["theme_id"]);
     if($theme->id)
@@ -23,19 +23,18 @@ if (isset($_GET["theme_id"])) {
         {
             // нахожу ошибки пользователя для этой темы
             $all_mistakes = $prof_mist->get_mistakes($user);
-            $all_mistakes_ids = [];
-            foreach ($all_mistakes as $m)
-                $all_mistakes_ids[] = $m->id;
 
             $tasks_theme = $theme->get_tasks();
+            $tasks_theme_ids = [];
+            foreach ($tasks_theme as $tt)
+                $tasks_theme_ids[] = $tt->id;
 
             $mistakes = [];
-            foreach ($tasks_theme as $tt)
+            foreach ($all_mistakes as $mistake)
             {
-                if(in_array($tt->id, $all_mistakes_ids))
-                    $mistakes[] = $tt;
+                if(in_array($mistake->id, $tasks_theme_ids))
+                    $mistakes[] = $mistake;
             }
-
 
             if (count($mistakes))
             {
@@ -48,10 +47,9 @@ if (isset($_GET["theme_id"])) {
 
                 $this_task = $mistakes[0];
 
-                $mistakes_block_constructor = new Mistake_block_constructor();
-                $response = $mistakes_block_constructor->get_mistake_block($this_task->id, $mistakes[1]->id);
+                $response = $this_task->get_html(["is_admin"=>($user->rights == "admin")]);
                 $content .= $response["block"];
-                $content.=" </div></div>";
+                $content.=" </div></div>";// закрыл #tt и #task
 
                 $page = new Render();
                 $page->temp = 'main.html';
@@ -72,7 +70,8 @@ if (isset($_GET["theme_id"])) {
     }
     else
         header("Location: /acc");
-} else
+}
+else
     header("Location: /acc");
 
 
