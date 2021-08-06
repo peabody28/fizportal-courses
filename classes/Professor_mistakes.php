@@ -1,7 +1,12 @@
 <?php
+
+require_once __DIR__."/Course.php";
 require_once __DIR__."/Task.php";
 require_once __DIR__."/Professor.php";
 require_once __DIR__."/Users_mistakes_table.php";
+require_once __DIR__."/Users_progress_theme_table.php";
+require_once __DIR__."/Users_themes_table.php";
+require_once __DIR__."/Themes_table.php";
 
 class Professor_mistakes extends Professor
 {
@@ -36,30 +41,38 @@ class Professor_mistakes extends Professor
     public function check_in_mistakes_list($user, $task)
     {
         $mist_list = $this->get_mistakes($user);
-        return in_array(["user_id"=>$user->id, "task_id"=>$task->id], $mist_list);
+        foreach ($mist_list as $item)
+        {
+            if($item->id == $task->id)
+                return true;
+        }
+        return false;
     }
 
-    public function mistakes_status($theme_id)
+    public function mistakes_status($user, $theme)
     {
+        // курс в котором эта тема
+        $course = new Course($theme->course_id);
+        // все темы этого курса
+        $courses_themes = $course->get_themes();
+        // их id
+        $courses_themes_ids = $course->get_themes_ids();
 
-        $themes_table = new Themes_table();
-        $theme = $themes_table->read($theme_id); // тема для которой делается РО
+        // темы, выполненные пользователем
+        $professor = new Professor();
+        $users_themes = $professor->get_themes($user);
 
-        $themes_list_full = $themes_table->get_courses_themes($theme["course_id"]);
+        // вычисляю id темы следующей за этой
+        $theme_number_in_course = array_search($theme->id, $courses_themes_ids);
+        $next_theme_id = isset($courses_themes[$theme_number_in_course+1])?$courses_themes[$theme_number_in_course+1]->id:null;
 
-        $users_themes_table = new Users_themes_table();
-        $users_themes_list = $users_themes_table->read($_SESSION["id"]);
-
-        $themes_ids = [];
-        foreach ($themes_list_full as $item)
-            $themes_ids[] = $item["id"];
-
-        $tec_local_id = array_search($theme_id, $themes_ids);
-        $sled_id = $themes_list_full[(int)$tec_local_id+1]["id"];
-        if(in_array(["user_id"=>$_SESSION["id"], "theme_id"=>$sled_id], $users_themes_list))
-            return true;
-        else
-            return false;
+        // если пользователь выполнил ее - даю доступ к РО
+        foreach ($users_themes as $u_th)
+        {
+            if($u_th->id == $next_theme_id)
+                return true;
+        }
+        return false;
 
     }
 

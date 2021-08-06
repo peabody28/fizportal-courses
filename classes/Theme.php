@@ -64,4 +64,11 @@ class Theme
         $this->time_limit = $answ?(int)$answ["time_limit"]:null;
     }
 
+    public function get_next_task_id($task)
+    {
+        $themes_tasks_ids = $this->get_tasks_ids();
+        $task_number_in_theme = array_search($task->id, $themes_tasks_ids);
+        $next_task_id = $themes_tasks_ids[$task_number_in_theme+1];
+        return $next_task_id ?? null;
+    }
 }

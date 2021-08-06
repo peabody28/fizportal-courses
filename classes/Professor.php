@@ -19,6 +19,7 @@ class Professor
 {
     public function check_task($task)
     {
+        // TODO проверить этот метод
         $status = true;
 
         if ($task->type == "A") {
@@ -76,6 +77,43 @@ class Professor
         $users_progress_theme_table = new Users_progress_theme_table();
         $users_progress_theme_table->update($row, "set_point");
     }
+    public function reset_theme($user, $theme)
+    {
+
+        $tasks_theme_list = $theme->get_tasks();
+        $prof_tasks = new Professor_tasks();
+        $users_tasks = $prof_tasks->get_tasks($user);
+
+        $prof_mist = new Professor_mistakes();
+        $users_mistakes = $prof_mist->get_mistakes($user);
+
+        $users_themes = $this->get_themes($user);
+
+        $progress = 0;
+        foreach ($tasks_theme_list as $task)
+        {
+            // если задача в работе над ошибками - удаляю
+            $obj = ["user_id"=>$user->id, "task_id"=>$task->id];
+            if(in_array($obj, $users_mistakes))
+            {
+                if (!in_array(["user_id"=>$user->id, "theme_id"=>$theme->id], $users_themes))
+                    $prof_mist->delete_from_mistakes($user, $task);
+                else
+                    $progress -= $task->complexity;
+            }
+            // если задача в списке решенных - удаляю
+            else if(in_array($obj, $users_tasks))
+                $prof_tasks->delete_task_from_users_tasks($user, $task);
+        }
+        // обновляю прогресс
+        $this->set_progress_theme($user, $theme, $progress);
+        // обнуляю время
+        $timer = new Timer();
+        $timer->delete_theme_begin_time($user, $theme);
+
+        return ["status"=>"OK"];
+    }
+
     public function theme_status($user, $theme)
     {
         // список id тем курса
@@ -120,44 +158,6 @@ class Professor
         }
 
     }
-    public function reset_theme($user, $theme)
-    {
-
-        $tasks_theme_list = $theme->get_tasks();
-        $prof_tasks = new Professor_tasks();
-        $users_tasks = $prof_tasks->get_tasks($user);
-
-        $prof_mist = new Professor_mistakes();
-        $users_mistakes = $prof_mist->get_mistakes($user);
-
-        $users_themes = $this->get_themes($user);
-
-        $progress = 0;
-        foreach ($tasks_theme_list as $task)
-        {
-            // если задача в работе над ошибками - удаляю
-            $obj = ["user_id"=>$user->id, "task_id"=>$task->id];
-            if(in_array($obj, $users_mistakes))
-            {
-                if (!in_array(["user_id"=>$user->id, "theme_id"=>$theme->id], $users_themes))
-                    $prof_mist->delete_from_mistakes($user, $task);
-                else
-                    $progress -= $task->complexity;
-            }
-            // если задача в списке решенных - удаляю
-            else if(in_array($obj, $users_tasks))
-                $prof_tasks->delete_task_from_users_tasks($user, $task);
-        }
-        // обновляю прогресс
-        $this->set_progress_theme($user, $theme, $progress);
-        // обнуляю время
-        $timer = new Timer();
-        $timer->delete_theme_begin_time($user, $theme);
-
-        return ["status"=>"OK"];
-    }
-
-
     public function check_access_supertest($limits_of_points, $users_progress, $is_admin=false)
     {
         if((int)$users_progress["progress"]<(int)$limits_of_points && !$is_admin)
@@ -184,7 +184,5 @@ class Professor
         $users_progress_theme_table = new Users_progress_theme_table();
         $users_progress_theme_table->delete_point(["user_id" => $user->id, "theme_id" => $task->theme_id], $task->complexity);
     }
-
-
 
 }

@@ -13,21 +13,20 @@ session_start();
 
 if (isset($_GET["theme_id"])) {
 
-    $themes_table = new Themes_table();
-    if($themes_table->read($_GET["theme_id"]))
+    $theme = new Theme($_GET["theme_id"]);
+    if($theme->id)
     {
+        $user = new User($_SESSION["id"]);
         $prof_mist = new Professor_mistakes();
         // можно ли пользователю решать эту РО?
-        if($prof_mist->mistakes_status($_GET["theme_id"]))
+        if($prof_mist->mistakes_status($user, $theme))
         {
             // нахожу ошибки пользователя для этой темы
-            $user = new User($_SESSION["id"]);
             $all_mistakes = $prof_mist->get_mistakes($user);
             $all_mistakes_ids = [];
             foreach ($all_mistakes as $m)
                 $all_mistakes_ids[] = $m->id;
 
-            $theme = new Theme($_GET["theme_id"]);
             $tasks_theme = $theme->get_tasks();
 
             $mistakes = [];

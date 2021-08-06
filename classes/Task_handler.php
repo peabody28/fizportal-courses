@@ -27,6 +27,7 @@ class Task_handler
 
     public function send_answer()
     {
+        // TODO проверить этот метод
         $this->construct_task();
         $task = &$this->task;
         $user = &$this->data["user"];

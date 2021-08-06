@@ -1,6 +1,7 @@
 <?php
 require_once __DIR__ . "/Tasks_table.php";
 require_once __DIR__ . "/Tasks_answers_table.php";
+require_once __DIR__ . "/Render.php";
 
 
 
@@ -34,5 +35,24 @@ class Task
         foreach ($resp as $item)
             $this->answer[] = $item["answer"];
 
+    }
+
+    public function get_html($is_admin=false) //TODO получать ли задачу тут (get_html in Task)?
+    {
+        $block = new Render();
+
+        $task_block = $block->render_task($this, 0);
+        if ($is_admin)
+        {
+            $task_block .= "<div class='col-12 mt-3 d-flex justify-content-center'><a class='btn chg_task_btn' href='/change_task?id=$this->id'>Изменить задачу</a></div>";
+            $task_block .= " <div class='col-12 mt-3 d-flex justify-content-center'>
+                                                <button class='btn del_task' onclick='del_task($this->id);return false;'>Удалить эту задачу</button>
+                             </div>";
+        }
+        // материалы для задачи
+        $task_block .= "<div class='d-flex justify-content-center col-12 mt-3' id='message'></div>";
+        $task_block .= "<div class='col-12 d-flex justify-content-center'> <a href='/materials?task_id=$this->id'>Материалы для задачи</a></div>";
+
+        return ["block"=>$task_block];
     }
 }

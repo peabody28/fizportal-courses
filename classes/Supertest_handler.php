@@ -8,6 +8,7 @@ class Supertest_handler extends Task_handler
 {
     public function send_answer()
     {
+        // TODO проверить этот метод
         $user = &$this->data["user"];
         $theme = new Theme($this->data["theme_id"]);
 

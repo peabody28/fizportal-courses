@@ -1,6 +1,7 @@
 <?php
 require_once __DIR__."/Task.php";
 require_once __DIR__."/Tasks_block_constructor.php";
+require_once __DIR__."/Render.php";
 
 
 class Mistake_block_constructor extends Tasks_block_constructor

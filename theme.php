@@ -96,6 +96,7 @@ else
                         // рендер первой задачи
                         if(isset($this_task_id))
                         {
+                            // TODO возможно ненормально реализоввать это так (вместо рендера задач - js)?
                             if($this_task_id=="supertest")
                                 $content .= "<script type='text/javascript'>$(document).ready(function() { $('.supertest').submit(); });</script>";
                             else

@@ -1,4 +1,6 @@
 <?php
+require_once __DIR__."/classes/Task.php";
+
 require_once __DIR__."/classes/User.php";
 require_once __DIR__."/classes/Tasks_table.php";
 
@@ -57,14 +59,18 @@ if(isset($data["submit"]))
     }
     else if ($data["code"]=="get_task")
     {
-        $tasks_block_constructor = new Tasks_block_constructor();
-        $response = $tasks_block_constructor->get_task_block($data["task_id"], $data["next_task_id"], ($_SESSION["rights"]=="admin"));
+        $task = new Task($data["task_id"]);
+        $response = $task->get_html($_SESSION["rights"]=="admin");
+        //$tasks_block_constructor = new Tasks_block_constructor();
+        //$response = $tasks_block_constructor->get_task_block($data["task_id"], $data["next_task_id"], ($_SESSION["rights"]=="admin"));
         echo json_encode(["block"=>$response["block"]]);
     }
     else if ($data["code"]=="get_mistake")
     {
-        $mistake_block_constructor = new Mistake_block_constructor();
-        $response = $mistake_block_constructor->get_mistake_block($data["task_id"], $data["next_task_id"]);
+        $mistake = new Mistake($data["task_id"]);
+        $response = $mistake->get_html($_SESSION["rights"]=="admin");
+        //$mistake_block_constructor = new Mistake_block_constructor();
+        //$response = $mistake_block_constructor->get_mistake_block($data["task_id"], $data["next_task_id"]);
         echo json_encode(["block"=>$response["block"]]);
     }
     else if ($data["code"]=="get_supertest")
