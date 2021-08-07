@@ -6,9 +6,10 @@ require_once __DIR__."/Professor.php";
 require_once __DIR__."/Supertest_task.php";
 require_once __DIR__."/Supertests_table.php";
 require_once __DIR__."/Supertests_tasks_table.php";
+require_once __DIR__ . "/HTML_block.php";
 
 
-class Supertest
+class Supertest implements HTML_block
 {
     public $id, $theme_id, $tasks;
 
@@ -59,5 +60,53 @@ class Supertest
         }
 
         return ["block"=>$supertest_block];
+    }
+
+    public function send_answer($data)
+    {
+        // TODO проверить этот метод
+        $user = &$data["user"];
+        $theme = new Theme($this->theme_id);
+
+        // выделяю задачи и ответы из строки запроса
+        $str = "";
+        foreach ($this->data as $key => $val)
+        {
+            if($key=="code" || $key == "submit")
+                continue;
+            $str .= "&".$key."=";
+        }
+        $match = [];
+        preg_match_all("/&([0-9]*)_{1}a{0,1}b{0,1}_{1}/u", $str, $match);
+
+        $tasks_resps = []; // данные о верности решения задач
+
+        foreach (array_unique($match[1]) as $task_id)
+        {
+            $spt_task = new Supertest_task($task_id);
+            $status = $spt_task->send_answer($data);
+            array_push($tasks_resps, $status);
+        }
+
+        // проверка
+        $status = true;
+        foreach ($tasks_resps as $item)
+        {
+            if($item == false)
+            {
+                $status = false;
+                break;
+            }
+        }
+
+        if ($status)
+        {
+            $prof = new Professor();
+            $prof->add_theme_to_users_themes($user, $theme);
+            return ["status"=>"OK"];
+        }
+        else
+            return ["status"=>"ERROR"];
+
     }
 }

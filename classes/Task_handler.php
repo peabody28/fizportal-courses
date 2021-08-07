@@ -8,16 +8,6 @@ require_once __DIR__."/Professor_mistakes.php";
 
 require_once __DIR__."/Timer.php";
 
-require_once __DIR__."/Users_tasks_table.php";
-require_once __DIR__."/Users_progress_theme_table.php";
-require_once __DIR__."/Users_mistakes_table.php";
-require_once __DIR__."/Users_themes_table.php";
-require_once __DIR__."/Tasks_table.php";
-require_once __DIR__."/Themes_table.php";
-require_once __DIR__."/Tasks_answers_table.php";
-require_once __DIR__."/Themes_limits_table.php";
-require_once __DIR__."/Themes_points_limit_table.php";
-require_once __DIR__."/Users_themes_time_table.php";
 session_start();
 
 
@@ -31,6 +21,7 @@ class Task_handler
         $this->construct_task();
         $task = &$this->task;
         $user = &$this->data["user"];
+
         $theme = new Theme($task->theme_id);
 
         // Если задача в РО, отклоняю решение

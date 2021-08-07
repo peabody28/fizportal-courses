@@ -2,10 +2,11 @@
 require_once __DIR__ . "/Theme.php";
 require_once __DIR__ . "/Courses_table.php";
 require_once __DIR__ . "/Themes_table.php";
+require_once __DIR__ . "/HTML_block.php";
 require_once __DIR__ . "/Render.php";
 
 
-class Course
+class Course implements HTML_block
 {
     public $id, $title, $text, $complexity=0, $price=null, $img_url=null, $themes=null;
 
