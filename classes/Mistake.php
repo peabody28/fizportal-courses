@@ -2,7 +2,6 @@
 require_once __DIR__ . "/Task.php";
 require_once __DIR__ . "/Render.php";
 require_once __DIR__ . "/Professor.php";
-require_once __DIR__ . "/Professor_mistakes.php";
 
 
 class Mistake extends Task
@@ -34,17 +33,17 @@ class Mistake extends Task
         $task = $this->construct_task_for_professor($data);
         $user = &$data["user"];
 
-        $prof = new Professor();
-        $status = $prof->check_task($task);
+        $professor = new Professor();
+        $status = $professor->check_task($task);
         if($status)
         {
             // добавляю задачу в список решенных пользователем
-            $prof->add_task_to_users_tasks($user, $task);
+            $professor->add_task_to_users_tasks($user, $task);
             // добавляю балл в тему
-            $prof->add_point($user, $task);
+            $task->complexity *=2;
+            $professor->add_point($user, $task);
             // удаляю из РО
-            $prof_mist = new Professor_mistakes();
-            $prof_mist->delete_from_mistakes($user, $task);
+            $professor->delete_from_mistakes($user, $task);
 
             return ["status" => "OK", "task_id"=>$task->id];
         }

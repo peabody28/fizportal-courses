@@ -2,10 +2,8 @@
 require_once __DIR__."/Tasks_table.php";
 require_once __DIR__."/Tasks_answers_table.php";
 require_once __DIR__."/HTML_block.php";
+require_once __DIR__."/Professor.php";
 require_once __DIR__."/Render.php";
-
-require_once __DIR__."/Professor_tasks.php";
-require_once __DIR__."/Professor_mistakes.php";
 require_once __DIR__."/Timer.php";
 
 
@@ -69,8 +67,8 @@ class Task implements HTML_block
         $theme = new Theme($this->theme_id);
 
         // Если задача в РО, отклоняю решение
-        $prof_mist = new Professor_mistakes();
-        $in_mistakes = $prof_mist->check_in_mistakes_list($user, $task);
+        $professor = new Professor();
+        $in_mistakes = $professor->check_in_mistakes_list($user, $task);
         if($in_mistakes)
             return ["status" => "ERROR", "code"=>"IN_MISTAKES"];
 
@@ -82,24 +80,23 @@ class Task implements HTML_block
         else if ($response["status"]==="update")
             $timer->set_theme_begin_time($user, $theme);
 
-        $prof = new Professor_tasks();
-        $status = $prof->check_task($task);
+        $status = $professor->check_task($task);
         if($status)
         {
-            $status = $prof->add_task_to_users_tasks($user, $task);
+            $status = $professor->add_task_to_users_tasks($user, $task);
             if($status) // если решается впервые добавляю балл
-                $prof->add_point($user, $task);
+                $professor->add_point($user, $task);
             // это нужно в js для открытия супертеста
-            $progress = $prof->get_points($user, $theme);
+            $progress = $professor->get_points($user, $theme);
             $theme->get_points_limit();
 
             return ["status" => "OK", "task_id"=>$task->id, "points_limit"=>$theme->points_limit, "progress"=>$progress];
         }
         else
         {
-            $status = $prof_mist->add_to_mistakes($user, $task); // добавляю задачу в РО
+            $status = $professor->add_to_mistakes($user, $task); // добавляю задачу в РО
             if ($status) // true если задача не была в РО
-                $prof->delete_point($user, $task); // снимаю балл
+                $professor->delete_point($user, $task); // снимаю балл
 
             return ["status" => "ERROR", "task_id"=>$task->id];
         }

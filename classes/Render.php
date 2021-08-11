@@ -1,7 +1,6 @@
 <?php
 require_once __DIR__."/Theme.php";
-require_once __DIR__."/Professor_tasks.php";
-require_once __DIR__."/Professor_mistakes.php";
+require_once __DIR__."/Professor.php";
 require_once __DIR__."/../vendor/autoload.php";
 session_start();
 
@@ -39,13 +38,14 @@ class Render
 
         $first_open_id = null;
         $first_solved_id = null;
+
+        $professor = new Professor();
         for($i=0; $i<count($tasks_list); $i++)
         {
             $task = $tasks_list[$i];
             $last = ($i==count($tasks_list)-1);
 
-            $prof_tasks = new Professor_tasks();
-            $task_status = $prof_tasks->task_status($user, $task);
+            $task_status = $professor->task_status($user, $task);
 
             if($task_status=="solved")
             {
@@ -81,8 +81,7 @@ class Render
         $theme->get_points_limit();
 
             // прогресс
-        $prof = new Professor();
-        $users_progress = $prof->get_progress_theme($user, $theme);
+        $users_progress = $professor->get_progress_theme($user, $theme);
 
         $disabled = "";
         if($users_progress < $theme->points_limit && $user->rights!="admin")

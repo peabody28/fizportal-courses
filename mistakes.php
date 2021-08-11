@@ -6,7 +6,7 @@ require_once __DIR__ . "/classes/Render.php";
 require_once __DIR__ . "/classes/Themes_table.php";
 require_once __DIR__ . "/classes/Users_mistakes_table.php";
 require_once __DIR__ . "/classes/Tasks_table.php";
-require_once __DIR__ . "/classes/Professor_mistakes.php";
+require_once __DIR__ . "/classes/Professor.php";
 session_start();
 
 
@@ -17,12 +17,12 @@ if (isset($_GET["theme_id"]))
     if($theme->id)
     {
         $user = new User($_SESSION["id"]);
-        $prof_mist = new Professor_mistakes();
+        $professor = new Professor();
         // можно ли пользователю решать эту РО?
-        if($prof_mist->mistakes_status($user, $theme))
+        if($professor->mistakes_status($user, $theme))
         {
             // нахожу ошибки пользователя для этой темы
-            $mistakes = $prof_mist->get_mistakes_for_theme($user, $theme);
+            $mistakes = $professor->get_mistakes_for_theme($user, $theme);
 
             if (count($mistakes))
             {

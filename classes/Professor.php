@@ -2,7 +2,6 @@
 require_once __DIR__."/Course.php";
 require_once __DIR__."/Theme.php";
 require_once __DIR__."/Timer.php";
-require_once __DIR__."/Professor_mistakes.php";
 
 require_once __DIR__."/Tasks_answers_table.php";
 require_once __DIR__."/Users_themes_table.php";
@@ -17,6 +16,85 @@ require_once __DIR__."/Users_progress_theme_table.php";
 
 class Professor
 {
+
+    public function get_mistakes($user)
+    {
+        $list = [];
+        $users_mistakes_table = new Users_mistakes_table();
+        $users_mistakes = $users_mistakes_table->read($user->id);
+        foreach ($users_mistakes as $item)
+        {
+            $task = new Mistake($item["task_id"]);
+            $list[] = $task;
+        }
+        return $list;
+    }
+    public function get_mistakes_for_theme($user, $theme)
+    {
+        $all_mistakes = $this->get_mistakes($user);
+
+        $tasks_theme = $theme->get_tasks();
+        $tasks_theme_ids = [];
+        foreach ($tasks_theme as $tt)
+            $tasks_theme_ids[] = $tt->id;
+
+        $mistakes = [];
+        foreach ($all_mistakes as $mistake)
+        {
+            if(in_array($mistake->id, $tasks_theme_ids))
+                $mistakes[] = $mistake;
+        }
+        return $mistakes;
+    }
+    public function add_to_mistakes($user, $task)
+    {
+        $users_mistakes_table = new Users_mistakes_table();
+        $status = $users_mistakes_table->create(["user_id"=>$user->id, "task_id"=>$task->id]);
+        return $status;
+    }
+    public function delete_from_mistakes($user, $task)
+    {
+        $users_mistakes_table = new Users_mistakes_table();
+        $status = $users_mistakes_table->delete(["user_id"=>$user->id, "task_id"=>$task->id]);
+        return $status;
+    }
+    public function check_in_mistakes_list($user, $task)
+    {
+        $mist_list = $this->get_mistakes($user);
+        foreach ($mist_list as $item)
+        {
+            if($item->id == $task->id)
+                return true;
+        }
+        return false;
+    }
+    public function mistakes_status($user, $theme)
+    {
+        // курс в котором эта тема
+        $course = new Course($theme->course_id);
+        // все темы этого курса
+        $courses_themes = $course->get_themes();
+        // их id
+        $courses_themes_ids = $course->get_themes_ids();
+
+        // темы, выполненные пользователем
+        $professor = new Professor();
+        $users_themes = $professor->get_themes($user);
+
+        // вычисляю id темы следующей за этой
+        $theme_number_in_course = array_search($theme->id, $courses_themes_ids);
+        $next_theme_id = isset($courses_themes[$theme_number_in_course+1])?$courses_themes[$theme_number_in_course+1]->id:null;
+
+        // если пользователь выполнил ее - даю доступ к РО
+        foreach ($users_themes as $u_th)
+        {
+            if($u_th->id == $next_theme_id)
+                return true;
+        }
+        return false;
+
+    }
+
     public function check_task($task)
     {
         // TODO проверить этот метод
@@ -45,9 +123,7 @@ class Professor
         // "close"
 
         $user_tasks = $this->get_tasks($user);
-
-        $prof_mist = new Professor_mistakes();
-        $user_mistakes = $prof_mist->get_mistakes($user);
+        $user_mistakes = $this->get_mistakes($user);
 
         foreach ($user_tasks as $ut)
         {
@@ -105,12 +181,9 @@ class Professor
     {
 
         $tasks_theme_list = $theme->get_tasks();
-        $prof_tasks = new Professor_tasks();
-        $users_tasks = $prof_tasks->get_tasks($user);
 
-        $prof_mist = new Professor_mistakes();
-        $users_mistakes = $prof_mist->get_mistakes($user);
-
+        $users_tasks = $this->get_tasks($user);
+        $users_mistakes = $this->get_mistakes($user);
         $users_themes = $this->get_themes($user);
 
         $progress = 0;
@@ -121,13 +194,13 @@ class Professor
             if(in_array($obj, $users_mistakes))
             {
                 if (!in_array(["user_id"=>$user->id, "theme_id"=>$theme->id], $users_themes))
-                    $prof_mist->delete_from_mistakes($user, $task);
+                    $this->delete_from_mistakes($user, $task);
                 else
                     $progress -= $task->complexity;
             }
             // если задача в списке решенных - удаляю
             else if(in_array($obj, $users_tasks))
-                $prof_tasks->delete_task_from_users_tasks($user, $task);
+                $this->delete_task_from_users_tasks($user, $task);
         }
         // обновляю прогресс
         $this->set_progress_theme($user, $theme, $progress);
@@ -171,8 +244,8 @@ class Professor
                 // проверяю РО темы с индексом -2 относительно данной
                 $tmp_theme = new Theme($themes_ids[$pred_id-1]);
                 $tasks_ids = $tmp_theme->get_tasks_ids();
-                $prof_mist = new Professor_mistakes();
-                $mistakes = $prof_mist->get_mistakes($user);
+
+                $mistakes = $this->get_mistakes($user);
                 foreach ($mistakes as $mistake)
                 {
                     if (in_array($mistake->id, $tasks_ids))
@@ -220,5 +293,4 @@ class Professor
         $timer = new Timer();
         return $timer->check_time($user, $theme);
     }
-
 }
