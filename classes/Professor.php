@@ -38,6 +38,30 @@ class Professor
 
         return $status;
     }
+    public function task_status($user, $task)
+    {
+        // "solved"
+        // "open"
+        // "close"
+
+        $user_tasks = $this->get_tasks($user);
+
+        $prof_mist = new Professor_mistakes();
+        $user_mistakes = $prof_mist->get_mistakes($user);
+
+        foreach ($user_tasks as $ut)
+        {
+            if($ut->id == $task->id)
+                return "solved";
+        }
+        foreach ($user_mistakes as $um)
+        {
+            if($um->id == $task->id)
+                return "close";
+        }
+        return "open";
+
+    }
 
     public function add_theme_to_users_themes($user, $theme)
     {

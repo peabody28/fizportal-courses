@@ -87,30 +87,22 @@ class Task implements HTML_block
         if($status)
         {
             $status = $prof->add_task_to_users_tasks($user, $task);
-
             if($status) // если решается впервые добавляю балл
                 $prof->add_point($user, $task);
             // это нужно в js для открытия супертеста
             $progress = $prof->get_points($user, $theme);
             $theme->get_points_limit();
-            //
+
             return ["status" => "OK", "task_id"=>$task->id, "points_limit"=>$theme->points_limit, "progress"=>$progress];
         }
         else
         {
-            $resp = ["status" => "ERROR"];
-            $prof_tasks = new Professor_tasks();
-            $status = $prof_tasks->task_status($user, $task);
-
-            if($status == "close") // если пользователь эту задачу еще не решал
-            {
-                $prof_mist->add_to_mistakes($user, $task); // добавляю задачу в РО
+            $status = $prof_mist->add_to_mistakes($user, $task); // добавляю задачу в РО
+            if ($status) // true если задача не была в РО
                 $prof->delete_point($user, $task); // снимаю балл
-                $resp["task_id"] = $task->id;
-            }
-            return $resp;
-        }
 
+            return ["status" => "ERROR", "task_id"=>$task->id];
+        }
     }
 
     public function construct_task_for_professor($data)
