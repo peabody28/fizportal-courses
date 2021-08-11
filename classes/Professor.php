@@ -116,6 +116,8 @@ class Professor
 
     public function theme_status($user, $theme)
     {
+        if($user->rights == "admin")
+            return ["status"=>"open"];
         // список id тем курса
         $course = new Course($theme->course_id);
         $themes_ids = $course->get_themes_ids();
@@ -161,10 +163,13 @@ class Professor
     }
     public function check_access_supertest($user, $theme)
     {
+        if($user->rights == "admin")
+            return ["status"=>true];
+
         $users_progress = $this->get_progress_theme($user, $theme);
         $theme->get_points_limit();
 
-        if($users_progress < $theme->points_limit && !($user->rights == "admin"))
+        if($users_progress < $theme->points_limit)
             return ["status"=>false ,"error" => "Вы решили мало задач ваш балл ".$users_progress."/".$theme->points_limit];
         return ["status"=>true];
     }
@@ -184,6 +189,12 @@ class Professor
     {
         $users_progress_theme_table = new Users_progress_theme_table();
         $users_progress_theme_table->delete_point(["user_id" => $user->id, "theme_id" => $task->theme_id], $task->complexity);
+    }
+
+    public function check_time($user, $theme)
+    {
+        $timer = new Timer();
+        return $timer->check_time($user, $theme);
     }
 
 }

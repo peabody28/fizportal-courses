@@ -6,6 +6,7 @@ require_once __DIR__."/Users_courses_table.php";
 
 class Manager
 {
+    public $courses = [];
     public function check_access_to_course($user, $course_id)
     {
         // получаю курсы пользователя
@@ -27,29 +28,40 @@ class Manager
         $list = [];
         $users_courses_table = new Users_courses_table();
         $users_courses = $users_courses_table->read($user->id);
-        foreach ($users_courses as $item)
+        if (!$this->courses)
+            $this->get_courses();
+
+        foreach ($users_courses as $u_cours)
         {
-            $course = new Course($item["course_id"]);
-            $list[] = $course;
+            foreach ($this->courses as $course)
+            {
+                if ($u_cours["course_id"] == $course->id)
+                    $list[] = $course;
+            }
+
         }
         return $list;
     }
 
     public function get_courses()
     {
-        $list = [];
+        if ($this->courses)
+            return $this->courses;
+
+        $this->courses = [];
         $courses_table = new Courses_table();
         $courses_list = $courses_table->get_courses_list();
         foreach ($courses_list as $item)
         {
             $course = new Course($item["course_id"]);
-            $list[] = $course;
+            $this->courses[] = $course;
         }
-        return $list;
+        return $this->courses;
     }
 
     public function buy_course($user, $course)
     {
+        // проверка на наличие курса
         // обработка покупки
         $users_courses_table = new Users_courses_table();
         $status = $users_courses_table->create(["user_id"=>$user->id, "course_id"=>$course->id]);

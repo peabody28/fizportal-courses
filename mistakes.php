@@ -22,19 +22,7 @@ if (isset($_GET["theme_id"]))
         if($prof_mist->mistakes_status($user, $theme))
         {
             // нахожу ошибки пользователя для этой темы
-            $all_mistakes = $prof_mist->get_mistakes($user);
-
-            $tasks_theme = $theme->get_tasks();
-            $tasks_theme_ids = [];
-            foreach ($tasks_theme as $tt)
-                $tasks_theme_ids[] = $tt->id;
-
-            $mistakes = [];
-            foreach ($all_mistakes as $mistake)
-            {
-                if(in_array($mistake->id, $tasks_theme_ids))
-                    $mistakes[] = $mistake;
-            }
+            $mistakes = $prof_mist->get_mistakes_for_theme($user, $theme);
 
             if (count($mistakes))
             {
@@ -45,10 +33,12 @@ if (isset($_GET["theme_id"]))
                 $content .="<div id='task' class='p-0 m-0 mt-5 pt-md-5 d-flex justify-content-center align-items-center row container-fluid'>
                                 <div id='tt' class='p-4 pt-5 m-0 ml-md-5 mr-md-5 row container-fluid d-flex justify-content-center'>";
 
+                // в theme.php это реализовано через вызов js функции
                 $this_task = $mistakes[0];
 
                 $response = $this_task->get_html(["is_admin"=>($user->rights == "admin")]);
                 $content .= $response["block"];
+
                 $content.=" </div></div>";// закрыл #tt и #task
 
                 $page = new Render();

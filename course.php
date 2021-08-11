@@ -42,9 +42,6 @@ if ($course->id)
             else
                 $class = "close_theme";
 
-            if($user->rights == "admin")
-                $class = "open_theme";
-
             $theme->get_points_limit();
             $progress = $professor->get_progress_theme($user, $theme);
 

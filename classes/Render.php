@@ -50,13 +50,13 @@ class Render
             if($task_status=="solved")
             {
                 if($first_solved_id === null)
-                    $first_solved_id = $i;
+                    $first_solved_id = $task->id;
                 $button = "<button class='btn' id='$task->id'></button>";
             }
             else if($task_status=="open")
             {
                 if($first_open_id === null)
-                    $first_open_id = $i;
+                    $first_open_id = $task->id;
                 $button = "<button class='btn open_btn' id='$task->id'></button>";
             }
             else //status == close
@@ -115,8 +115,7 @@ class Render
                         </div>";
         }
 
-        return ["content"=>$content, "first_id"=>$first_id];
-
+        return ["block"=>$content, "first_id"=>$first_id];
     }
 
     public function render_mistakes($mistakes)

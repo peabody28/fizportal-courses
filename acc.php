@@ -5,7 +5,6 @@ require_once __DIR__."/classes/Theme.php";
 require_once __DIR__."/classes/Render.php";
 require_once __DIR__."/classes/Professor.php";
 require_once __DIR__."/classes/Professor_mistakes.php";
-
 session_start();
 
 
@@ -22,23 +21,10 @@ foreach ($users_themes as $theme)
 {
     if($prof_mist->mistakes_status($user, $theme))
     {
-        // список всех ошибок пользователя
-        $all_mistakes = $prof_mist->get_mistakes($user);
-
-        $tasks_theme = $theme->get_tasks();
-        $tasks_theme_ids = [];
-        foreach ($tasks_theme as $tt)
-            $tasks_theme_ids[] = $tt->id;
-
-        $mistakes = [];
-        foreach ($all_mistakes as $mistake)
-        {
-            if(in_array($mistake->id, $tasks_theme_ids))
-                $mistakes[] = $mistake;
-        }
-
+        // список ошибок пользователя для данной темы
+        $mistakes = $prof_mist->get_mistakes_for_theme($user, $theme);
         if(count($mistakes)) // если в теме есть ошибки
-            $content .= "<a class='btn ro' href='/mistakes?theme_id=$theme->id'>Работа над ошибками для темы <i>$theme->title</i>></a><br>";
+            $content .= "<a class='btn ro mb-3' href='/mistakes?theme_id=$theme->id'>Работа над ошибками для темы <i>$theme->title</i>></a>";
     }
 
 }

@@ -25,6 +25,24 @@ class Professor_mistakes extends Professor
         return $list;
     }
 
+    public function get_mistakes_for_theme($user, $theme)
+    {
+        $all_mistakes = $this->get_mistakes($user);
+
+        $tasks_theme = $theme->get_tasks();
+        $tasks_theme_ids = [];
+        foreach ($tasks_theme as $tt)
+            $tasks_theme_ids[] = $tt->id;
+
+        $mistakes = [];
+        foreach ($all_mistakes as $mistake)
+        {
+            if(in_array($mistake->id, $tasks_theme_ids))
+                $mistakes[] = $mistake;
+        }
+        return $mistakes;
+    }
+
     public function add_to_mistakes($user, $task)
     {
         $users_mistakes_table = new Users_mistakes_table();

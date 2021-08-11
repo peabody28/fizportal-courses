@@ -8,7 +8,6 @@ require_once __DIR__."/classes/Manager.php";
 require_once __DIR__."/classes/Timer.php";
 require_once __DIR__."/classes/Render.php";
 require_once __DIR__."/classes/Themes_points_limit_table.php";
-
 session_start();
 
 
@@ -68,23 +67,18 @@ else
             if($theme_status == "open" || $theme_status == "solved" || $user->rights=="admin")
             {
                 // прошло ли время блокировки темы?
-                $timer = new Timer();
-                $response = $timer->check_time($user, $theme);
+                $response = $professor->check_time($user, $theme);
 
                 if($response["status"] !== false) // true or "update"
                 {
-                    // задачи темы
-                    $tasks_list = $theme->get_tasks();
-                    // супертест
-                    $sptest = new Supertest($theme->id);
-                    // рендер блоков задач и супертеста
-                    $render = new Render();
-                    $tasks_blocks = $render->render_tasks_theme($theme, $tasks_list, $user, $sptest);
-                    $content = $tasks_blocks["content"];
-
+                    // отображение квадратов задач
+                    // TODO написать тест для функции get_tasks_blocks()
+                    $resp2 = $theme->get_tasks_blocks($user);
+                    $content = $resp2["block"];
                     // отображаю время
                     if(isset($response["sec"]))
                     {
+                        $timer = new Timer();
                         $class = ($response["status"]===true)?"in_process":"lock";
                         $time_str = $timer->seconds_normalizations($response["sec"]);
                         $content .= "<div id='clock' class='row m-0 p-0 pr-md-5 mt-4 h2 d-flex justify-content-end $class'>$time_str</div>";
@@ -93,7 +87,7 @@ else
                     $content .="<div id='task' class='p-0 m-0 mt-5 d-flex justify-content-center align-items-center row container-fluid'>
                                     <div id='tt' class='p-4 pt-5 m-0 ml-md-5 mr-md-5 row container-fluid d-flex justify-content-center'>";
 
-                    if(count($tasks_list))
+                    if($resp2["count_tasks"])
                     {
                         // рендер первой задачи
                         if(isset($this_task_id))
@@ -105,11 +99,7 @@ else
                                 $content .= "<script type='text/javascript'>$(document).ready(function() { $('#$this_task_id').parent().submit(); });</script>";
                         }
                         else
-                        {
-                            $this_task = $tasks_list[$tasks_blocks["first_id"]];
-                            $content .= "<script type='text/javascript'>$(document).ready(function() { $('#$this_task->id').parent().submit(); });</script>";
-                        }
-
+                            $content .= "<script type='text/javascript'>$(document).ready(function() { $('#$resp2[first_id]').parent().submit(); });</script>";
                     }
                     else
                         $content .= "<script type='text/javascript'>$(document).ready(function() { $('#get_text_theme').click(); });</script>";
@@ -126,6 +116,7 @@ else
                 }
                 else
                 {
+                    $timer = new Timer();
                     $content = "<h2>Время решения темы истекло, возвращайтесь через</h2>";
                     $time_str = $timer->seconds_normalizations($response["sec"]);
                     $content .= "<div id='clock' class='row m-0 p-0 pr-md-5 mt-4 h2 d-flex justify-content-end blocked'>$time_str</div>";
