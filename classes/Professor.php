@@ -16,6 +16,48 @@ require_once __DIR__."/Users_progress_theme_table.php";
 
 class Professor
 {
+    public function task_status($user, $task)
+    {
+        // "solved"
+        // "open"
+        // "close"
+        if($user->rights == "admin")
+            return "open";
+        $user_tasks = $this->get_tasks($user);
+        $user_mistakes = $this->get_mistakes($user);
+
+        foreach ($user_tasks as $ut)
+        {
+            if($ut->id == $task->id)
+                return "solved";
+        }
+        foreach ($user_mistakes as $um)
+        {
+            if($um->id == $task->id)
+                return "close";
+        }
+        return "open";
+
+    }
+    public function get_tasks($user)
+    {
+        $users_tasks_table = new Users_tasks_table();
+        $users_tasks = $users_tasks_table->get_users_tasks($user->id);
+        return $users_tasks;
+    }
+    public function delete_task_from_users_tasks($user, $task)
+    {
+        $users_tasks_table = new Users_tasks_table();
+        $status = $users_tasks_table->delete(["user_id"=>$user->id, "task_id"=>$task->id]);
+        return $status;
+    }
+    public function add_task_to_users_tasks($user, $task)
+    {
+        //добавление задачи в список решенных
+        $users_tasks_table = new Users_tasks_table();
+        $status = $users_tasks_table->create(["user_id"=>$user->id, "task_id"=>$task->id]);
+        return $status;
+    }
 
     public function get_mistakes($user)
     {
@@ -116,41 +158,13 @@ class Professor
 
         return $status;
     }
-    public function task_status($user, $task)
-    {
-        // "solved"
-        // "open"
-        // "close"
-
-        $user_tasks = $this->get_tasks($user);
-        $user_mistakes = $this->get_mistakes($user);
-
-        foreach ($user_tasks as $ut)
-        {
-            if($ut->id == $task->id)
-                return "solved";
-        }
-        foreach ($user_mistakes as $um)
-        {
-            if($um->id == $task->id)
-                return "close";
-        }
-        return "open";
-
-    }
 
     public function add_theme_to_users_themes($user, $theme)
     {
         $users_themes_table = new Users_themes_table();
         $users_themes_table->create(["user_id"=>$user->id, "theme_id"=>$theme->id]);
     }
-    public function add_task_to_users_tasks($user, $task)
-    {
-        //добавление задачи в список решенных
-        $users_tasks_table = new Users_tasks_table();
-        $status = $users_tasks_table->create(["user_id"=>$user->id, "task_id"=>$task->id]);
-        return $status;
-    }
+
 
     public function get_themes($user)
     {
