@@ -57,7 +57,8 @@ class Theme implements HTML_block
     {
         $themes_points_limit_table = new Themes_points_limit_table();
         $resp = $themes_points_limit_table->read($this->id);
-        $this->points_limit = (int)(isset($resp["points_limit"]) ?? 10);  // если лимит не установен, принимаем его за 10 баллов
+        $this->points_limit = ($resp["points_limit"])?:10;  // если лимит не установен, принимаем его за 10 баллов
+        $this->points_limit = (int)$this->points_limit;
         return $this->points_limit;
     }
 

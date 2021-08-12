@@ -19,7 +19,7 @@ class User
         {
             $users_table = new Users_table();
             $tmp_user = $users_table->read($id);
-            $this->id = $tmp_user["id"];
+            $this->id = (int)$tmp_user["id"];
             $this->name = $tmp_user["name"];
             $this->email = $tmp_user["email"];
             $this->password = $tmp_user["password"];

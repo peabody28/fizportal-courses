@@ -1,6 +1,6 @@
 <?php
 require_once __DIR__."/auth.php";
-require_once __DIR__."/classes/Task.php";
+require_once __DIR__ . "/classes/Task.php";
 require_once __DIR__."/classes/Render.php";
 require_once __DIR__."/classes/Tasks_table.php";
 require_once __DIR__."/classes/Tasks_materials_table.php";

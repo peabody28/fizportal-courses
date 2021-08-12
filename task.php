@@ -2,7 +2,7 @@
 // ОБРАБОТЧИК ЗАПРОСОВ ОТ UI
 require_once __DIR__."/classes/Theme.php";
 require_once __DIR__."/classes/Supertest.php";
-require_once __DIR__."/classes/Task.php";
+require_once __DIR__ . "/classes/Task.php";
 require_once __DIR__."/classes/Mistake.php";
 require_once __DIR__."/classes/Professor.php";
 require_once __DIR__."/classes/User.php";
@@ -59,15 +59,17 @@ if(isset($data["submit"]))
     }
     else if ($data["code"]=="get_supertest")
     {
-
-        $user = new User($data["user_id"]);
+        $user = new User($_SESSION["id"]);
         $theme = new Theme($data["theme_id"]);
 
         // проверка на доступность супертеста
         $professor = new Professor();
         $resp = $professor->check_access_supertest($user, $theme);
         if(!$resp["status"])
+        {
             echo json_encode(["block" => $resp["error"]]);
+            exit();
+        }
 
         $supertest = new Supertest($theme->id);
 

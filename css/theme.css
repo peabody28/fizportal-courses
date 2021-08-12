@@ -15,7 +15,7 @@
   width: 26px;
   background-color: #50C878 ;
 }
-.get_task .close_btn {
+.get_task .open_btn {
   background-color: grey;
 }
 .get_task .supertest_btn {
@@ -23,7 +23,7 @@
   width: 26px;
   background-color: #592ce0;
 }
-.get_task .red {
+.get_task .close_btn {
   background-color: #d53e4f;
 }
 .del_task {

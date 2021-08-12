@@ -58,7 +58,6 @@ else
 
         if ($resp["status"])
         {
-
             // проверка доступа к теме
             $professor = new Professor();
             $resp = $professor->theme_status($user, $theme);

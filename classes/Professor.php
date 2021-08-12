@@ -1,10 +1,13 @@
 <?php
 require_once __DIR__."/Course.php";
+require_once __DIR__ . "/Task.php";
 require_once __DIR__."/Theme.php";
+require_once __DIR__."/Mistake.php";
 require_once __DIR__."/Timer.php";
 
 require_once __DIR__."/Tasks_answers_table.php";
 require_once __DIR__."/Users_themes_table.php";
+require_once __DIR__."/Users_mistakes_table.php";
 require_once __DIR__."/Themes_table.php";
 require_once __DIR__."/Tasks_table.php";
 require_once __DIR__."/Users_tasks_table.php";
@@ -41,9 +44,16 @@ class Professor
     }
     public function get_tasks($user)
     {
+        $list = [];
         $users_tasks_table = new Users_tasks_table();
         $users_tasks = $users_tasks_table->get_users_tasks($user->id);
-        return $users_tasks;
+        foreach ($users_tasks as $ut)
+        {
+            $task = new Task($ut["task_id"]);
+            $list[] = $task;
+        }
+
+        return $list;
     }
     public function delete_task_from_users_tasks($user, $task)
     {
@@ -182,8 +192,9 @@ class Professor
     public function get_progress_theme($user, $theme)
     {
         $users_progress_theme_table = new Users_progress_theme_table();
-        $users_progress = $users_progress_theme_table->read(["user_id"=>$user->id, "theme_id"=>$theme->id]);
-        return (int)(isset($users_progress["progress"]) ?? 0);
+        $user_progress = $users_progress_theme_table->read(["user_id"=>$user->id, "theme_id"=>$theme->id]);
+        $user_progress = $user_progress["progress"] ? : 0;
+        return (int)$user_progress;
     }
     public function set_progress_theme($user, $theme, $progress)
     {
@@ -234,11 +245,6 @@ class Professor
         $themes_ids = $course->get_themes_ids();
         // список тем решенных пользователем
         $users_themes_list = $this->get_themes($user);
-        foreach($users_themes_list as $th)
-        {
-            if($theme->id == $th->id) // пользователь уже сделал тему
-                return ["status"=>true, "theme_is_solved"=>true];
-        }
 
         $users_themes_ids_list = [];
         foreach ($users_themes_list as $th)
@@ -264,7 +270,7 @@ class Professor
                 $tmp_theme = new Theme($themes_ids[$pred_id-1]);
                 $tasks_ids = $tmp_theme->get_tasks_ids();
 
-                $mistakes = $this->get_mistakes($user);
+                $mistakes = $this->get_mistakes($user); // TODO
                 foreach ($mistakes as $mistake)
                 {
                     if (in_array($mistake->id, $tasks_ids))

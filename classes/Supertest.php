@@ -1,7 +1,7 @@
 <?php
 require_once __DIR__."/User.php";
 require_once __DIR__."/Theme.php";
-require_once __DIR__."/Task.php";
+require_once __DIR__ . "/Task.php";
 require_once __DIR__."/Professor.php";
 require_once __DIR__."/Supertest_task.php";
 require_once __DIR__."/Supertests_table.php";

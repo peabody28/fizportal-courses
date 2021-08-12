@@ -53,7 +53,7 @@ class Manager
         $courses_list = $courses_table->get_courses_list();
         foreach ($courses_list as $item)
         {
-            $course = new Course($item["course_id"]);
+            $course = new Course($item["id"]);
             $this->courses[] = $course;
         }
         return $this->courses;

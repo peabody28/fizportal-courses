@@ -1,11 +1,33 @@
 <?php
-require_once __DIR__ . "/Task.php";
-require_once __DIR__ . "/Render.php";
-require_once __DIR__ . "/Professor.php";
 
-
+require_once __DIR__."/Render.php";
+require_once __DIR__."/Professor.php";
+require_once __DIR__."/HTML_block.php";
+require_once __DIR__ ."/Task.php";
+//echo class_exists('Task');
+// TODO НЕ РАБОТАЕТ EXTENDS
 class Mistake extends Task
 {
+    /*
+    public function __construct($id=null, $tmp_task=null)
+    {
+        if($id !== null)
+        {
+            if(!$tmp_task)
+            {
+                $tasks_table = new Tasks_table();
+                $tmp_task = $tasks_table->read($id);
+            }
+            $this->id = (int)$tmp_task["id"];
+            $this->text = $tmp_task["text"];
+            $this->answer = $tmp_task["answer"]?:null;
+            $this->complexity = (int)$tmp_task["complexity"];
+            $this->theme_id = (int)$tmp_task["theme_id"];
+            $this->type = $tmp_task["type"];
+            $this->img_url = $tmp_task["img_url"];
+        }
+    }
+*/
     public function get_html($data)
     {
         $is_admin = $data["is_admin"];
