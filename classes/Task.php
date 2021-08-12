@@ -5,6 +5,7 @@ require_once __DIR__."/HTML_block.php";
 require_once __DIR__."/Professor.php";
 require_once __DIR__."/Render.php";
 require_once __DIR__."/Timer.php";
+require_once __DIR__."/Theme.php";
 
 
 class Task implements HTML_block
@@ -20,11 +21,11 @@ class Task implements HTML_block
                 $tasks_table = new Tasks_table();
                 $tmp_task = $tasks_table->read($id);
             }
-            $this->id = $tmp_task["id"];
+            $this->id = (int)$tmp_task["id"];
             $this->text = $tmp_task["text"];
             $this->answer = $tmp_task["answer"]?:null;
-            $this->complexity = $tmp_task["complexity"];
-            $this->theme_id = $tmp_task["theme_id"];
+            $this->complexity = (int)$tmp_task["complexity"];
+            $this->theme_id = (int)$tmp_task["theme_id"];
             $this->type = $tmp_task["type"];
             $this->img_url = $tmp_task["img_url"];
         }
