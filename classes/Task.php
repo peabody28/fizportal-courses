@@ -8,7 +8,7 @@ require_once __DIR__."/Timer.php";
 require_once __DIR__."/Theme.php";
 
 
-class Task implements HTML_block
+class Task // implements HTML_block TODO ЧЕГОТО НЕ РАБОТАЕТ implements
 {
     public $id, $text, $answer=null, $complexity=0, $theme_id=0, $type=null, $img_url=null, $users_answer=null;
 

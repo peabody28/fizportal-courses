@@ -1,10 +1,8 @@
 <?php
-
 require_once __DIR__."/Render.php";
 require_once __DIR__."/Professor.php";
 require_once __DIR__."/HTML_block.php";
-require_once __DIR__ ."/Task.php";
-//echo class_exists('Task');
+require_once __DIR__."/Task.php";
 // TODO НЕ РАБОТАЕТ EXTENDS
 class Mistake extends Task
 {

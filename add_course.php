@@ -21,6 +21,7 @@ if (isset($data["submit"]))
     // TODO: ВОЗМОЖНО ЗДЕСЬ НУЖНА ПРОВЕРКА ВВЕДЕННЫХ ДАННЫХ
     $courses_table = new Courses_table();
     $response = $courses_table->create($course);
+    echo json_encode($response);
 }
 else
 {

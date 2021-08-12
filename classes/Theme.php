@@ -8,8 +8,6 @@ require_once __DIR__ . "/Themes_limits_table.php";
 require_once __DIR__ . "/HTML_block.php";
 require_once __DIR__ . "/Render.php";
 
-
-
 class Theme implements HTML_block
 {
     public $id, $title, $text, $complexity=0, $course_id, $points_limit=10, $time_limit=null, $tasks=null;

@@ -68,6 +68,16 @@ class Professor
         $status = $users_tasks_table->create(["user_id"=>$user->id, "task_id"=>$task->id]);
         return $status;
     }
+    public function in_users_tasks($user, $task)
+    {
+        $users_tasks = $this->get_tasks($user);
+        foreach ($users_tasks as $u_task)
+        {
+            if ($u_task->id == $task->id)
+                return 1;
+        }
+        return 0;
+    }
 
     public function get_mistakes($user)
     {
@@ -204,28 +214,25 @@ class Professor
     }
     public function reset_theme($user, $theme)
     {
-
         $tasks_theme_list = $theme->get_tasks();
-
-        $users_tasks = $this->get_tasks($user);
-        $users_mistakes = $this->get_mistakes($user);
-        $users_themes = $this->get_themes($user);
 
         $progress = 0;
         foreach ($tasks_theme_list as $task)
         {
-            // если задача в работе над ошибками - удаляю
-            $obj = ["user_id"=>$user->id, "task_id"=>$task->id];
-            if(in_array($obj, $users_mistakes))
+            if ($this->in_users_tasks($user, $task))
             {
-                if (!in_array(["user_id"=>$user->id, "theme_id"=>$theme->id], $users_themes))
+                $this->delete_task_from_users_tasks($user, $task);
+                continue;
+            }
+            if ($this->check_in_mistakes_list($user, $task))
+            {
+                $theme_status = $this->theme_status($user, $theme);
+                if ($theme_status == "open")
                     $this->delete_from_mistakes($user, $task);
                 else
                     $progress -= $task->complexity;
             }
-            // если задача в списке решенных - удаляю
-            else if(in_array($obj, $users_tasks))
-                $this->delete_task_from_users_tasks($user, $task);
+
         }
         // обновляю прогресс
         $this->set_progress_theme($user, $theme, $progress);

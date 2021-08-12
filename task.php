@@ -2,7 +2,7 @@
 // ОБРАБОТЧИК ЗАПРОСОВ ОТ UI
 require_once __DIR__."/classes/Theme.php";
 require_once __DIR__."/classes/Supertest.php";
-require_once __DIR__ . "/classes/Task.php";
+require_once __DIR__."/classes/Task.php";
 require_once __DIR__."/classes/Mistake.php";
 require_once __DIR__."/classes/Professor.php";
 require_once __DIR__."/classes/User.php";

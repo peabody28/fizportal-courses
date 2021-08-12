@@ -8,7 +8,7 @@ $('.get_course').submit(
             success: function (res)
             {
                 var resp = JSON.parse(res)
-                if (resp["status"]==="OK")
+                if (resp["status"])
                     $(location).attr("href", "/course?id="+resp["course_id"])
 
             }
