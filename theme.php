@@ -11,6 +11,11 @@ require_once __DIR__."/classes/Themes_points_limit_table.php";
 session_start();
 
 
+$user = new User();
+$user->id = $_SESSION["id"];
+$user->rights = $_SESSION["rights"];
+$user->name = $_SESSION["name"];
+
 if(isset($_POST["submit"]) && $_POST["code"] != "back_to_theme")
 {
     $data = $_POST;
@@ -28,11 +33,11 @@ if(isset($_POST["submit"]) && $_POST["code"] != "back_to_theme")
     }
     else if($data["code"]=="reset_theme")
     {
-        $user = new User($_SESSION["id"]);
         $theme = new Theme($data["id"]);
 
         $professor = new Professor();
-        $resp = $professor->reset_theme($user, $theme);
+        $professor->student = $user;
+        $resp = $professor->reset_theme($theme);
     }
     echo json_encode($resp);
 }
@@ -47,7 +52,6 @@ else
     else
         $data = $_GET;
 
-    $user = new User($_SESSION["id"]);
     $theme = new Theme($data["id"]);
 
     if ($theme->id)
@@ -60,13 +64,15 @@ else
         {
             // проверка доступа к теме
             $professor = new Professor();
-            $resp = $professor->theme_status($user, $theme);
+            $professor->student = $user;
+
+            $resp = $professor->theme_status($theme);
             $theme_status = $resp["status"];
 
             if($theme_status == "open" || $theme_status == "solved" || $user->rights=="admin")
             {
                 // прошло ли время блокировки темы?
-                $response = $professor->check_time($user, $theme);
+                $response = $professor->check_time($theme);
 
                 if($response["status"] !== false) // true or "update"
                 {

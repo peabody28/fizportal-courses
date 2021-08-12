@@ -40,12 +40,14 @@ class Render
         $first_solved_id = null;
 
         $professor = new Professor();
+        $professor->student = $user;
+
         for($i=0; $i<count($tasks_list); $i++)
         {
             $task = $tasks_list[$i];
             $last = ($i==count($tasks_list)-1);
 
-            $task_status = $professor->task_status($user, $task);
+            $task_status = $professor->task_status($task);
 
             if($task_status=="solved")
             {
@@ -81,7 +83,7 @@ class Render
         $theme->get_points_limit();
 
             // прогресс
-        $users_progress = $professor->get_progress_theme($user, $theme);
+        $users_progress = $professor->get_progress_theme($theme);
 
         $disabled = "";
         if($users_progress < $theme->points_limit && $user->rights!="admin")

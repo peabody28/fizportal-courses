@@ -54,16 +54,18 @@ class Mistake extends Task
         $user = &$data["user"];
 
         $professor = new Professor();
+        $professor->student = $data["user"];
+
         $status = $professor->check_task($task);
         if($status)
         {
             // добавляю задачу в список решенных пользователем
-            $professor->add_task_to_users_tasks($user, $task);
+            $professor->add_task_to_users_tasks($task);
             // добавляю балл в тему
             $task->complexity *=2;
-            $professor->add_point($user, $task);
+            $professor->add_point($task);
             // удаляю из РО
-            $professor->delete_from_mistakes($user, $task);
+            $professor->delete_from_mistakes($task);
 
             return ["status" => "OK", "task_id"=>$task->id];
         }

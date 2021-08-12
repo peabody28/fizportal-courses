@@ -59,12 +59,18 @@ if(isset($data["submit"]))
     }
     else if ($data["code"]=="get_supertest")
     {
-        $user = new User($_SESSION["id"]);
+        $user = new User();
+        $user->id = $_SESSION["id"];
+        $user->rights = $_SESSION["rights"];
+        $user->name = $_SESSION["name"];
+
         $theme = new Theme($data["theme_id"]);
 
         // проверка на доступность супертеста
         $professor = new Professor();
-        $resp = $professor->check_access_supertest($user, $theme);
+        $professor->student = $user;
+
+        $resp = $professor->check_access_supertest($theme);
         if(!$resp["status"])
         {
             echo json_encode(["block" => $resp["error"]]);

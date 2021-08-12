@@ -16,13 +16,18 @@ if (isset($_GET["theme_id"]))
     $theme = new Theme($_GET["theme_id"]);
     if($theme->id)
     {
-        $user = new User($_SESSION["id"]);
+        $user = new User();
+        $user->id = $_SESSION["id"];
+        $user->rights = $_SESSION["rights"];
+        $user->name = $_SESSION["name"];
+
         $professor = new Professor();
+        $professor->student = $user;
         // можно ли пользователю решать эту РО?
-        if($professor->mistakes_status($user, $theme))
+        if($professor->mistakes_status($theme))
         {
             // нахожу ошибки пользователя для этой темы
-            $mistakes = $professor->get_mistakes_for_theme($user, $theme);
+            $mistakes = $professor->get_mistakes_for_theme($theme);
 
             if (count($mistakes))
             {

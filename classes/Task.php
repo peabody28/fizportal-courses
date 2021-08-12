@@ -64,40 +64,44 @@ class Task // implements HTML_block TODO ЧЕГОТО НЕ РАБОТАЕТ impl
     {
         // TODO проверить этот метод
         $task = $this->construct_task_for_professor($data);
-        $user = &$data["user"];
         $theme = new Theme($this->theme_id);
 
         // Если задача в РО, отклоняю решение
         $professor = new Professor();
-        $in_mistakes = $professor->check_in_mistakes_list($user, $task);
+        $professor->student = $data["user"];
+        $in_mistakes = $professor->check_in_mistakes_list($task);
         if($in_mistakes)
             return ["status" => "ERROR", "code"=>"IN_MISTAKES"];
 
         // Проверяю время
-        $timer = new Timer();
-        $response = $timer->check_time($user, $theme);
+        $response = $professor->check_time($theme);
+
         if($response["status"]===false)
             return ["status" => "ERROR", "code"=>"TIME"];
         else if ($response["status"]==="update")
-            $timer->set_theme_begin_time($user, $theme);
+        {
+            $timer = new Timer();
+            $timer->set_theme_begin_time($data["user"], $theme);
+        }
+
 
         $status = $professor->check_task($task);
         if($status)
         {
-            $status = $professor->add_task_to_users_tasks($user, $task);
+            $status = $professor->add_task_to_users_tasks($task);
             if($status) // если решается впервые добавляю балл
-                $professor->add_point($user, $task);
+                $professor->add_point($task);
             // это нужно в js для открытия супертеста
-            $progress = $professor->get_points($user, $theme);
+            $progress = $professor->get_points($theme);
             $theme->get_points_limit();
 
             return ["status" => "OK", "task_id"=>$task->id, "points_limit"=>$theme->points_limit, "progress"=>$progress];
         }
         else
         {
-            $status = $professor->add_to_mistakes($user, $task); // добавляю задачу в РО
+            $status = $professor->add_to_mistakes($task); // добавляю задачу в РО
             if ($status) // true если задача не была в РО
-                $professor->delete_point($user, $task); // снимаю балл
+                $professor->delete_point($task); // снимаю балл
 
             return ["status" => "ERROR", "task_id"=>$task->id];
         }

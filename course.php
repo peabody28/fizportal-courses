@@ -12,7 +12,11 @@ session_start();
 $data = $_GET;
 
 $course = new Course($data["id"]);
-$user = new User($_SESSION["id"]);
+
+$user = new User();
+$user->id = $_SESSION["id"];
+$user->rights = $_SESSION["rights"];
+$user->name = $_SESSION["name"];
 
 if ($course->id)
 {
@@ -30,9 +34,10 @@ if ($course->id)
         $themes = $course->get_themes();
         // отображаю темы
         $professor = new Professor();
+        $professor->student = $user;
         foreach ($themes as $theme)
         {
-            $response = $professor->theme_status($user, $theme);
+            $response = $professor->theme_status($theme);
             $theme_status = $response["status"];
 
             if ($theme_status=="solved")
@@ -43,7 +48,7 @@ if ($course->id)
                 $class = "close_theme";
 
             $theme->get_points_limit();
-            $progress = $professor->get_progress_theme($user, $theme);
+            $progress = $professor->get_progress_theme($theme);
 
             $theme_block = $theme->get_html(["class"=>$class, "progress"=>$progress, "is_admin"=>($user->rights == "admin")]);
             $content .= $theme_block;

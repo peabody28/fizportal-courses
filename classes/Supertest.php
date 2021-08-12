@@ -65,7 +65,6 @@ class Supertest implements HTML_block
     public function send_answer($data)
     {
         // TODO проверить этот метод
-        $user = &$data["user"];
         $theme = new Theme($this->theme_id);
 
         // выделяю задачи и ответы из строки запроса
@@ -102,7 +101,8 @@ class Supertest implements HTML_block
         if ($status)
         {
             $prof = new Professor();
-            $prof->add_theme_to_users_themes($user, $theme);
+            $prof->student = $data["user"];
+            $prof->add_theme_to_users_themes($theme);
             return ["status"=>"OK"];
         }
         else

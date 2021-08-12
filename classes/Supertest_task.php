@@ -17,9 +17,10 @@ class Supertest_task extends Task
     {
         // TODO проверить этот метод
         $task = $this->construct_task_for_professor($data);
-        $user = &$data["user"];
 
         $prof = new Professor();
+        $prof->student = $data["user"];
+
         $status = $prof->check_task($task);
         return $status;
     }
