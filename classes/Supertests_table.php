@@ -24,12 +24,12 @@ class Supertests_table implements Table
 
     public function update($obj, $column)
     {
-        // TODO: Implement update() method.
+
     }
 
     public function delete($obj)
     {
-        // TODO: Implement delete() method.
+
     }
     public function read_by_theme($id)
     {

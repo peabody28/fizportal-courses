@@ -29,7 +29,7 @@ class Users_table implements Table
         return $result;
     }
     public function delete($id){
-        // TODO: deliting user
+
     }
     public function check_existence_username($name)
     {

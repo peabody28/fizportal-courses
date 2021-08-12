@@ -6,37 +6,23 @@ require_once __DIR__ . "/classes/Render.php";
 require_once __DIR__ . "/classes/Themes_table.php";
 require_once __DIR__ . "/classes/Users_mistakes_table.php";
 require_once __DIR__ . "/classes/Tasks_table.php";
-require_once __DIR__ . "/classes/Mistake_block_constructor.php";
-require_once __DIR__ . "/classes/Professor_mistakes.php";
+require_once __DIR__ . "/classes/Professor.php";
 session_start();
 
 
-if (isset($_GET["theme_id"])) {
+if (isset($_GET["theme_id"]))
+{
 
-    $themes_table = new Themes_table();
-    if($themes_table->read($_GET["theme_id"]))
+    $theme = new Theme($_GET["theme_id"]);
+    if($theme->id)
     {
-        $prof_mist = new Professor_mistakes();
+        $user = new User($_SESSION["id"]);
+        $professor = new Professor();
         // можно ли пользователю решать эту РО?
-        if($prof_mist->mistakes_status($_GET["theme_id"]))
+        if($professor->mistakes_status($user, $theme))
         {
             // нахожу ошибки пользователя для этой темы
-            $user = new User($_SESSION["id"]);
-            $all_mistakes = $prof_mist->get_mistakes($user);
-            $all_mistakes_ids = [];
-            foreach ($all_mistakes as $m)
-                $all_mistakes_ids[] = $m->id;
-
-            $theme = new Theme($_GET["theme_id"]);
-            $tasks_theme = $theme->get_tasks();
-
-            $mistakes = [];
-            foreach ($tasks_theme as $tt)
-            {
-                if(in_array($tt->id, $all_mistakes_ids))
-                    $mistakes[] = $tt;
-            }
-
+            $mistakes = $professor->get_mistakes_for_theme($user, $theme);
 
             if (count($mistakes))
             {
@@ -47,12 +33,13 @@ if (isset($_GET["theme_id"])) {
                 $content .="<div id='task' class='p-0 m-0 mt-5 pt-md-5 d-flex justify-content-center align-items-center row container-fluid'>
                                 <div id='tt' class='p-4 pt-5 m-0 ml-md-5 mr-md-5 row container-fluid d-flex justify-content-center'>";
 
+                // в theme.php это реализовано через вызов js функции
                 $this_task = $mistakes[0];
 
-                $mistakes_block_constructor = new Mistake_block_constructor();
-                $response = $mistakes_block_constructor->get_mistake_block($this_task->id, $mistakes[1]->id);
+                $response = $this_task->get_html(["is_admin"=>($user->rights == "admin")]);
                 $content .= $response["block"];
-                $content.=" </div></div>";
+
+                $content.=" </div></div>";// закрыл #tt и #task
 
                 $page = new Render();
                 $page->temp = 'main.html';
@@ -73,7 +60,8 @@ if (isset($_GET["theme_id"])) {
     }
     else
         header("Location: /acc");
-} else
+}
+else
     header("Location: /acc");
 
 

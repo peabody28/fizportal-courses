@@ -31,11 +31,9 @@ class Users_themes_table implements Table
 
     public function update($obj, $column)
     {
-        // TODO: Implement update() method.
     }
 
     public function delete($obj)
     {
-        // TODO: Implement delete() method.
     }
 }
