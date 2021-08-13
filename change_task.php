@@ -85,13 +85,13 @@ if (isset($data["submit"])) {
                 $task->img_url = '/media/tasks_imgs/'.$apend;
                 $tasks_table = new Tasks_table();
                 $tasks_table->update($task, "img_url");
-                header("Location: /change_task?id=$task->id&from_supertest=true&theme_id=0");
+                header("Location: /theme?id=$data[theme_id]");
             }
             else
-                header("Location: /change_task?id=$task->id&from_supertest=true&theme_id=0");
+                header("Location: /theme?id=$data[theme_id]");
         }
         else
-            header("Location: /change_task?id=$task->id&from_supertest=true&theme_id=0");
+            header("Location: /theme?id=$data[theme_id]");
 
     }
 

@@ -85,7 +85,7 @@ class Theme implements HTML_block
 
     public function get_text_html()
     {
-        $block = "<div class='col-12 m-0 p-0 d-flex justify-content-center'>Описание темы</div><div class='col-12 m-0 p-0 text-break'>$this->text</div>";
+        $block = "<div class='col-12 m-0 p-0 text-break'>$this->text</div>";
         return ["block"=>$block];
 
     }

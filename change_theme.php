@@ -83,7 +83,7 @@ else
     $content = "";
     $forms = new Render();
     $forms->temp = "change_theme_forms.html";
-    $forms->argv = ["theme_id"=>$theme->id, "theme_title"=>strip_tags($theme->title), "theme_text"=>strip_tags($theme->text), "theme_complexity"=>$theme->complexity, "points_limit"=>$limits_of_points, "time_limit"=>$time_limit];
+    $forms->argv = ["theme_id"=>$theme->id, "course_id"=>$theme->course_id,  "theme_title"=>strip_tags($theme->title), "theme_text"=>strip_tags($theme->text), "theme_complexity"=>$theme->complexity, "points_limit"=>$limits_of_points, "time_limit"=>$time_limit];
     $content.=$forms->render_temp();
     $content.="<br><br><h2>Задачи темы</h2>";
 
