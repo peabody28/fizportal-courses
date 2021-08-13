@@ -13,8 +13,7 @@ $data = $_POST;
 
 if (isset($data["submit"])) {
 
-    $task = new Task();
-    $task->id = $data["task_id"];
+    $task = new Task($data["task_id"]);
 
     if($data["code"]=="change_text")
     {
@@ -76,8 +75,7 @@ if (isset($data["submit"])) {
 
         $uploadfile = "$uploaddir$apend";
 
-        $tasks_table = new Tasks_table();
-        $tmp_task = $tasks_table->read($task->id);
+
 
         if($_FILES['file']['type'] == 'image/gif' || $_FILES['file']['type'] == 'image/jpeg' || $_FILES['file']['type'] == 'image/png' || $_FILES['file']['type'] == 'image/jpg')
         {
@@ -87,13 +85,13 @@ if (isset($data["submit"])) {
                 $task->img_url = '/media/tasks_imgs/'.$apend;
                 $tasks_table = new Tasks_table();
                 $tasks_table->update($task, "img_url");
-                header("Location: /theme?id=$tmp_task[theme_id]");
+                header("Location: /change_task?id=$task->id&from_supertest=true&theme_id=0");
             }
             else
-                header("Location: /theme?id=$tmp_task[theme_id]");
+                header("Location: /change_task?id=$task->id&from_supertest=true&theme_id=0");
         }
         else
-            header("Location: /theme?id=$tmp_task[theme_id]");
+            header("Location: /change_task?id=$task->id&from_supertest=true&theme_id=0");
 
     }
 

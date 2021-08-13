@@ -92,7 +92,7 @@ else
                     $content .="<div id='task' class='p-0 m-0 mt-5 d-flex justify-content-center align-items-center row container-fluid'>
                                     <div id='tt' class='p-4 pt-5 m-0 ml-md-5 mr-md-5 row container-fluid d-flex justify-content-center'>";
 
-                    if($resp2["count_tasks"])
+                    if($resp2["tasks_count"])
                     {
                         // рендер первой задачи
                         if(isset($this_task_id))

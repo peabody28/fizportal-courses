@@ -63,6 +63,7 @@ if(isset($data["submit"]))
         $user->id = $_SESSION["id"];
         $user->rights = $_SESSION["rights"];
         $user->name = $_SESSION["name"];
+        $data["is_admin"] = ($user->rights == "admin");
 
         $theme = new Theme($data["theme_id"]);
 

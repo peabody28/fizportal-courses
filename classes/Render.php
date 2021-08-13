@@ -209,7 +209,7 @@ class Render
         return $content;
     }
 
-    public function render_supertest_task($task, $is_admin)
+    public function render_supertest_task($task, $theme_id, $is_admin)
     {
         $content = "";
         $a_type_task = "
@@ -224,7 +224,8 @@ class Render
                             </div>";
 
         $b_type_task = "<input type='text' class='row' name='".$task->id."_b_answer'>";
-
+        $image_block = $task->img_url?"<img src='$task->img_url' alt=''>":"";
+        $task->text = str_replace("{{ img }}", "<br><div class='container-fluid row d-flex justify-content-center m-0 p-0 '>".$image_block."</div><br>", $task->text);
         $content .=
             "<div class='opis m-0 p-0 mt-5 d-flex justify-content-center'>
                 <div class='col-12 m-0 p-0 text-break'>$task->text</div>
@@ -242,7 +243,7 @@ class Render
 
         if ($is_admin)
         {
-            $content .= "<div class='col-12 mt-3 d-flex justify-content-center'><a class='btn chg_task_btn' href='/change_task?id=$task->id&from_supertest=true&theme_id=$task->theme_id'>Изменить задачу</a></div>";
+            $content .= "<div class='col-12 mt-3 d-flex justify-content-center'><a class='btn chg_task_btn' href='/change_task?id=$task->id&from_supertest=true&theme_id=$theme_id'>Изменить задачу</a></div>";
             $content .= " <div class='col-12 mt-3 d-flex justify-content-center'>
                                                 <button class='btn del_task' onclick='del_task($task->id);return false;'>Удалить эту задачу</button>
                                            </div>";

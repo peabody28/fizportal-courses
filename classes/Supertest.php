@@ -52,7 +52,7 @@ class Supertest implements HTML_block
                                     <input type='hidden' name='code' value='send_supertest_answers'>
                                     <input type='hidden' name='theme_id' value='$this->theme_id'>";
             foreach ($supertests_tasks as $task)
-                $supertest_block .= $task->get_html(["is_admin"=>$is_admin]);
+                $supertest_block .= $task->get_html(["is_admin"=>$is_admin, "theme_id"=>$data["theme_id"]]);
 
             $supertest_block .= "<hr><div class='m-0 col-12 mt-5 d-flex justify-content-center'><button class='btn send' type='submit'>Отправить</button></div>";
             $supertest_block .= "<div class='col-12 mt-3 d-flex justify-content-center h2' id='message'></div>";
