@@ -13,12 +13,15 @@ class Timer
         $prof = new Professor();
         $prof->student = $user;
 
-        $users_themes_list = $prof->get_themes();
-        foreach($users_themes_list as $th)
-        {
-            if($theme->id == $th->id) // пользователь уже сделал тему
-                return ["status"=>true, "theme_is_solved"=>true];
-        }
+        //$users_themes_list = $prof->get_themes();
+        $resp = $prof->theme_status($theme);
+        $theme_status = $resp["status"];
+
+        if($theme_status == "solved") // пользователь уже сделал тему
+            return ["status"=>true, "theme_is_solved"=>true];
+        if($theme_status == "close") // пользователь уже сделал тему
+            return ["status"=>false, "theme_is_solved"=>false];
+
 
         // узнаю лимит выполнения темы
         $theme->get_time_limit();

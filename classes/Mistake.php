@@ -49,9 +49,7 @@ class Mistake extends Task
 
     public function send_answer($data)
     {
-        // TODO проверить этот метод
         $task = $this->construct_task_for_professor($data);
-        $user = &$data["user"];
 
         $professor = new Professor();
         $professor->student = $data["user"];

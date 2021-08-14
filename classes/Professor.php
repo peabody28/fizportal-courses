@@ -218,26 +218,17 @@ class Professor
         }
         else // >=3
         {
-            $pred_id = array_search($theme->id, $themes_ids)-1;
+            $this_id = array_search($theme->id, $themes_ids)+1;
+            $pred_id = $this_id%3;
+            // TODO статус темы не зависит от РО
             if (in_array($themes_ids[$pred_id], $users_themes_ids_list)) // предыдущая решена?
-            {
-                // проверяю РО темы с индексом -2 относительно данной
-                $tmp_theme = new Theme($themes_ids[$pred_id-1]);
-                $tasks_ids = $tmp_theme->get_tasks_ids();
-
-                $mistakes = $this->get_mistakes(); // TODO
-                foreach ($mistakes as $mistake)
-                {
-                    if (in_array($mistake->id, $tasks_ids))
-                        return ["status"=>"close", "message"=>"Вы не сделали работу над ошибками одной из предыдущих тем, зайдите в Личный кабинет"];
-                }
                 return ["status"=>"open"];
-            }
             else
-                return ["status"=>"close", "message"=>"Вы не решили предыдущую тему"];
+                return ["status"=>"close", "message"=>"Вы пока не можете решать эту тему"];
         }
 
     }
+
     public function add_theme_to_users_themes($theme)
     {
         $user = &$this->student;

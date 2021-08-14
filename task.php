@@ -19,22 +19,36 @@ if(isset($data["submit"]))
 
     if ($data["code"]=="send_answer")
     {
+        $user = new User();
+        $user->id = $_SESSION["id"];
+        $user->rights = $_SESSION["rights"];
+        $user->name = $_SESSION["name"];
+        $data["user"] = $user;
 
-        $data["user"] = new User($_SESSION["id"]);
         $task = new Task($data["task_id"]);
         $resp = $task->send_answer($data);
         echo json_encode($resp);
     }
     else if($data["code"]=="send_mistake_answer")
     {
-        $data["user"] = new User($_SESSION["id"]);
+        $user = new User();
+        $user->id = $_SESSION["id"];
+        $user->rights = $_SESSION["rights"];
+        $user->name = $_SESSION["name"];
+        $data["user"] = $user;
+
         $mistake = new Mistake($data["task_id"]);
         $resp = $mistake->send_answer($data);
         echo json_encode($resp);
     }
     else if($data["code"]=="send_supertest_answers")
     {
-        $data["user"] = new User($_SESSION["id"]);
+        $user = new User();
+        $user->id = $_SESSION["id"];
+        $user->rights = $_SESSION["rights"];
+        $user->name = $_SESSION["name"];
+        $data["user"] = $user;
+
         $supertest = new Supertest($data["theme_id"]);
         $resp = $supertest->send_answer($data);
         echo json_encode($resp);

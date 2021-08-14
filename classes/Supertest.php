@@ -69,7 +69,7 @@ class Supertest implements HTML_block
 
         // выделяю задачи и ответы из строки запроса
         $str = "";
-        foreach ($this->data as $key => $val)
+        foreach ($data as $key => $val)
         {
             if($key=="code" || $key == "submit")
                 continue;
