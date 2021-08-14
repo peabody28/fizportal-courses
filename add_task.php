@@ -1,7 +1,7 @@
 <?php
 require_once __DIR__."/auth.php";
 require_once __DIR__."/auth_root.php";
-require_once __DIR__."/classes/Task.php";
+require_once __DIR__ . "/classes/Task.php";
 require_once __DIR__."/classes/Tasks_table.php";
 require_once __DIR__."/classes/Tasks_answers_table.php";
 require_once __DIR__."/classes/Supertests_table.php";

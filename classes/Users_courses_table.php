@@ -24,11 +24,11 @@ class Users_courses_table implements Table
 
     public function update($obj, $column)
     {
-        // TODO: Implement update() method.
+
     }
 
     public function delete($user_courses_row_id)
     {
-        // TODO: Implement delete() method.
+
     }
 }

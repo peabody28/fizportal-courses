@@ -248,7 +248,7 @@ $('#reset_theme').click(
         var theme_id = $(this).attr("theme_id")
         $.ajax(
             {
-                url: "/task.php",
+                url: "/theme.php",
                 type: "POST",
                 data: "submit=true&code=reset_theme&id="+theme_id,
                 success: function ()

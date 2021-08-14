@@ -1,11 +1,12 @@
 <?php
-require_once __DIR__."/classes/Render.php";
-require_once __DIR__."/classes/Tasks_table.php";
-require_once __DIR__."/classes/Supertests_tasks_table.php";
-require_once __DIR__."/classes/Users_progress_theme_table.php";
+// ОБРАБОТЧИК ЗАПРОСОВ ОТ UI
+require_once __DIR__."/classes/Theme.php";
+require_once __DIR__."/classes/Supertest.php";
+require_once __DIR__."/classes/Task.php";
+require_once __DIR__."/classes/Mistake.php";
 require_once __DIR__."/classes/Professor.php";
-require_once __DIR__."/classes/Task_handler.php";
-require_once __DIR__."/classes/Tasks_block_constructor.php";
+require_once __DIR__."/classes/User.php";
+require_once __DIR__."/classes/Tasks_table.php";
 session_start();
 
 
@@ -15,58 +16,90 @@ $tasks_table = new Tasks_table();
 
 if(isset($data["submit"]))
 {
-    $task_handler = new Task_handler();
-    $task_handler->data = $data;
 
     if ($data["code"]=="send_answer")
     {
-        $resp = $task_handler->send_answer();
+        $user = new User();
+        $user->id = $_SESSION["id"];
+        $user->rights = $_SESSION["rights"];
+        $user->name = $_SESSION["name"];
+        $data["user"] = $user;
+
+        $task = new Task($data["task_id"]);
+        $resp = $task->send_answer($data);
         echo json_encode($resp);
     }
     else if($data["code"]=="send_mistake_answer")
     {
-        $resp = $task_handler->send_mistake_answer();
+        $user = new User();
+        $user->id = $_SESSION["id"];
+        $user->rights = $_SESSION["rights"];
+        $user->name = $_SESSION["name"];
+        $data["user"] = $user;
+
+        $mistake = new Mistake($data["task_id"]);
+        $resp = $mistake->send_answer($data);
         echo json_encode($resp);
     }
     else if($data["code"]=="send_supertest_answers")
     {
-        $resp = $task_handler->send_supertest_answer();
+        $user = new User();
+        $user->id = $_SESSION["id"];
+        $user->rights = $_SESSION["rights"];
+        $user->name = $_SESSION["name"];
+        $data["user"] = $user;
+
+        $supertest = new Supertest($data["theme_id"]);
+        $resp = $supertest->send_answer($data);
         echo json_encode($resp);
     }
     else if($data["code"]=="get_text_theme")
     {
-        $tasks_block_constructor = new Tasks_block_constructor();
-        $response = $tasks_block_constructor->get_text_theme_block($data["theme_id"]);
+        $theme = new Theme($data["theme_id"]);
+        $response = $theme->get_text_html();
         echo json_encode(["block"=>$response["block"]]);
     }
     else if ($data["code"]=="get_task")
     {
-        $tasks_block_constructor = new Tasks_block_constructor();
-        $response = $tasks_block_constructor->get_task_block($data["task_id"], $data["next_task_id"], ($_SESSION["rights"]=="admin"));
+        $task = new Task($data["task_id"]);
+        $response = $task->get_html(["is_admin"=>$_SESSION["rights"]=="admin"]);
         echo json_encode(["block"=>$response["block"]]);
     }
     else if ($data["code"]=="get_mistake")
     {
-        $tasks_block_constructor = new Tasks_block_constructor();
-        $response = $tasks_block_constructor->get_mistake_block($data["task_id"], $data["next_task_id"]);
+        $mistake = new Mistake($data["task_id"]);
+        $response = $mistake->get_html(["is_admin"=>$_SESSION["rights"]=="admin"]);
         echo json_encode(["block"=>$response["block"]]);
     }
     else if ($data["code"]=="get_supertest")
     {
-        $tasks_block_constructor = new Tasks_block_constructor();
-        $resp = $tasks_block_constructor->get_supertest_block($_SESSION["id"], $data["theme_id"], ($_SESSION["rights"]=="admin"), $data["supertest_id"]);
+        $user = new User();
+        $user->id = $_SESSION["id"];
+        $user->rights = $_SESSION["rights"];
+        $user->name = $_SESSION["name"];
+        $data["is_admin"] = ($user->rights == "admin");
+
+        $theme = new Theme($data["theme_id"]);
+
+        // проверка на доступность супертеста
+        $professor = new Professor();
+        $professor->student = $user;
+
+        $resp = $professor->check_access_supertest($theme);
+        if(!$resp["status"])
+        {
+            echo json_encode(["block" => $resp["error"]]);
+            exit();
+        }
+
+        $supertest = new Supertest($theme->id);
+
+        $resp = $supertest->get_html($data);
         echo json_encode(["block" => $resp["block"]]);
-    }
-    else if($data["code"]=="reset_theme")
-    {
-        $resp = $task_handler->reset_theme();
-        echo json_encode($resp);
     }
     else
         echo json_encode(["status"=>"wrong code"]);
 }
 else
-{
     echo json_encode(["status"=>"error1 not subm"]);
-}
 

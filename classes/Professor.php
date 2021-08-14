@@ -1,23 +1,36 @@
 <?php
+require_once __DIR__."/Course.php";
+require_once __DIR__ . "/Task.php";
+require_once __DIR__."/Theme.php";
+require_once __DIR__."/Mistake.php";
+require_once __DIR__."/Timer.php";
+
 require_once __DIR__."/Tasks_answers_table.php";
 require_once __DIR__."/Users_themes_table.php";
-require_once __DIR__."/Themes_table.php";
 require_once __DIR__."/Users_mistakes_table.php";
+require_once __DIR__."/Themes_table.php";
 require_once __DIR__."/Tasks_table.php";
+require_once __DIR__."/Users_tasks_table.php";
+require_once __DIR__."/Users_courses_table.php";
 require_once __DIR__."/Users_themes_time_table.php";
 require_once __DIR__."/Themes_limits_table.php";
+require_once __DIR__."/Users_progress_theme_table.php";
+
 
 class Professor
 {
+    public $student;
+
     public function check_task($task)
     {
+        // TODO проверить этот метод
         $status = true;
 
-        if ($task["type"]=="A") {
+        if ($task->type == "A") {
             for($i=1; $i<=5;$i++)
             {
-                if( (!in_array(["task_id"=>$task["id"], "answer"=>$i], $task["answers"]) && in_array($i, $task["user_answers"]) ) ||
-                    (in_array(["task_id"=>$task["id"], "answer"=>$i], $task["answers"]) && !in_array($i, $task["user_answers"])) )
+                if( (!in_array($i, $task->answer) && in_array($i, $task->users_answer) ) ||
+                    (in_array($i, $task->answer) && !in_array($i, $task->users_answer)) )
                 {
                     $status=false;
                     break;
@@ -25,152 +38,306 @@ class Professor
             }
         }
         else
-            $status = ($task["answer"]==$task["user_answer"]);
+            $status = ($task->answer == $task->users_answer);
 
         return $status;
     }
+    public function task_status($task)
+    {
+        $user = &$this->student;
+        // "solved"
+        // "open"
+        // "close"
+        if($user->rights == "admin")
+            return "open";
+        $user_tasks = $this->get_tasks($user);
+        $user_mistakes = $this->get_mistakes($user);
+
+        foreach ($user_tasks as $ut)
+        {
+            if($ut->id == $task->id)
+                return "solved";
+        }
+        foreach ($user_mistakes as $um)
+        {
+            if($um->id == $task->id)
+                return "close";
+        }
+        return "open";
+
+    }
+    public function get_tasks($user)
+    {
+        $list = [];
+        $users_tasks_table = new Users_tasks_table();
+        $users_tasks = $users_tasks_table->get_users_tasks($user->id);
+        foreach ($users_tasks as $ut)
+        {
+            $task = new Task($ut["task_id"]);
+            $list[] = $task;
+        }
+
+        return $list;
+    }
+    public function delete_task_from_users_tasks($task)
+    {
+        $user = &$this->student;
+        $users_tasks_table = new Users_tasks_table();
+        $status = $users_tasks_table->delete(["user_id"=>$user->id, "task_id"=>$task->id]);
+        return $status;
+    }
+    public function add_task_to_users_tasks($task)
+    {
+        $user = &$this->student;
+        //добавление задачи в список решенных
+        $users_tasks_table = new Users_tasks_table();
+        $status = $users_tasks_table->create(["user_id"=>$user->id, "task_id"=>$task->id]);
+        return $status;
+    }
+    public function in_users_tasks($task)
+    {
+        $user = &$this->student;
+        $users_tasks = $this->get_tasks($user);
+        foreach ($users_tasks as $u_task)
+        {
+            if ($u_task->id == $task->id)
+                return 1;
+        }
+        return 0;
+    }
+
+
+    public function get_mistakes()
+    {
+        $user = &$this->student;
+        $list = [];
+        $users_mistakes_table = new Users_mistakes_table();
+        $users_mistakes = $users_mistakes_table->read($user->id);
+        foreach ($users_mistakes as $item)
+        {
+            $task = new Mistake($item["task_id"]);
+            $list[] = $task;
+        }
+        return $list;
+    }
+    public function get_mistakes_for_theme($theme)
+    {
+        $user = &$this->student;
+        $all_mistakes = $this->get_mistakes($user);
+
+        $tasks_theme = $theme->get_tasks();
+        $tasks_theme_ids = [];
+        foreach ($tasks_theme as $tt)
+            $tasks_theme_ids[] = $tt->id;
+
+        $mistakes = [];
+        foreach ($all_mistakes as $mistake)
+        {
+            if(in_array($mistake->id, $tasks_theme_ids))
+                $mistakes[] = $mistake;
+        }
+        return $mistakes;
+    }
+    public function add_to_mistakes($task)
+    {
+        $user = &$this->student;
+        $users_mistakes_table = new Users_mistakes_table();
+        $status = $users_mistakes_table->create(["user_id"=>$user->id, "task_id"=>$task->id]);
+        return $status;
+    }
+    public function delete_from_mistakes($task)
+    {
+        $user = &$this->student;
+        $users_mistakes_table = new Users_mistakes_table();
+        $status = $users_mistakes_table->delete(["user_id"=>$user->id, "task_id"=>$task->id]);
+        return $status;
+    }
+    public function check_in_mistakes_list($task)
+    {
+        $user = &$this->student;
+        $mist_list = $this->get_mistakes($user);
+        foreach ($mist_list as $item)
+        {
+            if($item->id == $task->id)
+                return true;
+        }
+        return false;
+    }
+    public function mistakes_status($theme)
+    {
+        $user = &$this->student;
+        // курс в котором эта тема
+        $course = new Course($theme->course_id);
+        // все темы этого курса
+        $courses_themes = $course->get_themes();
+        // их id
+        $courses_themes_ids = $course->get_themes_ids();
+        // темы, выполненные пользователем
+        $users_themes = $this->get_themes();
+
+        // вычисляю id темы следующей за этой
+        $theme_number_in_course = array_search($theme->id, $courses_themes_ids);
+        $next_theme_id = isset($courses_themes[$theme_number_in_course+1])?$courses_themes[$theme_number_in_course+1]->id:null;
+
+        // если пользователь выполнил ее - даю доступ к РО
+        foreach ($users_themes as $u_th)
+        {
+            if($u_th->id == $next_theme_id)
+                return true;
+        }
+        return false;
+
+    }
+
 
     public function theme_status($theme)
     {
-        // список тем курса
-        $themes_table = new Themes_table();
-        $themes_list_full = $themes_table->get_courses_themes($theme["course_id"]);
-        $themes_ids = [];
-        foreach ($themes_list_full as $item)
-            $themes_ids[] = $item["id"];
-
+        $user = &$this->student;
+        if($user->rights == "admin")
+            return ["status"=>"open"];
+        // список id тем курса
+        $course = new Course($theme->course_id);
+        $themes_ids = $course->get_themes_ids();
         // список тем решенных пользователем
-        $users_themes_table = new Users_themes_table();
-        $users_themes_list = $users_themes_table->read($_SESSION["id"]);
+        $users_themes_list = $this->get_themes();
 
-        if (in_array(["user_id" => $_SESSION["id"], "theme_id" => $theme["id"]], $users_themes_list))
-            return "solved";
-        else if ($theme["id"]==$themes_ids[0]) // первая тема курса
-            return "open";
-        else if ($theme["id"]==$themes_ids[1])// вторая тема курса
+        $users_themes_ids_list = [];
+        foreach ($users_themes_list as $th)
+            $users_themes_ids_list[] = $th->id;
+
+        if(in_array($theme->id, $users_themes_ids_list))
+            return ["status"=>"solved"]; // тема в списке решенных
+        else if ($theme->id == $themes_ids[0]) // первая тема курса
+            return ["status"=>"open"];
+        else if ($theme->id == $themes_ids[1])// вторая тема курса
         {
-            if (in_array(["user_id" => $_SESSION["id"], "theme_id" => $themes_ids[0]], $users_themes_list))
-                return "open";
+            if (in_array($themes_ids[0], $users_themes_ids_list)) // если первая решена - открываю вторую
+                return ["status"=>"open"];
             else
-                return "close";
+                return ["status"=>"close", "message"=>"Вы не решили первую тему"];
         }
         else // >=3
         {
-            $pred_id = array_search($theme["id"], $themes_ids)-1;
-            if (in_array(["user_id" => $_SESSION["id"], "theme_id" => $themes_ids[$pred_id]], $users_themes_list)) // предыдущая решена?
-            {
-                $tasks_table = new Tasks_table();
-                $tasks_theme_full = $tasks_table->get_tasks_theme($themes_ids[$pred_id-1]);
-                $tasks_ids = [];
-                foreach ($tasks_theme_full as $task)
-                    $tasks_ids[] = $task["id"];
-
-                $users_mistakes_table = new Users_mistakes_table();
-                $mistakes = $users_mistakes_table->read($_SESSION["id"]); // работа над ошибками пользователя
-                foreach ($mistakes as $mistake)
-                {
-                    if (in_array($mistake["task_id"], $tasks_ids))
-                        return "close";
-                }
-                return "open";
-            }
+            $this_id = array_search($theme->id, $themes_ids)+1;
+            $pred_id = $this_id%3;
+            // TODO статус темы не зависит от РО
+            if (in_array($themes_ids[$pred_id], $users_themes_ids_list)) // предыдущая решена?
+                return ["status"=>"open"];
             else
-                return "close";
+                return ["status"=>"close", "message"=>"Вы пока не можете решать эту тему"];
         }
 
     }
 
-    public function mistakes_status($theme_id)
+    public function add_theme_to_users_themes($theme)
     {
-
-        $themes_table = new Themes_table();
-        $theme = $themes_table->read($theme_id); // тема для которой делается РО
-
-        $themes_list_full = $themes_table->get_courses_themes($theme["course_id"]);
-
+        $user = &$this->student;
         $users_themes_table = new Users_themes_table();
-        $users_themes_list = $users_themes_table->read($_SESSION["id"]);
-
-        $themes_ids = [];
-        foreach ($themes_list_full as $item)
-            $themes_ids[] = $item["id"];
-
-        $tec_local_id = array_search($theme_id, $themes_ids);
-        $sled_id = $themes_list_full[(int)$tec_local_id+1]["id"];
-        if(in_array(["user_id"=>$_SESSION["id"], "theme_id"=>$sled_id], $users_themes_list))
-            return true;
-        else
-            return false;
-
+        $users_themes_table->create(["user_id"=>$user->id, "theme_id"=>$theme->id]);
     }
-
-    public function check_in_mistakes_list($task_id, $user_id)
+    public function get_themes()
     {
-        $users_mistakes_table = new Users_mistakes_table();
-        $mist_list = $users_mistakes_table->read($user_id);
-        return in_array(["user_id"=>$user_id, "task_id"=>$task_id], $mist_list);
-
-    }
-
-    public function check_time($row)
-    {
-
+        $user = &$this->student;
+        $themes = [];
         $users_themes_table = new Users_themes_table();
-        $users_themes_list= $users_themes_table->read($_SESSION["id"]);
-        if(in_array(["user_id"=>$_SESSION["id"], "theme_id"=>$row["theme_id"]], $users_themes_list) || $_SESSION["rights"]=="admin") // пользователь уже сделал тему
-            return ["status"=>true, "theme_is_solved"=>true];
-        // узнаю лимит выполнения темы
-        $themes_limits_table = new Themes_limits_table();
-        $answ = $themes_limits_table->read($row["theme_id"]);
-        $limit = $answ?(int)$answ["time_limit"]:null;
-        if(!$limit)
-            return true;
-        $users_themes_time = new Users_themes_time_table();
-        $resp = $users_themes_time->read($row);
-        $time = $resp["time"];
-        if ($time)
+        $users_themes_list = $users_themes_table->read($user->id);
+        foreach ($users_themes_list as $item)
         {
-            $real_time = time();
-            $delta = $real_time - (int)$time;
+            $theme = new Theme($item["theme_id"]);
+            $themes[]=$theme;
+        }
 
-            if($delta <= $limit*60) // если разница во времени меньше времени на тему(30м) - пропускаем
+        return $themes;
+    }
+    public function get_progress_theme($theme)
+    {
+        $user = &$this->student;
+        $users_progress_theme_table = new Users_progress_theme_table();
+        $user_progress = $users_progress_theme_table->read(["user_id"=>$user->id, "theme_id"=>$theme->id]);
+        $user_progress = $user_progress["progress"] ? : 0;
+        return (int)$user_progress;
+    }
+    public function set_progress_theme($theme, $progress)
+    {
+        $user = &$this->student;
+        $row = ["user_id"=>$user->id, "theme_id"=>$theme->id, "progress"=>$progress];
+        $users_progress_theme_table = new Users_progress_theme_table();
+        $users_progress_theme_table->update($row, "set_point");
+    }
+    public function reset_theme($theme)
+    {
+        $user = &$this->student;
+        $tasks_theme_list = $theme->get_tasks();
+
+        $progress = 0;
+        foreach ($tasks_theme_list as $task)
+        {
+            if ($this->in_users_tasks($task))
             {
-                $hours = (int)(($limit*60-$delta)/3600);
-                $min = (int)(($limit*60-$delta)/60)-$hours*60;
-                $sec = ($limit*60-$delta)-$hours*3600-$min*60;
-                return ["status"=>true, "theme_is_solved"=>false, "hours"=>$hours, "min"=>$min, "sec"=>$sec];
+                $this->delete_task_from_users_tasks($task);
+                continue;
             }
-            else if($delta > $limit*60 && $delta < $limit*60*2+$limit*60) // если разница во времени больше времени на тему и меньше штрафа+время на тему (5ч+30м) - запрет на решение
+            if ($this->check_in_mistakes_list($task))
             {
-                $hours = (int)(($limit*2*60+$limit*60 - $delta)/3600);
-                $min = (int)(($limit*2*60+$limit*60 - $delta)/60) - $hours*60;
-                $sec = (int)(($limit*2*60+$limit*60 - $delta)) - $hours*3600 - $min*60;
-                return ["status"=>false, "theme_is_solved"=>false, "hours"=>$hours, "min"=>$min, "sec"=>$sec];
+                $theme_status = $this->theme_status($theme);
+                $theme_status = $theme_status["status"];
+                if ($theme_status == "open")
+                    $this->delete_from_mistakes($task);
+                else
+                    $progress -= $task->complexity;
             }
 
-            else // если разница во времени больше штрафа+время на тему - пропускаем и записываем новое время в таблицу
-                return ["status"=>"update", "theme_is_solved"=>false, "hours"=>(int)($limit/60), "min"=>$limit-((int)($limit/60))*60, "sec"=>0];
         }
-        else
-            return ["status"=>"update", "theme_is_solved"=>false, "hours"=>(int)($limit/60), "min"=>$limit-((int)($limit/60))*60, "sec"=>0];
+        // обновляю прогресс
+        $this->set_progress_theme($theme, $progress);
+        // обнуляю время
+        $timer = new Timer();
+        $timer->delete_theme_begin_time($user, $theme);
+
+        return ["status"=>"OK"];
     }
 
-    public function set_time($row)
-    {
-        $users_themes_time = new Users_themes_time_table();
-        $row["time"]=time();
-        $users_themes_time->update($row, "time");
-    }
 
-    public function check_access_supertest($limits_of_points, $users_progress, $is_admin=false)
+    public function check_access_supertest($theme)
     {
-        if((int)$users_progress["progress"]<(int)$limits_of_points && !$is_admin)
-        {
-            $progress = $users_progress["progress"]?:"0";
-            return ["status"=>false ,"error" => "Вы решили мало задач ваш балл ".$progress."/".$limits_of_points];
-        }
+        $user = &$this->student;
+        if($user->rights == "admin")
+            return ["status"=>true];
+
+        $users_progress = $this->get_progress_theme($theme);
+        $theme->get_points_limit();
+
+        if($users_progress < $theme->points_limit)
+            return ["status"=>false ,"error" => "Вы решили мало задач ваш балл ".$users_progress."/".$theme->points_limit];
         return ["status"=>true];
     }
 
 
+    public function get_points($theme)
+    {
+        $user = &$this->student;
+        $users_progress_theme_table = new Users_progress_theme_table();
+        $resp = $users_progress_theme_table->read(["user_id"=>$user->id, "theme_id"=>$theme->id]);
+        return (int)( $resp?$resp["progress"]:0 );
+    }
+    public function add_point($task)
+    {
+        $user = &$this->student;
+        $users_progress_theme_table = new Users_progress_theme_table();
+        $users_progress_theme_table->add_point(["user_id"=>$user->id, "theme_id"=>$task->theme_id], $task->complexity);
+    }
+    public function delete_point($task)
+    {
+        $user = &$this->student;
+        $users_progress_theme_table = new Users_progress_theme_table();
+        $users_progress_theme_table->delete_point(["user_id" => $user->id, "theme_id" => $task->theme_id], $task->complexity);
+    }
+
+
+    public function check_time($theme)
+    {
+        $user = &$this->student;
+        $timer = new Timer();
+        return $timer->check_time($user, $theme);
+    }
 }

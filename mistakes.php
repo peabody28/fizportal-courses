@@ -1,34 +1,33 @@
 <?php
 require_once __DIR__ . "/auth.php";
+require_once __DIR__ . "/classes/User.php";
+require_once __DIR__ . "/classes/Theme.php";
 require_once __DIR__ . "/classes/Render.php";
 require_once __DIR__ . "/classes/Themes_table.php";
 require_once __DIR__ . "/classes/Users_mistakes_table.php";
 require_once __DIR__ . "/classes/Tasks_table.php";
-require_once __DIR__ . "/classes/Tasks_block_constructor.php";
 require_once __DIR__ . "/classes/Professor.php";
 session_start();
 
 
-if (isset($_GET["theme_id"])) {
+if (isset($_GET["theme_id"]))
+{
 
-    $themes_table = new Themes_table();
-    if($themes_table->read($_GET["theme_id"]))
+    $theme = new Theme($_GET["theme_id"]);
+    if($theme->id)
     {
+        $user = new User();
+        $user->id = $_SESSION["id"];
+        $user->rights = $_SESSION["rights"];
+        $user->name = $_SESSION["name"];
+
         $professor = new Professor();
+        $professor->student = $user;
         // можно ли пользователю решать эту РО?
-        if($professor->mistakes_status($_GET["theme_id"]))
+        if($professor->mistakes_status($theme))
         {
             // нахожу ошибки пользователя для этой темы
-            $users_mistakes_table = new Users_mistakes_table();
-            $all_mistakes = $users_mistakes_table->read($_SESSION["id"]);
-
-            $tasks_table = new Tasks_table();
-            $tasks_theme = $tasks_table->get_tasks_theme($_GET["theme_id"]);
-
-            $mistakes = [];
-            foreach ($tasks_theme as $tt)
-                if(in_array(["user_id"=>$_SESSION["id"], "task_id"=>$tt["id"]], $all_mistakes))
-                    $mistakes[] = $tt;
+            $mistakes = $professor->get_mistakes_for_theme($theme);
 
             if (count($mistakes))
             {
@@ -39,18 +38,19 @@ if (isset($_GET["theme_id"])) {
                 $content .="<div id='task' class='p-0 m-0 mt-5 pt-md-5 d-flex justify-content-center align-items-center row container-fluid'>
                                 <div id='tt' class='p-4 pt-5 m-0 ml-md-5 mr-md-5 row container-fluid d-flex justify-content-center'>";
 
+                // в theme.php это реализовано через вызов js функции
                 $this_task = $mistakes[0];
 
-                $tasks_block_constructor = new Tasks_block_constructor();
-                $response = $tasks_block_constructor->get_mistake_block($this_task["id"], $mistakes[1]["id"]);
+                $response = $this_task->get_html(["is_admin"=>($user->rights == "admin")]);
                 $content .= $response["block"];
-                $content.=" </div></div>";
+
+                $content.=" </div></div>";// закрыл #tt и #task
 
                 $page = new Render();
                 $page->temp = 'main.html';
                 $page->argv = ['title' => "mistakes",
                     'css' => "/css/mistakes.css",
-                    "name" => "<h2>$_SESSION[name]</h2>",
+                    "name" => "<h2>$user->name</h2>",
                     "content" => $content,
                     "js" => "/js/mistakes.js",
                     "mathjax"=>file_get_contents("templates/mathjax.html")
@@ -65,7 +65,8 @@ if (isset($_GET["theme_id"])) {
     }
     else
         header("Location: /acc");
-} else
+}
+else
     header("Location: /acc");
 
 

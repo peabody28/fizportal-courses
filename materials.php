@@ -1,5 +1,6 @@
 <?php
 require_once __DIR__."/auth.php";
+require_once __DIR__ . "/classes/Task.php";
 require_once __DIR__."/classes/Render.php";
 require_once __DIR__."/classes/Tasks_table.php";
 require_once __DIR__."/classes/Tasks_materials_table.php";
@@ -58,8 +59,7 @@ else if (isset($_GET["task_id"]))
 {
     $content = "";
 
-    $tasks_table = new Tasks_table();
-    $tmp_task = $tasks_table->read($_GET["task_id"]);
+    $task = new Task($_GET["task_id"]);
 
     if ($_SESSION["rights"]=="admin")
     {
@@ -68,7 +68,7 @@ else if (isset($_GET["task_id"]))
         // добавление материалов
         $forms = new Render();
         $forms->temp = "add_materials_to_task_forms.html";
-        $forms->argv = ["task_id"=>$_GET["task_id"]];
+        $forms->argv = ["task_id"=>$task->id];
         $content .= $forms->render_temp();
 
         // добавить ссылку
@@ -78,12 +78,12 @@ else if (isset($_GET["task_id"]))
     $content .= "<form action='/theme.php' method='POST'>
                     <input type='hidden' name='submit'>
                     <input type='hidden' name='code' value='back_to_theme'>
-                    <input type='hidden' name='id' value='$tmp_task[theme_id]'>
-                    <input type='hidden' name='task_id' value='$tmp_task[id]'>
+                    <input type='hidden' name='id' value='$task->theme_id'>
+                    <input type='hidden' name='task_id' value='$task->id'>
                     <button class='btn' id='back_to_theme_btn'>Вернуться к теме</button>
                 </form>";
-
-    $urls = $tasks_materials_table->read($_GET["task_id"]);
+    // TODO написать метод получения материалов в классе Task
+    $urls = $tasks_materials_table->read($task->id);
     foreach ($urls as $item) {
         foreach ($item as $key=>$url)
         {
@@ -115,9 +115,9 @@ else if (isset($_GET["task_id"]))
     ];
 
     echo $page->render_temp();
-
 }
 else
     header("Location: /courses");
+
 
 

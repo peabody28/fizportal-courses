@@ -40,7 +40,7 @@ class Themes_table implements Table
         global $link;
         $sql = sprintf("SELECT * FROM themes WHERE course_id='%s'", $id);
         $result = mysqli_query($link, $sql);
-        $themes_list = mysqli_fetch_all($result, MYSQLI_ASSOC);
-        return $themes_list;
+        $themes = mysqli_fetch_all($result, MYSQLI_ASSOC);
+        return $themes;
     }
 }

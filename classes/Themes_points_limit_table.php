@@ -38,7 +38,6 @@ class Themes_points_limit_table implements Table
 
     public function delete($obj)
     {
-        // TODO: Implement delete() method.
     }
 
 }

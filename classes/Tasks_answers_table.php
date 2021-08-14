@@ -24,7 +24,6 @@ class Tasks_answers_table implements Table
 
     public function update($obj, $column)
     {
-        // TODO: Implement update() method.
     }
 
     public function delete($task_id)
@@ -33,10 +32,5 @@ class Tasks_answers_table implements Table
         $sql = sprintf("DELETE FROM tasks_answers WHERE task_id='%s'", $task_id);
         $res = mysqli_query($link, $sql);
         return $res;
-    }
-
-    public function get_tasks_answers()
-    {
-        // TODO: Implement get_tasks_answers() method.
     }
 }

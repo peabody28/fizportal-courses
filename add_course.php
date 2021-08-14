@@ -15,12 +15,13 @@ if (isset($data["submit"]))
     $course->title = $data["course_title"];
     $course->text =$data["course_text"];
     $course->price = $data["course_price"];
-    $course->complexity = $data["course_comlexity"];
+    $course->complexity = $data["course_complexity"];
     $course->img_url = $data["course_img_url"];
 
     // TODO: ВОЗМОЖНО ЗДЕСЬ НУЖНА ПРОВЕРКА ВВЕДЕННЫХ ДАННЫХ
     $courses_table = new Courses_table();
     $response = $courses_table->create($course);
+    echo json_encode($response);
 }
 else
 {
