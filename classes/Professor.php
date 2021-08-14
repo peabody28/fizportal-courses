@@ -165,7 +165,6 @@ class Professor
     }
     public function mistakes_status($theme)
     {
-        $user = &$this->student;
         // курс в котором эта тема
         $course = new Course($theme->course_id);
         // все темы этого курса
@@ -175,16 +174,18 @@ class Professor
         // темы, выполненные пользователем
         $users_themes = $this->get_themes();
 
-        // вычисляю id темы следующей за этой
+        // если одна из двух след. тем выполнена - разрешаю доступ
         $theme_number_in_course = array_search($theme->id, $courses_themes_ids);
-        $next_theme_id = isset($courses_themes[$theme_number_in_course+1])?$courses_themes[$theme_number_in_course+1]->id:null;
 
-        // если пользователь выполнил ее - даю доступ к РО
-        foreach ($users_themes as $u_th)
+        if($theme_number_in_course+1 < count($courses_themes) )
         {
-            if($u_th->id == $next_theme_id)
-                return true;
+            foreach ($users_themes as $u_th)
+            {
+                if($u_th->id == $courses_themes_ids[$theme_number_in_course+1] || $theme_number_in_course+2 < count($courses_themes) &&  $u_th->id == $courses_themes_ids[$theme_number_in_course+2])
+                    return true;
+            }
         }
+
         return false;
 
     }
