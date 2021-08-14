@@ -218,10 +218,9 @@ class Professor
         }
         else // >=3
         {
-            $this_id = array_search($theme->id, $themes_ids)+1;
-            $pred_id = $this_id%3;
+            $this_id = array_search($theme->id, $themes_ids);
             // TODO статус темы не зависит от РО
-            if (in_array($themes_ids[$pred_id], $users_themes_ids_list)) // предыдущая решена?
+            if (in_array($themes_ids[$this_id-1], $users_themes_ids_list) || in_array($themes_ids[$this_id-2], $users_themes_ids_list)) // предыдущая решена?
                 return ["status"=>"open"];
             else
                 return ["status"=>"close", "message"=>"Вы пока не можете решать эту тему"];
