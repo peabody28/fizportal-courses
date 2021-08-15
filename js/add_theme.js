@@ -1,5 +1,7 @@
 $("#add_theme").submit(function ()
 {
+    CKEDITOR.instances['editor1'].updateElement();
+    CKEDITOR.instances['editor2'].updateElement();
     $.ajax(
         {
             url: "/add_theme.php",
