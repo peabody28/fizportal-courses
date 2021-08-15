@@ -1,5 +1,7 @@
 $("#create_course").submit(function ()
 {
+    CKEDITOR.instances['editor1'].updateElement();
+    CKEDITOR.instances['editor2'].updateElement();
     $.ajax(
         {
             url: "/add_course.php",

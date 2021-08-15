@@ -24,7 +24,8 @@ $("input[type = 'radio']").click(function(){
 
 
 $("#change_text_task").submit(function (){
-    console.log("here")
+    CKEDITOR.instances['editor1'].updateElement();
+    console.log($(this).serialize())
     $.ajax(
         {
             url: "/change_task.php",

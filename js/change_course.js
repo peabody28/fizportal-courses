@@ -2,6 +2,8 @@
 
 $("#change_title_course").submit(function ()
 {
+    CKEDITOR.instances['editor1'].updateElement();
+    CKEDITOR.instances['editor2'].updateElement();
     $.ajax(
         {
             url: "/change_course.php",
@@ -21,6 +23,8 @@ $("#change_title_course").submit(function ()
 
 $("#change_text_course").submit(function ()
 {
+    CKEDITOR.instances['editor1'].updateElement();
+    CKEDITOR.instances['editor2'].updateElement();
     $.ajax(
         {
             url: "/change_course.php",

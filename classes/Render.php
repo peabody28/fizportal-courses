@@ -142,7 +142,6 @@ class Render
 
     public function render_mistake($task)
     {
-        // TODO next_id не работает
         return $this->render_task($task, 1);
     }
 

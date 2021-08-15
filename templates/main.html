@@ -15,7 +15,8 @@
     <link rel="stylesheet" href="/vendor/twbs/bootstrap/dist/css/bootstrap.css">
     <link rel="stylesheet" href="/css/main.css">
     <link rel="stylesheet" href="{{ css }}">
-    <script src="https://cdn.ckeditor.com/ckeditor5/27.0.0/classic/ckeditor.js"></script>
+    <script src="https://cdn.ckeditor.com/4.16.2/standard/ckeditor.js"></script>
+   <!-- <script src="https://cdn.ckeditor.com/ckeditor5/27.0.0/classic/ckeditor.js"></script> -->
 </head>
 <body>
     <div id="wrapper" class="container-fluid p-0">
@@ -37,15 +38,21 @@
             <div class="m-0 row w-100" id="footer">Developed by Горбачевский Максим </div>
         </div>
     </div>
+    <script src="/js/main.js"></script>
+
+    <script src="{{ js }}"></script>
+    <script src="/vendor/twbs/bootstrap/dist/js/bootstrap.js"></script>
     <script>
+        CKEDITOR.replace( 'editor1' );
+        CKEDITOR.replace( 'editor2' );
+        CKEDITOR.config.allowedContent = true;
+        /*
         ClassicEditor
             .create( document.querySelector( '#editor1' ) )
         ClassicEditor
             .create( document.querySelector( '#editor2' ) )
+        */
     </script>
-    <script src="/js/main.js"></script>
-    <script src="{{ js }}"></script>
-    <script src="/vendor/twbs/bootstrap/dist/js/bootstrap.js"></script>
     {{ mathjax|raw }}
 </body>
 </html>
