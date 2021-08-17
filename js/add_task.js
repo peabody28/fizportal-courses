@@ -1,5 +1,9 @@
 $("#add_task").submit(function ()
 {
+    /*
+    CKEDITOR.instances['editor1'].updateElement();
+    CKEDITOR.instances['editor2'].updateElement();
+    */
     $.ajax(
         {
             url: "/add_task.php",

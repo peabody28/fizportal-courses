@@ -2,6 +2,10 @@
 
 $("form").submit(function ()
 {
+    /*
+    CKEDITOR.instances['editor1'].updateElement();
+    CKEDITOR.instances['editor2'].updateElement();
+    */
     $.ajax(
         {
             url: "/change_theme.php",

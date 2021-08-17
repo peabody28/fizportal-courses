@@ -24,7 +24,10 @@ $("input[type = 'radio']").click(function(){
 
 
 $("#change_text_task").submit(function (){
-    console.log("here")
+    /*
+    CKEDITOR.instances['editor1'].updateElement();
+    CKEDITOR.instances['editor2'].updateElement();
+    */
     $.ajax(
         {
             url: "/change_task.php",
