@@ -1,6 +1,47 @@
 #exit {
   background-color: #c67d7d;
 }
+#settings {
+  background-color: #acc5ec;
+}
+#get_st {
+  background-color: #3d7f79;
+}
+.title {
+  border: 2px solid #4b4b4b;
+}
+.title p {
+  padding: 0;
+  margin: 0;
+}
+.title a {
+  color: inherit;
+  width: 100%;
+  height: 100%;
+  text-decoration: none;
+}
+.title a :active {
+  color: inherit;
+}
+.title a :hover {
+  cursor: pointer;
+  color: inherit;
+}
+.green {
+  background-color: #00cb66;
+}
+.solved_theme_block .title {
+  background-color: #82cdb2;
+}
+.solved_theme_block .title:hover {
+  background-color: #cdcdcd;
+}
+.solved_theme_block .mist_btn {
+  background-color: #c67d7d;
+}
+.open_theme_block .title:hover {
+  background-color: #d9e6ef;
+}
 .adm_btn {
   background-color: #6c6c6c;
 }

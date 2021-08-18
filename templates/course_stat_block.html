@@ -1,0 +1,46 @@
+<div class="course_stat_block m-0 p-0 col-12 container-fluid" id="{{ course_id }}" style="display: none">
+    <div class="row col-12 m-0 p-0 d-flex justify-content-center" id="progress_percent">
+        <div class="row col-12 col-md-10 m-0 p-0 mt-4 mb-3 border">
+            {% if percent > 50 %}
+                <div class="green pl-1" style="width: {{ percent }}%;">{{ percent }}%</div>
+                <div class="white" style="width: {{ 100 - percent }}%;"></div>
+            {% else %}
+                <div class="green" style="width: {{ percent }}%;"></div>
+                <div class="white pl-1" style="width: {{ 100 - percent }}%;">{{ percent }}%</div>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="row h2 col-12 d-flex justify-content-center count_tasks mb-5" >{{ tasks }} задач решено из {{ all_tasks }}</div>
+    <hr>
+    <div class="h3 row col-12 d-flex justify-content-center mb-2 mt-5">Решенные темы</div>
+
+    {% for theme in themes %}
+        <div class="solved_theme_block mt-lg-0 mb-3">
+            <div class="row m-0 p-0 mt-3 col-12 d-flex justify-content-start align-items-center solved_theme">
+                <div class="m-0 p-0 pl-3 pt-2 pb-2 ml-lg-3 mr-lg-3 col-12 col-lg-6 title d-flex justify-content-start align-items-center ">
+                    <a href="/theme?id={{ theme.id }}">{{ theme.title|raw }}</a>
+                </div>
+                {% if theme.mistakes_href != false %}
+                    <div class="m-0 p-0 theme_tasks_count d-flex justify-content-start align-items-center col-12 col-lg-2">{{ theme.tasks }} решено из {{ theme.all_tasks }}</div>
+                    <div class="m-0 p-0 ml-lg-4 col-12 col-lg-2"><a class="btn btn-md mist_btn border" href="{{ theme.mistakes_href }}">Работа над ошибками</a></div>
+                {% else %}
+                    <div class="m-0 p-0 theme_tasks_count d-flex justify-content-start align-items-center col-12 col-lg-4">{{ theme.tasks }} решено из {{ theme.all_tasks }}</div>
+                {% endif %}
+            </div>
+        </div>
+    {% endfor %}
+
+    <hr class="mt-3">
+    <div class="h3 row col-12 d-flex justify-content-center mb-2 mt-5">В процессе</div>
+
+    {% for theme in open_themes %}
+    <div class="row m-0 p-0 open_theme_block container-fluid mb-3">
+        <div class="m-0 p-0 pl-3 pt-2 pb-2 ml-lg-3 mr-lg-3 col-12 col-lg-6 title d-flex justify-content-start align-items-center ">
+            <a href="/theme?id={{ theme.id }}">{{ theme.title|raw }}</a>
+        </div>
+        <div class="m-0 p-0 theme_tasks_count d-flex justify-content-start align-items-center col-12 col-lg-4">{{ theme.tasks }} решено из {{ theme.all_tasks }}</div>
+    </div>
+
+    {% endfor %}
+</div>
