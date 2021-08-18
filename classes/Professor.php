@@ -66,8 +66,9 @@ class Professor
         return "open";
 
     }
-    public function get_tasks($user)
+    public function get_tasks()
     {
+        $user = &$this->student;
         $list = [];
         $users_tasks_table = new Users_tasks_table();
         $users_tasks = $users_tasks_table->get_users_tasks($user->id);
