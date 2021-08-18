@@ -38,14 +38,10 @@
             <div class="m-0 row w-100" id="footer">Developed by Горбачевский Максим </div>
         </div>
     </div>
-    <script src="/js/main.js"></script>
-
-    <script src="{{ js }}"></script>
-    <script src="/vendor/twbs/bootstrap/dist/js/bootstrap.js"></script>
     <script>
-       // CKEDITOR.replace( 'editor1' );
+        // CKEDITOR.replace( 'editor1' );
         //CKEDITOR.replace( 'editor2' );
-       // CKEDITOR.config.allowedContent = true;
+        // CKEDITOR.config.allowedContent = true;
 
         ClassicEditor
             .create( document.querySelector( '#editor1' ) )
@@ -53,6 +49,9 @@
             .create( document.querySelector( '#editor2' ) )
 
     </script>
+    <script src="/js/main.js"></script>
+    <script src="{{ js }}"></script>
+    <script src="/vendor/twbs/bootstrap/dist/js/bootstrap.js"></script>
     {{ mathjax|raw }}
 </body>
 </html>
