@@ -1,14 +1,14 @@
 
 <p>
 <div class="container-fluid">
-  <form id="add_text" method="POST">
+  <form id="add_text" method="POST" action="/materials.php">
     <label class="row col-12 justify-content-center h2">Добавить текст</label>
-    <textarea id="editor1"  name="text">{{ course_title }}</textarea>
+    <textarea id="editor1"  name="text"></textarea>
     <input type="hidden" name="code" value="add_text">
     <input type="hidden" name="task_id" value="{{ task_id }}">
     <input type="hidden" name="submit">
     <br>
-    <input class="btn izm" type="submit" value="Добавить">
+    <input class="btn add_text" type="submit" value="Добавить">
   </form>
 </div>
 <p>
