@@ -1,3 +1,17 @@
+
+
+
+<form id="add_text" method="POST" action="/materials.php">
+  <label class="m-0 p-0 row col-12 justify-content-center h2">Добавить текст</label>
+  <textarea id="editor1"  name="text"></textarea>
+  <input type="hidden" name="code" value="add_text">
+  <input type="hidden" name="task_id" value="{{ task_id }}">
+  <input type="hidden" name="submit">
+  <br>
+  <input class="btn add_text" type="submit" value="Добавить">
+</form>
+
+
 <form id="add_file" method="POST" enctype="multipart/form-data" action="/materials?task_id={{ task_id }}">
   <label class="row col-12 justify-content-center h2">Добавить файл</label>
   <input type="file" name="file">
@@ -26,7 +40,16 @@
 </form>
 <br>
 <br>
-<form id="add_video" method="POST" action="/materials?task_id={{ task_id }}">
+<form id="add_link" method="POST" action="/materials?task_id={{ task_id }}" class="mb-5">
+  <label class="row col-12 justify-content-center h2">Добавить ссылку</label>
+  <input type="text" size="50" name="link_url">
+  <input type="hidden" name="code" value="add_link">
+  <input type="hidden" name="task_id" value="{{ task_id }}">
+  <input type="hidden" name="submit">
+  <input type="submit" class="add_text btn" value="Добавить">
+</form>
+<br><br>
+<form id="add_video" method="POST" action="/materials?task_id={{ task_id }}" class="mb-5">
   <label class="row col-12 justify-content-center h2">Добавить видео по ссылке</label>
   <input type="text" size="50" name="video_url">
   <input type="hidden" name="code" value="add_video">
