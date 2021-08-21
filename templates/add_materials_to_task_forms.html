@@ -1,17 +1,15 @@
 
-<p>
-<div class="container-fluid">
-  <form id="add_text" method="POST" action="/materials.php">
-    <label class="row col-12 justify-content-center h2">Добавить текст</label>
-    <textarea id="editor1"  name="text"></textarea>
-    <input type="hidden" name="code" value="add_text">
-    <input type="hidden" name="task_id" value="{{ task_id }}">
-    <input type="hidden" name="submit">
-    <br>
-    <input class="btn add_text" type="submit" value="Добавить">
-  </form>
-</div>
-<p>
+
+
+<form id="add_text" method="POST" action="/materials.php">
+  <label class="m-0 p-0 row col-12 justify-content-center h2">Добавить текст</label>
+  <textarea id="editor1"  name="text"></textarea>
+  <input type="hidden" name="code" value="add_text">
+  <input type="hidden" name="task_id" value="{{ task_id }}">
+  <input type="hidden" name="submit">
+  <br>
+  <input class="btn add_text" type="submit" value="Добавить">
+</form>
 
 
 <form id="add_file" method="POST" enctype="multipart/form-data" action="/materials?task_id={{ task_id }}">

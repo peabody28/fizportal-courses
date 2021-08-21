@@ -93,6 +93,7 @@ if (isset($_POST["submit"]))
 }
 else if (isset($_GET["task_id"]))
 {
+    $is_admin = $_SESSION["rights"] == "admin";
     $task = new Task($_GET["task_id"]);
 
     $content = "<form action='/theme.php' method='POST'>
@@ -103,7 +104,7 @@ else if (isset($_GET["task_id"]))
                     <button class='btn' id='back_to_theme_btn'>Вернуться к теме</button>
                 </form>";
 
-    if ($_SESSION["rights"]=="admin")
+    if ($is_admin)
     {
         // добавление материалов
         $forms = new Render();
@@ -118,32 +119,88 @@ else if (isset($_GET["task_id"]))
 
     if ($materials["texts"])
     {
-        $content .= "<div class='m-0 p-0 col-12 d-flex justify-content-center h2 mb-4'>Подсказки</div>";
+        $content .= "<div class='m-0 p-0 col-12 d-flex justify-content-center h2 mb-4'>Подсказки</div><hr>";
         foreach ($materials["texts"] as $text) {
-            $content .= "<div class='m-0 p-0 p-3 mb-4 mt-4 col-12 d-flex justify-content-start align-items-center h2 text_block'>$text</div>";
+            $content .= "<div class='m-0 p-0 p-3 mb-4 mt-4 col-12 d-flex justify-content-start align-items-center h2 text_block'>$text";
+            if ($is_admin)
+                $content .= "<form action='materials.php' method='POST' class='col-4 d-flex align-items-center'>
+                                    <input type='hidden' name='submit'>
+                                    <input type='hidden' name='code' value='delete_text'>    
+                                    <input type='hidden' name='task_id' value='$task->id'>
+                                    <input type='hidden' name='text' value='$text'>      
+                                    <input type='submit' class='btn del' value='Удалить'>
+                                </form>";
+           $content .= "</div>";
         }
     }
     if ($materials["imgs"])
     {
-        $content .= "<div class='m-0 p-0 col-12 d-flex justify-content-center h2 mb-4'>Картинки</div>";
+
+        $content .= "<div class='m-0 p-0 col-12 d-flex justify-content-center h2 mb-4'>Картинки</div><hr>";
         $content .= "<div class='m-0 p-0 row container-fluid mb-4'>";
         foreach ($materials["imgs"] as $url)
-            $content .= "<div class='row container m-0 mt-4 p-0 mt-lg-0 col-12 col-lg-6 d-flex justify-content-center'><img src='$url' width='100%' height='100%' alt='img'></div>";
+        {
+
+            if ($is_admin)
+            {
+                $content .= "<div class='row container m-0 mt-5 p-0 col-12 d-flex justify-content-start img_block'>
+                                <img src='$url' width='720' alt='img'>
+                                <form action='materials.php' method='POST' class='col-4 d-flex align-items-center'>
+                                    <input type='hidden' name='submit'>
+                                    <input type='hidden' name='code' value='delete_img'>    
+                                    <input type='hidden' name='task_id' value='$task->id'>
+                                    <input type='hidden' name='img_url' value='$url'>      
+                                    <input type='submit' class='btn del' value='Удалить'>
+                                </form>";
+            }
+            else
+                $content .= "<div class='row container m-0 mt-4 p-0 mt-lg-0 col-12 col-lg-6 d-flex justify-content-center'>
+                            <img src='$url' width='100%' height='100%' alt='img'>";
+            $content .= "</div>";
+        }
         $content .= "</div>";
+
+
     }
     if ($materials["docs"])
     {
-        $content .= "<div class='m-0 p-0 d-flex col-12 justify-content-center h2 mb-4'>Полезные ссылки</div>";
+        $content .= "<div class='m-0 p-0 mt-4 d-flex col-12 justify-content-center h2 mb-4'>Полезные ссылки</div><hr>";
         foreach ($materials["docs"] as $doc)
-            $content .= "<div class='m-0 p-0 col-12 mt-2 h3'><a href='$doc[doc_url]'>$doc[file_name]</a></div>";
+        {
+            $content .= "<div class='m-0 p-0 col-12 mt-2 h3 row d-flex justify-content-start'>
+                            <a class='col' href='$doc[doc_url]'>$doc[file_name]</a>";
+            if($is_admin)
+                $content .= "<form  class='col' action='materials.php' method='POST'>
+                                <input type='hidden' name='submit'>
+                                <input type='hidden' name='code' value='delete_doc'>    
+                                <input type='hidden' name='task_id' value='$task->id'>
+                                <input type='hidden' name='file_name' value='$doc[file_name]'>      
+                                <input type='submit' class='btn del' value='Удалить'>
+                            </form>";
+
+            $content .= "</div>";
+        }
+
     }
     if ($materials["videos"])
     {
-        $content .= "<div class='m-0 p-0 d-flex col-12 justify-content-center h2 mb-4'>Ролики</div>";
+        $content .= "<div class='m-0 p-0 mt-4 d-flex col-12 justify-content-center h2 mb-4'>Ролики</div><hr>";
         foreach ($materials["videos"] as $item)
-            $content .= "<div class='m-0 p-0 col-12 mt-2 h3 '><iframe width='560' height='315' src='$item' frameborder='0' allowfullscreen></iframe></div>";
-    }
+        {
+            $content .= "<div class='m-0 p-0 col-12 mt-2 h3 '>
+                            <iframe class='col-12' width='560' height='315' src='$item' frameborder='0' allowfullscreen></iframe>";
+            if($is_admin)
+                $content .= "<form class='col-12' action='materials.php' method='POST'>
+                                <input type='hidden' name='submit'>
+                                <input type='hidden' name='code' value='delete_video'>    
+                                <input type='hidden' name='task_id' value='$task->id'>
+                                <input type='hidden' name='video_url' value='$item'>      
+                                <input type='submit' class='btn del' value='Удалить'>
+                            </form>";
+            $content .= "</div>";
+        }
 
+    }
 
     $page = new Render();
     $page->temp = 'main.html';
