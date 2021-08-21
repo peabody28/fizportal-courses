@@ -5,6 +5,7 @@ require_once __DIR__."/Materials_imgs_url_table.php";
 require_once __DIR__."/Materials_docs_url_table.php";
 require_once __DIR__."/Materials_videos_url_table.php";
 require_once __DIR__."/Materials_text_table.php";
+require_once __DIR__."/Materials_links_table.php";
 require_once __DIR__."/HTML_block.php";
 require_once __DIR__."/Professor.php";
 require_once __DIR__."/Render.php";
@@ -157,6 +158,12 @@ class Task // implements HTML_block TODO ЧЕГОТО НЕ РАБОТАЕТ impl
         foreach ($texts_list as $item)
             $texts[] = $item["text"];
 
-        return ["imgs"=>$imgs, "docs"=>$docs, "videos"=>$videos, "texts"=>$texts];
+        $links = [];
+        $materials_links_table = new Materials_links_table();
+        $links_list = $materials_links_table->read($this->id);
+        foreach ($links_list as $item)
+            $links[] = $item["url"];
+
+        return ["imgs"=>$imgs, "docs"=>$docs, "videos"=>$videos, "texts"=>$texts, "links"=>$links];
     }
 }

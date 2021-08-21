@@ -6,6 +6,7 @@ require_once __DIR__."/classes/Tasks_table.php";
 require_once __DIR__."/classes/Materials_imgs_url_table.php";
 require_once __DIR__."/classes/Materials_docs_url_table.php";
 require_once __DIR__."/classes/Materials_videos_url_table.php";
+require_once __DIR__."/classes/Materials_links_table.php";
 require_once __DIR__."/classes/Materials_text_table.php";
 session_start();
 
@@ -53,6 +54,12 @@ if (isset($_POST["submit"]))
             header("Location: /materials?task_id=$_POST[task_id]");
 
     }
+    else if ($_POST["code"] == "add_link")
+    {
+        $materials_links_table = new Materials_links_table();
+        $materials_links_table->create(["task_id"=>$_POST["task_id"], "url"=>$_POST["link_url"]]);
+        header("Location: /materials?task_id=$_POST[task_id]");
+    }
     else if ($_POST["code"] == "add_video")
     {
 
@@ -82,6 +89,12 @@ if (isset($_POST["submit"]))
     {
         $materials_videos_url_table = new Materials_videos_url_table();
         $materials_videos_url_table->delete(["task_id"=>$_POST["task_id"], "video_url"=>$_POST["video_url"]]);
+        header("Location: /materials?task_id=$_POST[task_id]");
+    }
+    else if ($_POST["code"] == "delete_link")
+    {
+        $materials_links_table = new Materials_links_table();
+        $materials_links_table->delete(["task_id"=>$_POST["task_id"], "url"=>$_POST["url"]]);
         header("Location: /materials?task_id=$_POST[task_id]");
     }
     else if ($_POST["code"] == "delete_text")
@@ -132,6 +145,7 @@ else if (isset($_GET["task_id"]))
                                 </form>";
            $content .= "</div>";
         }
+        $content .= "<br><br>";
     }
     if ($materials["imgs"])
     {
@@ -158,13 +172,11 @@ else if (isset($_GET["task_id"]))
                             <img src='$url' width='100%' height='100%' alt='img'>";
             $content .= "</div>";
         }
-        $content .= "</div>";
-
-
+        $content .= "</div><br><br>";
     }
     if ($materials["docs"])
     {
-        $content .= "<div class='m-0 p-0 mt-4 d-flex col-12 justify-content-center h2 mb-4'>Полезные ссылки</div><hr>";
+        $content .= "<div class='m-0 p-0 mt-4 d-flex col-12 justify-content-center h2 mb-4'>Полезные файлы</div><hr>";
         foreach ($materials["docs"] as $doc)
         {
             $content .= "<div class='m-0 p-0 col-12 mt-2 h3 row d-flex justify-content-start'>
@@ -178,7 +190,26 @@ else if (isset($_GET["task_id"]))
                                 <input type='submit' class='btn del' value='Удалить'>
                             </form>";
 
-            $content .= "</div>";
+            $content .= "</div><br><br>";
+        }
+
+    }
+    if ($materials["links"])
+    {
+        $content .= "<div class='m-0 p-0 mt-4 d-flex col-12 justify-content-center h2 mb-4'>Полезные ссылки</div><hr>";
+        foreach ($materials["links"] as $url)
+        {
+            $content .= "<div class='m-0 p-0 col-12 mt-2 row d-flex justify-content-start'>
+                            <a class='col' href='$url'>$url</a>";
+            if($is_admin)
+                $content .= "<form  class='col' action='materials.php' method='POST'>
+                                <input type='hidden' name='submit'>
+                                <input type='hidden' name='code' value='delete_link'>    
+                                <input type='hidden' name='task_id' value='$task->id'>
+                                <input type='hidden' name='url' value='$url'>      
+                                <input type='submit' class='btn del' value='Удалить'>
+                            </form>";
+            $content .= "</div><br><br>";
         }
 
     }
