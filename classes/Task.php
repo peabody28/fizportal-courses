@@ -1,6 +1,9 @@
 <?php
 require_once __DIR__."/Tasks_table.php";
 require_once __DIR__."/Tasks_answers_table.php";
+require_once __DIR__."/Materials_imgs_url_table.php";
+require_once __DIR__."/Materials_docs_url_table.php";
+require_once __DIR__."/Materials_videos_url_table.php";
 require_once __DIR__."/HTML_block.php";
 require_once __DIR__."/Professor.php";
 require_once __DIR__."/Render.php";
@@ -125,5 +128,28 @@ class Task // implements HTML_block TODO ЧЕГОТО НЕ РАБОТАЕТ impl
         else
             $task->users_answer = $data[$task->id."_b_answer"];
         return $task;
+    }
+
+    public function get_materials()
+    {
+        $imgs = [];
+        $materials_imgs_table = new Materials_imgs_url_table();
+        $imgs_list = $materials_imgs_table->read($this->id);
+        foreach ($imgs_list as $item)
+            $imgs[] = $item["img_url"];
+
+        $docs = [];
+        $materials_docs_table = new Materials_docs_url_table();
+        $docs_list = $materials_docs_table->read($this->id);
+        foreach ($docs_list as $item)
+            $docs[] = ["doc_url"=>$item["doc_url"], "file_name"=>$item["file_name"]];
+
+        $videos = [];
+        $materials_videos_table = new Materials_videos_url_table();
+        $vid_list = $materials_videos_table->read($this->id);
+        foreach ($vid_list as $item)
+            $videos[] = ["video_url"=>$item["video_url"]];
+
+        return ["imgs"=>$imgs, "docs"=>$docs, "videos"=>$videos];
     }
 }
