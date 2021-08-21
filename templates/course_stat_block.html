@@ -12,18 +12,25 @@
     </div>
 
     <div class="row h2 col-12 d-flex justify-content-center count_tasks mb-5" >{{ tasks }} задач решено из {{ all_tasks }}</div>
-    <hr>
-    <div class="h3 row col-12 d-flex justify-content-center mb-2 mt-5">Решенные темы</div>
 
+    {% if themes %}
+        <hr>
+        <div class="h3 row col-12 d-flex justify-content-center mb-2 mt-5">Решенные темы</div>
+    {% endif %}
     {% for theme in themes %}
+
         <div class="solved_theme_block mt-lg-0 mb-3">
             <div class="row m-0 p-0 mt-3 col-12 d-flex justify-content-start align-items-center solved_theme">
                 <div class="m-0 p-0 pl-3 pt-2 pb-2 ml-lg-3 mr-lg-3 col-12 col-lg-6 title d-flex justify-content-start align-items-center ">
                     <a href="/theme?id={{ theme.id }}">{{ theme.title|raw }}</a>
                 </div>
                 {% if theme.mistakes_href != false %}
-                    <div class="m-0 p-0 theme_tasks_count d-flex justify-content-start align-items-center col-12 col-lg-2">{{ theme.tasks }} решено из {{ theme.all_tasks }}</div>
-                    <div class="m-0 p-0 ml-lg-4 col-12 col-lg-2"><a class="btn btn-md mist_btn border" href="{{ theme.mistakes_href }}">Работа над ошибками</a></div>
+                <div class="m-0 p-0 theme_tasks_count d-flex justify-content-start align-items-center col-12 col-lg-2">{{ theme.tasks }} решено из {{ theme.all_tasks }}</div>
+                    {% if theme.mistakes_status != false %}
+                        <div class="m-0 p-0 ml-lg-4 col-12 col-lg-2"><a class="btn btn-md mist_btn border" href="{{ theme.mistakes_href }}">Работа над ошибками</a></div>
+                    {% else %}
+                        <div class="m-0 p-0 ml-lg-4 col-12 col-lg-2"><a class="btn btn-md disable_mist_btn border disabled" href="#">Работа над ошибками</a></div>
+                    {% endif %}
                 {% else %}
                     <div class="m-0 p-0 theme_tasks_count d-flex justify-content-start align-items-center col-12 col-lg-4">{{ theme.tasks }} решено из {{ theme.all_tasks }}</div>
                 {% endif %}
