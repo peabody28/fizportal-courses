@@ -39,6 +39,9 @@
 .solved_theme_block .mist_btn {
   background-color: #c67d7d;
 }
+.solved_theme_block .disable_mist_btn {
+  background-color: #7c7c7c;
+}
 .open_theme_block .title:hover {
   background-color: #d9e6ef;
 }

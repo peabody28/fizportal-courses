@@ -56,7 +56,11 @@ function get_stat(Course $course, $user)
         {
             $mistakes = $professor->get_mistakes_for_theme($theme);
             if(count($mistakes)) // если в теме есть ошибки
+            {
+                $th["mistakes_status"] = $professor->mistakes_status($theme);
                 $th["mistakes_href"] = "/mistakes?theme_id=$theme->id";
+            }
+
             $themes[] = $th;
         }
         else if($theme_status == "open")
