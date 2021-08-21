@@ -25,7 +25,7 @@ if(!isset($_SESSION["name"]))
                 $_SESSION["id"]=$user->id;
                 $_SESSION["name"]=$user->name;
                 $_SESSION["rights"]=$user->rights;
-                header("Location: /main");
+                header("Location: /courses");
             }
             else
                 header("Location: /login");
@@ -42,4 +42,4 @@ if(!isset($_SESSION["name"]))
         header("Location: /login");
 }
 else
-    header("Location: /main");
+    header("Location: /courses");

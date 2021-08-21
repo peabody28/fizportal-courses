@@ -9,7 +9,7 @@ $("#form").submit(function ()
             {
                 let response = JSON.parse(res)
                 if(response["status"]==="OK")
-                    $(location).attr("href", "/main")
+                    $(location).attr("href", "/courses")
                 else
                     $("#error").html(response["error"])
 
