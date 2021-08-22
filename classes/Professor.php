@@ -38,7 +38,20 @@ class Professor
             }
         }
         else
-            $status = ($task->answer == $task->users_answer);
+        {
+            // "8.5" 8,5
+            $answers =[];
+            if(strpos($task->users_answer, '.', 1) || strpos($task->users_answer, ',', 1))
+            {
+                $answers[] = str_replace(".", ",", $task->users_answer);
+                $answers[] = str_replace(",", ".", $task->users_answer);
+            }
+            else
+                $answers[] = $task->users_answer;
+
+
+            $status = (in_array($task->answer, $answers));
+        }
 
         return $status;
     }
