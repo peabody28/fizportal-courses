@@ -114,6 +114,7 @@ class Task // implements HTML_block TODO ЧЕГОТО НЕ РАБОТАЕТ impl
             $status = $professor->add_to_mistakes($task); // добавляю задачу в РО
             if ($status) // true если задача не была в РО
             {
+                $task->complexity = (int)($task->complexity/2);
                 $professor->delete_point($task); // снимаю балл
                 $progress-=$task->complexity;
             }

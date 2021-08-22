@@ -60,7 +60,7 @@ class Mistake extends Task
             // добавляю задачу в список решенных пользователем
             $professor->add_task_to_users_tasks($task);
             // добавляю балл в тему
-            $task->complexity *=2;
+            $task->complexity = (int)($task->complexity/2) + $task->complexity;
             $professor->add_point($task);
             // удаляю из РО
             $professor->delete_from_mistakes($task);
