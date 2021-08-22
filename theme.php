@@ -80,6 +80,22 @@ else
                     // TODO написать тест для функции get_tasks_blocks()
                     $resp2 = $theme->get_tasks_blocks($user);
                     $content = $resp2["block"];
+                    // прогресс темы
+
+                    $u_progress = $professor->get_progress_theme($theme);
+                    $points_limit = $theme->get_points_limit();
+                    $percent = 100*$u_progress/$points_limit;
+                    $white_percent = 100-$percent;
+                    $content .= "<div id='progress' class='row m-0 p-0 h4 mt-4 border'>";
+                    if ($percent >= 50)
+                    {
+                        $content .= "<div class='green d-flex justify-content-end pr-3' style='width: $percent%'><span id='user_progress'>$u_progress</span>/$points_limit</div>
+                                        <div class='white d-flex justify-content-start pl-3' style='width:  $white_percent'></div>";
+                    }
+                    else
+                        $content .= "<div class='green d-flex justify-content-end pr-3' style='width: $percent%'></div>
+                                        <div class='white d-flex justify-content-start pl-3' style='width: $white_percent'><span id='user_progress'>$u_progress</span>/$points_limit</div>";
+                    $content .=  "</div>";
                     // отображаю время
                     if(isset($response["sec"]))
                     {

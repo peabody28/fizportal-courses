@@ -74,9 +74,12 @@ class Task // implements HTML_block TODO ЧЕГОТО НЕ РАБОТАЕТ impl
         // Если задача в РО, отклоняю решение
         $professor = new Professor();
         $professor->student = $data["user"];
+        $progress = $professor->get_progress_theme($theme);
+        $theme->get_points_limit();
+
         $in_mistakes = $professor->check_in_mistakes_list($task);
         if($in_mistakes)
-            return ["status" => "ERROR", "code"=>"IN_MISTAKES"];
+            return ["status" => "ERROR", "code"=>"IN_MISTAKES", "points_limit"=>$theme->points_limit, "progress"=>$progress];
 
         // Проверяю время
         $response = $professor->check_time($theme);
@@ -94,13 +97,15 @@ class Task // implements HTML_block TODO ЧЕГОТО НЕ РАБОТАЕТ impl
         if($status)
         {
             $status = $professor->add_task_to_users_tasks($task);
-            if($status) // если решается впервые добавляю балл
+            if($status)// если решается впервые добавляю балл
+            {
                 $professor->add_point($task);
+                $progress+=$task->complexity;
+            }
+
             // это нужно в js для открытия супертеста
-            $progress = $professor->get_points($theme);
             if($progress >= 100)
                 $professor->add_theme_to_users_themes($theme);
-            $theme->get_points_limit();
 
             return ["status" => "OK", "task_id"=>$task->id, "points_limit"=>$theme->points_limit, "progress"=>$progress];
         }
@@ -108,9 +113,11 @@ class Task // implements HTML_block TODO ЧЕГОТО НЕ РАБОТАЕТ impl
         {
             $status = $professor->add_to_mistakes($task); // добавляю задачу в РО
             if ($status) // true если задача не была в РО
+            {
                 $professor->delete_point($task); // снимаю балл
-
-            return ["status" => "ERROR", "task_id"=>$task->id];
+                $progress-=$task->complexity;
+            }
+            return ["status" => "ERROR", "task_id"=>$task->id, "points_limit"=>$theme->points_limit, "progress"=>$progress];
         }
     }
 

@@ -37,13 +37,12 @@ function send_mistake_answer()
                 var response = JSON.parse(res)
                 if (response["status"]=="OK")
                 {
-                    if($(".next").text())
-                        $(".next").click();
-                    else
-                        location.reload()
-
                     var element = $("#"+response["task_id"]).parent()
                     var status = element.remove();
+                    if(!$('.get_mistake').length)
+                        location.reload()
+                    else
+                        $('.get_mistake:first').submit()
                 }
                 else
                 {

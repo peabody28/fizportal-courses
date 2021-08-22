@@ -105,10 +105,9 @@ function send_answer()
                     if(response["progress"]>=response["points_limit"] || response["progress"]>=100)
                     {
                         $( ".supertest_btn" ).prop( "disabled", false );
-                        if (intervalId)
+                        if (typeof intervalId != "undefined")
                             clearInterval(intervalId)
                     }
-
                 }
                 else
                 {
@@ -120,7 +119,6 @@ function send_answer()
                         $('#message').removeClass("green_mess")
                         $("#message").html("Вы сможете решить эту задачу в работе над ошибками")
                     }
-
                     else
                     {
                         $('#message').addClass("red_mess")
@@ -131,7 +129,22 @@ function send_answer()
                     }
 
                 }
+                var percent = 100*response["progress"]/response["points_limit"]
+                console.log(response["progress"] +"  "+response["points_limit"]+"  "+percent)
+                if(percent <= 50)
+                {
+                    $(".green").html("")
+                    $(".white").html("<span id='user_progress'>"+response["progress"]+"</span>/"+response["points_limit"])
+                }
+                else
+                {
+                    $(".green").html("<span id='user_progress'>"+response["progress"]+"</span>/"+response["points_limit"])
+                    $(".white").html("")
+                }
 
+                $("#user_progress").html(response["progress"])
+                $(".green").css("width", percent+"%")
+                $(".white").css("width", 100-percent+"%")
                 if($('.lock').length)
                 {
                     $('.lock').toggleClass('lock').toggleClass('in_process');
