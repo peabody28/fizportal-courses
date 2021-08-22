@@ -10,7 +10,8 @@ class Materials_text_table implements Table
         global $link;
         $sql = sprintf("INSERT INTO materials_text(text, task_id) VALUES ('%s','%s')", $material["text"], $material["task_id"]);
         $result = mysqli_query($link, $sql);
-        return $result;
+        $text_id = mysqli_insert_id($link);
+        return $text_id;
     }
 
     public function read($id)
@@ -30,7 +31,7 @@ class Materials_text_table implements Table
     public function delete($material)
     {
         global $link;
-        $sql = sprintf("DELETE FROM materials_text WHERE task_id = '%s' AND text = '%s'", $material["task_id"], $material["text"]);
+        $sql = sprintf("DELETE FROM materials_text WHERE task_id = '%s' AND id = '%s'", $material["task_id"], $material["id"]);
         $result = mysqli_query($link, $sql);
         return $result;
     }
