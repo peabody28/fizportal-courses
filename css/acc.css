@@ -4,7 +4,8 @@
 #settings {
   background-color: #acc5ec;
 }
-#get_st {
+.get_course_stat,
+.get_user {
   background-color: #3d7f79;
 }
 .title {
