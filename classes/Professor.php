@@ -124,7 +124,7 @@ class Professor
     public function get_mistakes_for_theme($theme)
     {
         $user = &$this->student;
-        $all_mistakes = $this->get_mistakes($user);
+        $all_mistakes = $this->get_mistakes();
 
         $tasks_theme = $theme->get_tasks();
         $tasks_theme_ids = [];
@@ -204,17 +204,22 @@ class Professor
         $users_themes_list = $this->get_themes();
 
         $users_themes_ids_list = [];
+        $mistakes_count = 0;
         foreach ($users_themes_list as $th)
+        {
             $users_themes_ids_list[] = $th->id;
+            $mistakes_count += count($this->get_mistakes_for_theme($th));
+        }
 
+        //Если ошибок больше 10 - закрываю все темы
         if(in_array($theme->id, $users_themes_ids_list))
-            return ["status"=>"solved"]; // тема в списке решенных
+            return ["status"=>"solved", "mist"=>($mistakes_count >= 10)]; // тема в списке решенных
         else if ($theme->id == $themes_ids[0]) // первая тема курса
-            return ["status"=>"open"];
+            return ["status"=>"open", "mist"=>($mistakes_count >= 10)];
         else if ($theme->id == $themes_ids[1])// вторая тема курса
         {
             if (in_array($themes_ids[0], $users_themes_ids_list)) // если первая решена - открываю вторую
-                return ["status"=>"open"];
+                return ["status"=>"open", "mist"=>($mistakes_count >= 10)];
             else
                 return ["status"=>"close", "message"=>"Вы не решили первую тему"];
         }
@@ -223,7 +228,7 @@ class Professor
             $this_id = array_search($theme->id, $themes_ids);
             // TODO статус темы не зависит от РО
             if (in_array($themes_ids[$this_id-1], $users_themes_ids_list) || in_array($themes_ids[$this_id-2], $users_themes_ids_list)) // предыдущая решена?
-                return ["status"=>"open"];
+                return ["status"=>"open", "mist"=>($mistakes_count >= 10)];
             else
                 return ["status"=>"close", "message"=>"Вы пока не можете решать эту тему"];
         }

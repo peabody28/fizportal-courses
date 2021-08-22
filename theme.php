@@ -68,8 +68,9 @@ else
 
             $resp = $professor->theme_status($theme);
             $theme_status = $resp["status"];
+            $big_mist = $resp["mist"];
 
-            if($theme_status == "open" || $theme_status == "solved" || $user->rights=="admin")
+            if( (($theme_status == "open" || $theme_status == "solved") && !$big_mist) || $user->rights=="admin")
             {
                 // прошло ли время блокировки темы?
                 $response = $professor->check_time($theme);
