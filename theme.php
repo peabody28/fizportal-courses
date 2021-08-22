@@ -91,10 +91,10 @@ else
                     if ($percent >= 50)
                     {
                         $content .= "<div class='green d-flex justify-content-end pr-3' style='width: $percent%'><span id='user_progress'>$u_progress</span>/$points_limit</div>
-                                        <div class='white d-flex justify-content-start pl-3' style='width:  $white_percent'></div>";
+                                        <div class='white' style='width:  $white_percent'></div>";
                     }
                     else
-                        $content .= "<div class='green d-flex justify-content-end pr-3' style='width: $percent%'></div>
+                        $content .= "<div class='green' style='width: $percent%'></div>
                                         <div class='white d-flex justify-content-start pl-3' style='width: $white_percent'><span id='user_progress'>$u_progress</span>/$points_limit</div>";
                     $content .=  "</div>";
                     // отображаю время

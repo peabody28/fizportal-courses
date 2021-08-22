@@ -133,12 +133,14 @@ function send_answer()
                 console.log(response["progress"] +"  "+response["points_limit"]+"  "+percent)
                 if(percent <= 50)
                 {
+                    $(".white").addClass("d-flex justify-content-start pl-3")
                     $(".green").html("")
                     $(".white").html("<span id='user_progress'>"+response["progress"]+"</span>/"+response["points_limit"])
                 }
                 else
                 {
                     $(".green").html("<span id='user_progress'>"+response["progress"]+"</span>/"+response["points_limit"])
+                    $(".green").addClass("d-flex justify-content-end pr-3")
                     $(".white").html("")
                 }
 
