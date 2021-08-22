@@ -39,12 +39,16 @@ if ($course->id)
         {
             $response = $professor->theme_status($theme);
             $theme_status = $response["status"];
+            $big_mistakes = $response["mist"];
 
             if ($theme_status=="solved")
                 $class = "green_theme";
             else if ($theme_status=="open")
                 $class = "open_theme";
             else
+                $class = "close_theme";
+
+            if($big_mistakes)
                 $class = "close_theme";
 
             $theme->get_points_limit();
