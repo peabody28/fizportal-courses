@@ -26,7 +26,7 @@
                 </div>
                 {% if theme.mistakes_href != false %}
                 <div class="m-0 p-0 theme_tasks_count d-flex justify-content-start align-items-center col-12 col-lg-2">{{ theme.tasks }} решено из {{ theme.all_tasks }}</div>
-                    {% if is_admin != 1 %}}
+                    {% if is_admin != 1 %}
                         {% if theme.mistakes_status != false %}
                             <div class="m-0 p-0 ml-lg-4 col-12 col-lg-2"><a class="btn btn-md mist_btn border" href="{{ theme.mistakes_href }}">Работа над ошибками</a></div>
                         {% else %}
