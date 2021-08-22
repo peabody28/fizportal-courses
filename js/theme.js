@@ -102,8 +102,13 @@ function send_answer()
                     $('#message').removeClass("red_mess")
                     $("#message").html("Верно!")
                     $("#"+response["task_id"]).css('background-color', '#50C878');
-                    if(response["progress"]>=response["points_limit"])
+                    if(response["progress"]>=response["points_limit"] || response["progress"]>=100)
+                    {
                         $( ".supertest_btn" ).prop( "disabled", false );
+                        if (intervalId)
+                            clearInterval(intervalId)
+                    }
+
                 }
                 else
                 {
