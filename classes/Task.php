@@ -98,6 +98,8 @@ class Task // implements HTML_block TODO ЧЕГОТО НЕ РАБОТАЕТ impl
                 $professor->add_point($task);
             // это нужно в js для открытия супертеста
             $progress = $professor->get_points($theme);
+            if($progress >= 100)
+                $professor->add_theme_to_users_themes($theme);
             $theme->get_points_limit();
 
             return ["status" => "OK", "task_id"=>$task->id, "points_limit"=>$theme->points_limit, "progress"=>$progress];
