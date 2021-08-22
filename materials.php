@@ -100,7 +100,7 @@ if (isset($_POST["submit"]))
     else if ($_POST["code"] == "delete_text")
     {
         $materials_texts_table = new Materials_text_table();
-        $materials_texts_table->delete(["task_id"=>$_POST["task_id"], "text"=>$_POST["text"]]);
+        $materials_texts_table->delete(["task_id"=>$_POST["task_id"], "text"=>$_POST["text"], "id"=>$_POST["text_id"]]);
         header("Location: /materials?task_id=$_POST[task_id]");
     }
 }
@@ -134,13 +134,13 @@ else if (isset($_GET["task_id"]))
     {
         $content .= "<div class='m-0 p-0 col-12 d-flex justify-content-center h2 mb-4'>Подсказки</div><hr>";
         foreach ($materials["texts"] as $text) {
-            $content .= "<div class='m-0 p-0 p-3 mb-4 mt-4 col-12 d-flex justify-content-start align-items-center h2 text_block'>$text";
+            $content .= "<div class='m-0 p-0 p-3 mb-4 mt-4 col-12 d-flex justify-content-start align-items-center h2 text_block'>$text[text]";
             if ($is_admin)
                 $content .= "<form action='materials.php' method='POST' class='col-4 d-flex align-items-center'>
                                     <input type='hidden' name='submit'>
                                     <input type='hidden' name='code' value='delete_text'>    
                                     <input type='hidden' name='task_id' value='$task->id'>
-                                    <input type='hidden' name='text' value='$text'>      
+                                    <input type='hidden' name='text_id' value='$text[id]'>      
                                     <input type='submit' class='btn del' value='Удалить'>
                                 </form>";
            $content .= "</div>";

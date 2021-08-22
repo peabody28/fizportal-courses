@@ -156,7 +156,7 @@ class Task // implements HTML_block TODO ЧЕГОТО НЕ РАБОТАЕТ impl
         $materials_text_table = new Materials_text_table();
         $texts_list = $materials_text_table->read($this->id);
         foreach ($texts_list as $item)
-            $texts[] = $item["text"];
+            $texts[] = ["text"=>$item["text"], "id"=>$item["id"]];
 
         $links = [];
         $materials_links_table = new Materials_links_table();
