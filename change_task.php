@@ -96,20 +96,25 @@ if (isset($data["submit"])) {
     }
 
 } else {
-    $tasks_table = new Tasks_table();
-    $tmp_task = $tasks_table->read($_GET["id"]);
+    $task = new Task($_GET["id"]);
 
-    $back_id = $tmp_task["id"]; // ID задачи куда возвращаться
+    $back_id = $task->id; // ID задачи куда возвращаться
     if(isset($_GET["from_supertest"]))
     {
         $back_id = "supertest";
         $tmp_task["theme_id"]=$_GET["theme_id"];
     }
 
+
     $forms = new Render();
     $forms->temp = "change_task_forms.html";
-    $forms->argv = ["task_id"=>$tmp_task["id"], "task_text"=>$tmp_task["text"], "task_answer"=>$tmp_task["answer"], "task_complexity"=>$tmp_task["complexity"], "theme_id" => $tmp_task["theme_id"], "back_id"=>$back_id];
+    if($task->type == "A")
+        $task->get_A_answer();
 
+
+    $forms->argv = ["task_id"=>$task->id, "task_text"=>$task->text, "task_answer"=>$task->answer, "task_complexity"=>$task->complexity, "theme_id" => $task->theme_id, "back_id"=>$back_id];
+    foreach ($task->answer as $answ)
+        $forms->argv["a$answ"."_checked"] = "checked";
 
     $content = $forms->render_temp();
 

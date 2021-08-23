@@ -2,7 +2,7 @@
 
 
 <form id="add_text" method="POST" action="/materials.php">
-  <label class="m-0 p-0 row col-12 justify-content-center h2">Добавить текст</label>
+  <label class="m-0 p-0 row col-12 justify-content-center h2 mt-5">Добавить текст</label>
   <textarea id="editor1"  name="text"></textarea>
   <input type="hidden" name="code" value="add_text">
   <input type="hidden" name="task_id" value="{{ task_id }}">
@@ -13,12 +13,12 @@
 
 
 <form id="add_file" method="POST" enctype="multipart/form-data" action="/materials?task_id={{ task_id }}">
-  <label class="row col-12 justify-content-center h2">Добавить файл</label>
+  <label class="row col-12 justify-content-center h2 mt-5">Добавить файл</label>
   <input type="file" name="file">
   <br>
   <br>
   <label class="row col-12">Название ссылки</label>
-  <input type="text" size="50" name="file_name">
+  <input type="text" class="col-12 col-md-5" name="file_name">
   <br>
   <br>
   <input type="hidden" name="code" value="add_file">
@@ -42,16 +42,16 @@
 <br>
 <form id="add_link" method="POST" action="/materials?task_id={{ task_id }}" class="mb-5">
   <label class="row col-12 justify-content-center h2">Добавить ссылку</label>
-  <input type="text" size="50" name="link_url">
+  <input type="text" class="col-12 col-md-5" name="link_url">
   <input type="hidden" name="code" value="add_link">
   <input type="hidden" name="task_id" value="{{ task_id }}">
   <input type="hidden" name="submit">
-  <input type="submit" class="add_text btn" value="Добавить">
+  <input type="submit" class="add_text btn mt-3" value="Добавить">
 </form>
 <br><br>
 <form id="add_video" method="POST" action="/materials?task_id={{ task_id }}" class="mb-5">
   <label class="row col-12 justify-content-center h2">Добавить видео по ссылке</label>
-  <input type="text" size="50" name="video_url">
+  <input type="text" class="col-12 col-md-5" name="video_url">
   <input type="hidden" name="code" value="add_video">
   <input type="hidden" name="task_id" value="{{ task_id }}">
   <input type="hidden" name="submit">
