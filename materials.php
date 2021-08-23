@@ -134,7 +134,7 @@ else if (isset($_GET["task_id"]))
     {
         $content .= "<div class='m-0 p-0 col-12 d-flex justify-content-center h2 mb-4'>Подсказки</div><hr>";
         foreach ($materials["texts"] as $text) {
-            $content .= "<div class='m-0 p-0 p-3 mb-4 mt-4 col-12 d-flex justify-content-start align-items-center h2 text_block'>$text[text]";
+            $content .= "<div class='m-0 p-0 p-3 mb-4 mt-4 col-12 h3 text_block text-break'>$text[text]";
             if ($is_admin)
                 $content .= "<form action='materials.php' method='POST' class='col-4 d-flex align-items-center'>
                                     <input type='hidden' name='submit'>

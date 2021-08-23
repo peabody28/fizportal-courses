@@ -8,4 +8,12 @@
 #back_to_theme_btn {
   background-color: #f6b477;
 }
+.ch_b input {
+  width: 100%;
+  height: 50%;
+  box-sizing: border-box;
+}
+.ch_b label {
+  width: 100%;
+}
 /*# sourceMappingURL=change_task.css.map */

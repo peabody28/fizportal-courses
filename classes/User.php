@@ -13,12 +13,15 @@ class User
 {
     public $id, $name, $email, $rights, $hash=null, $password;
 
-    public function __construct($id=null)
+    public function __construct($id=null, $tmp_user=null)
     {
         if($id !== null)
         {
-            $users_table = new Users_table();
-            $tmp_user = $users_table->read($id);
+            if(!$tmp_user)
+            {
+                $users_table = new Users_table();
+                $tmp_user = $users_table->read($id);
+            }
             $this->id = (int)$tmp_user["id"];
             $this->name = $tmp_user["name"];
             $this->email = $tmp_user["email"];

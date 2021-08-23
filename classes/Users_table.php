@@ -57,4 +57,12 @@ class Users_table implements Table
         return $user_data;
     }
 
+    public function get_users_list()
+    {
+        global $link;
+        $sql = sprintf("SELECT * FROM users");
+        $result = mysqli_query($link, $sql);
+        $users = mysqli_fetch_all($result, MYSQLI_ASSOC);
+        return $users;
+    }
 }
